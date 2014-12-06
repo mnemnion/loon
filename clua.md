@@ -30,7 +30,6 @@ Clua is eager and imperative. These may be wrapped in a `(do (...))` form when u
 	(do
 		(frob(foo))
 		bar(baz))
-)
 ```
 
 Which becomes
