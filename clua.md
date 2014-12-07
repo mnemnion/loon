@@ -71,7 +71,15 @@ Things Clojure accomplishes with sequences, Clua uses iterators for. As you migh
 This might mean we have a function like `setseq` that binds an iterator to something like a table. 
 
 `(foo["bar"])` can't produce the value of the key `"bar"`, because it must call foo with the argument of a vector containing only the string `"bar"`. `(foo.bar baz)` could easily call `foo.bar`, which better be a function, on `baz`. 
-Since we don't have to interoperate with Java, we don't have the broken dot syntax. and `(foo . bar)` would call `foo` on `.` and `bar`, 
+Since we don't have to interoperate with Java, we don't have the broken dot syntax. and `(foo . bar)` would call `foo` on `.` and `bar`. So how would we interpret `(foo bar.1)`? Well, we kinda have to interpret it as `foo["1"]`, not to be confused with `foo[1]`. 
+
+I want to solve this problem in some fashion. One possibility is to cast `foo.1` to a number, and allow/require `foo."1"` as a valid formation to string-index numbers. This is elegantly sugary, at the expense of some clarity. The alternative would be to use some form such as `foo:1` for numbers, which might be okay. As a Lisper I do like being able to generate symbol names like `into:`, we like punctuating prefixes in general. Perhaps just `foo..1`, though this poses a problem, because `foo[".1"]`, though weird looking, is a valid table lookup. 
+
+The answer might be: a vector in the function position during read, calls a compile time macro that expects a single value, which is interpreted as the index. So `([foo bar baz] 2)` will return `bar`. Not `baz`, because Lua. `([foo bar baz] -1)` will give you baz, because Lua again. 
+
+I like this resolution. It should work on tables also, since they aren't actually different things, at least not yet. The Clua standard environment will never violate the semantic difference between a table and a vector, so if we ever add fast(er) vectors to the runtime, they may be employed profitably. It would even function correctly on sets, which we intend to implement as a table which produces `true` for elements which are in the set. I do need to look carefully into Lua's concept of equality: our sets will simply provide it. This means Clua lacks an important guarantee of Clojure, which uses immutable data sets to ensure the equality of structurally identical compound types. So if you take two different `#{a,b,c}` and add them to a set, you'll have a set that contains either of those literal sets, despite their semantic equivalence. Worse (much worse) providing the anonymous set `#{a,b,c}` as a key will produce `nil`, since that third set is not a member. 
+
+This would qualify as a mistake in Lua as well, so we allow this behavior and expect the programmer to understand that she is using a dynamic, imperative language. Loon will easily allow adding immutable types, with real structural equality, and disguising them with whatever syntax you desire. 
 
 
 ```clojure
