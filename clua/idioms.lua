@@ -7,7 +7,7 @@ function _GSetSyms (lval, rval)
 end
 --[[ > foo = 23
 	 > bar = "fortytwo"
-	 > globalSet("foo","bar")
+	 > _GSetSyms("foo","bar")
 	 > print(foo)
 	 fortytwo --]] 
 
@@ -17,7 +17,7 @@ function _GSetVal(lval, rval)
 end
 --[[ > foo = 23
 	 > bar = "fortytwo"
-	 > globalSetVal("foo","bar")
+	 > _GSetSyms("foo","bar")
 	 > print(foo)	
 	 bar --]] 
 
@@ -31,3 +31,10 @@ end
 	 > _GSetVal("foo",f)
 	 > print(foo("hello"," function"))
 	 hello function --]]
+
+-- Next problem: this doesn't understand, or have access to, the local environment.
+-- in context, the local environment is whatever we've said it is, but loadstring only
+-- knows the global context. 
+-- Therefore, we'll need to cache the desired context in a global, attach it as the local environment, generate
+-- our function, and return it. Cleanly.
+-- This requires careful study. 

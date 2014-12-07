@@ -21,6 +21,5 @@
 (let '(foo bar) (baz bux)) ; syntax error, macro resolves form from AST, 
 						   ; where '(list elements) and [vector elements]
 						   ; are not equivalent. 
-
 ```
 
