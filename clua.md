@@ -54,7 +54,11 @@ I need to get my story straight around multiple return values, which aren't inhe
 
 The answer is probably some destructuring syntax such as `(let { [a,b,c] : (multi-return) })`, that creates a vector and proceeds never to use it. This we most likely leave out of the generated code, which makes locals in the expected fashion. If we want to `let` into a vector, that looks like `(let vector : (vec (multi-return)))`. I'd like to write `let` as a macro, and one that doesn't use `drop!` (which passes bog Lua to the compiler). That means a regular syntax is needed, that `let` emits on expansion. 
 
-In Clua, our let looks a little different:
+This also implies a `return` special form, that takes a quoted list and returns the values in the specified order. So `(let {[a,b,c] : vector-from-args} (return '(a b c))` should destructure the first three elements of the vector into locals a, b and c, then return them atomically. 
+
+This points to a peculiarity of Clua: our lists are imaginary. Depending on context, they exist as a function with arguments or a vector of elements, both of which are treated differently than the underlying tables would be. There are going to be all kinds of mind-bending ways of breaking the logic underlying Clua. Since I'm a Lisper at heart, I encourage this, as long as the resulting syntax is clean. 
+
+In Clua, our let looks a little different than Clojure:
 
 ```clojure
 
