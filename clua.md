@@ -62,11 +62,13 @@ In Clua, our let looks a little different than Clojure:
 
 ```clojure
 
-(let { foo: bar, baz: bux})
+(let { foo: bar, baz: bux} (...))
 
 ```
 
-reflecting exactly what we're doing: copying the value of a variable over into the local scope, which is a table. It's called `let` but it does what Lua does, and your changes to the new value mutate what Lua would mutate. They go out of scope when Lua does, and so on. 
+reflecting exactly what we're doing: copying the value of a variable over into the local scope, which is a table. It's called `let` but it does what Lua does, and your changes to the new value mutate what Lua would mutate. They go out of scope when Lua does, and so on. `set` is the equivalent. If either receives an atom as the first argument, the second argument is assigned to the first, and the third form executed in that context: `(let foo bar (...))`. 
+
+Getting the macro system right will be challenging, but we do intend to work on the AST, not the source code. I'm hoping the only truly special form will be `drop!`, which pushes a string of Lua to the compiler. We can then 'drop' a kernel REPL as part of the bootstrap sequence. 
 
 Comments are whitespace, as is conventional in a Clojure. It is customary to use them to separate key-value pairs in a map. Clua has no maps, only tables: now you don't have to map a map, so you're welcome for that. 
 
