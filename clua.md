@@ -28,8 +28,8 @@ Clua is eager and imperative. These may be wrapped in a `(do (...))` form when u
 	"this is a funky function."
 	[ foo bar baz]
 	(do
-		(frob(foo))
-		bar(baz))
+		(frob foo)
+		(bar baz))
 ```
 
 Which becomes
