@@ -38,7 +38,7 @@ Which becomes
 
 foo = function (...)
 	-- local docstring = "this is a funky function."
-	foo, bar, baz = unpack(...)
+	local foo, bar, baz = unpack(...)
 	frob(foo)
 	return bar(baz)
 end
@@ -47,6 +47,12 @@ end
 more or less. 
 
 In Clojure the `[]` syntax indicates a vector, here it indicates a table used in the lua array fashion. It starts with 1. I didn't do this and won't change it. There is no sugared syntax for indexing, we use the Clojurian `(ith 5 Array)` formation. 
+
+The reason we `unpack(...)` rather than assigning the arguments directly, is to provide a consistent semantics for function calls. My instinct is that this will make macros easier to write. 
+
+I need to get my story straight around multiple return values, aren't inherently Lispy. It's too easy in that context to return some collection, such as, I dunno. A list?
+
+The answer is probably some destructuring syntax such as `(let { [a,b,c] : (multi-return) })`, that creates a vector and proceeds never to use it. This we most likely leave out of the generated code, which makes locals in the expected fashion. 
 
 In Clua, our let looks a little different:
 
@@ -66,3 +72,22 @@ This might mean we have a function like `setseq` that binds an iterator to somet
 
 `(foo["bar"])` can't produce the value of the key `"bar"`, because it must call foo with the argument of a vector containing only the string `"bar"`. `(foo.bar baz)` could easily call `foo.bar`, which better be a function, on `baz`. 
 Since we don't have to interoperate with Java, we don't have the broken dot syntax. and `(foo . bar)` would call `foo` on `.` and `bar`, 
+
+
+```clojure
+(+ a b c d)
+```
+
+```lua
+a + b + c + d
+```
+
+This is a non-obvious point. Lua has overloading of certain operators through the metatable. Those 'functions' are expanded into the form shown. The effect is what it is, and can be anything. I mislike operator overloading, and a Lispy syntax shows why. 
+
+The alternative would be to add gating logic to operators in the runtime, since Clua is as unable as any lisp to infer the value of a symbol at compile. This is of course unacceptable, as we expect operators to be fast. 
+
+The same logic applies to relational operators. Anything a Lua user would expect to be resolved via metatable will do so in Clua. Since they are neither functions (as they would be in a common Lisp), special forms, macros nor expression, we simply call the referents of symbols in this class metamethods. 
+
+Clua is a Lisp 1, since Lua uses a single symbol environment. This would be easy to change, since environments are delightfully simple things in Lua, being tables. Clojure is also Lisp 1, so why bother violating expectations? Only trouble can result. 
+
+`=` is tricksy. We should use `let` and `set` for local and global assignment respectively, leaving an important symbol semantically void. I suggest casting it to mean `==` and making `==` into structural equality, which has a slower but equivalent result on atomic types and is a useful idiom for some compound types. The cleanest thing to do is make them synonyms, to prevent user error. The same should hold for `~=` and `!=`, the former being Lua idiom and the latter universally understood. 
