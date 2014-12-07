@@ -50,9 +50,9 @@ In Clojure the `[]` syntax indicates a vector, here it indicates a table used in
 
 The reason we `unpack(...)` rather than assigning the arguments directly, is to provide a consistent semantics for function calls. My instinct is that this will make macros easier to write. 
 
-I need to get my story straight around multiple return values, aren't inherently Lispy. It's too easy in that context to return some collection, such as, I dunno. A list?
+I need to get my story straight around multiple return values, which aren't inherently Lispy. It's too easy in that context to return some collection, such as, I dunno. A list?
 
-The answer is probably some destructuring syntax such as `(let { [a,b,c] : (multi-return) })`, that creates a vector and proceeds never to use it. This we most likely leave out of the generated code, which makes locals in the expected fashion. 
+The answer is probably some destructuring syntax such as `(let { [a,b,c] : (multi-return) })`, that creates a vector and proceeds never to use it. This we most likely leave out of the generated code, which makes locals in the expected fashion. If we want to `let` into a vector, that looks like `(let vector : (vec (multi-return)))`. I'd like to write `let` as a macro, and one that doesn't use `drop!` (which passes bog Lua to the compiler). That means a regular syntax is needed, that `let` emits on expansion. 
 
 In Clua, our let looks a little different:
 
