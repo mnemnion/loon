@@ -23,13 +23,14 @@ WS     = P' '^0 + P'\n'^0 + P',' + P'\07'
 
 atom = WS * symbol * WS + WS * number * WS
 
-seq =  atom * atom^0
-
+seq = P"foo"
 
 form = P{
   "form" ;
-  form =  seq + WS * '(' * V"form" * P')' * WS  + V"list" ;
-  list = P"foo" ;
+  list =  seq + WS * '(' * V"element"^0 * P')' * WS  ;
+  element = atom + V"form" ;
+  form = V"list" ;
 }
 
 print(match(form,list_string))
+print(match(form,"()"))
