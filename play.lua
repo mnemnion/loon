@@ -1,4 +1,5 @@
 require "lpeg"
+epnf = require "lua-luaepnf/src/epnf"
 
 function rl()
 	dofile "play.lua"
@@ -23,14 +24,27 @@ WS     = P' '^0 + P'\n'^0 + P',' + P'\07'
 
 atom = WS * symbol * WS + WS * number * WS
 
-seq = P"foo"
+
+clua = epnf.define ( function (_ENV)
+	local symbol = R'az'^1-- incorrect start
+	local number = R'09'^1 -- likewise
+	local WS     = P' '^0 + P'\n'^0 + P',' + P'\07'
+	local atom   = WS * symbol * WS + WS * number * WS
+	START "form"
+	list    =   P'(' * V"element"^0 * P')' * WS  
+	element = atom + V"form" 
+	form    = V"list"
+end)
+--]]
+
 
 form = P{
   "form" ;
-  list =  seq + WS * '(' * V"element"^0 * P')' * WS  ;
+  list =   P'(' * V"element"^0 * P')' * WS  ;
   element = atom + V"form" ;
   form = V"list" ;
 }
 
 print(match(form,list_string))
 print(match(form,"()"))
+print(match(form,"(foo bar(baz bux))"))
