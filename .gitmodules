@@ -1,9 +1,9 @@
 [submodule "moonscript"]
 	path = moonscript
 	url = https://github.com/leafo/moonscript
-[submodule "lua-luaepnf"]
-	path = lua-luaepnf
-	url = https://github.com/siffiejoe/lua-luaepnf/
 [submodule "LuaMacro"]
 	path = LuaMacro
 	url = https://github.com/stevedonovan/LuaMacro
+[submodule "lua-luaepnf"]
+	path = lua-luaepnf
+	url = https://github.com/mnemnion/lua-luaepnf.git
