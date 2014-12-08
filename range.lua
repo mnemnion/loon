@@ -57,7 +57,8 @@ end
 --tests
 teststr = "\"χἏ☒➤\"" --any old weird stuff, in quotes
 ascii = "\"readable\""
-range_s = "[\"ab\"-\"cz\"]"
+range_s = "[\"ab\"-\"cza\"]"
+
 print(range_s) 
 print(match(inquotes,teststr))
 print(match(inquotes,ascii))
