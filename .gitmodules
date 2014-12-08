@@ -4,3 +4,6 @@
 [submodule "lua-luaepnf"]
 	path = lua-luaepnf
 	url = https://github.com/siffiejoe/lua-luaepnf/
+[submodule "LuaMacro"]
+	path = LuaMacro
+	url = https://github.com/stevedonovan/LuaMacro
