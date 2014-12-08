@@ -10,10 +10,11 @@
 -- what we want. Back-adaptation to old regexes was keenly on the mind of the designers. 
 -- 
 -- Currently, we barf on a range like `["ab"-"c"]`. This precludes matching against Unicode characters of 
--- different widths. PEGs are very flexible, and there should be a way to resolve this, at least in some
--- useful cases. This should come up quite seldom, as the various code classes don't cross width boundaries
--- for just this reason.
-
+-- different widths, and is far faster than solving the general case.
+-- 
+-- This should come up quite seldom, as the various code classes don't cross width boundaries
+-- for just this reason. in the event you need a range spanning N'Ko and Indic, or Forms and 
+-- Ancient Sym, CJK, you're on your own.
 
 require "lpeg"
 
@@ -36,9 +37,9 @@ local function makerange(first, second)
 end
 
 Ru = makerange
---tests
-teststr = "\"χἏ☒➤\"" --any old weird stuff, in quotes
-ascii = "\"readable\""
-greek = Ru("Α","Ω")
-print ("Greek ",lpeg.match(greek,"Β"))
 
+--tests
+greek = Ru("Α","Ω")
+latin = Ru("a", "z")
+print ("Greek ",lpeg.match(greek,"Β"))
+print ("Latin ",lpeg.match(latin,"b"))
