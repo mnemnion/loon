@@ -1,7 +1,7 @@
-dofile "./tools/util.lua"
+
 require "lpeg"
 epnf = require "lua-luaepnf/src/epnf"
-
+dofile "./tools/util.lua"
 
 function rl()
 	dofile "play.lua"
@@ -27,18 +27,19 @@ clua = epnf.define ( function (_ENV)
 	list    =   WS * P'(' * V"element"^0 * P')'
 	vector  =   WS * P'[' * V"element"^0 * P']' 
 	pair    = V"element" * WS * V"element" * WS
-	hash    = WS * P'{' * V"pair" * P'}'
+	hash    = WS * P'{' * V"pair"^0 * P'}'
+	set     = P'#' * P'{' * V"element"^0 * P'}'
 	element = V"atom" + V"form" * WS 
-	form    = V"list" + V"vector" + V"hash"
+	form    = V"list" + V"vector" + V"hash" + V"set"
 end)
 
 
 function read (str)
 	ast = epnf.parsestring(clua,str)
-	epnf.dumpast(ast)
+	dump_ast(ast, "")
 	return ast
 end
 
- ast = epnf.parsestring(clua, "(foo bar [baz bux 23] )")
-epnf.dumpast(ast)
+read "(foo bar [baz bux (qux flux (pavilion)) 23] )"
 read("{qux flux}")
+read("#{quux fluux}")
