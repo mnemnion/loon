@@ -33,23 +33,27 @@ inquotes = P"\"" * C((R"\35\255" + R"\0\33")^0) * P"\""
 --local 
 range_g = P"[" * inquotes * P"-" * inquotes * P"]"
 
-function makerange(first, second)
-	local from = {}
-	local to   = {}
+--local
+
+local function makerange(first, second)
+	local patts = {}
+	local patt  = {}
 	if (string.len(first) == string.len(second)) then
 		for i = 1, string.len(first) do
-			from[i] = string.byte(first, i)
-			to[i] = string.byte(second, i) 
+			patts[i] = R(string.sub(first,i,i)..string.sub(second,i,i))
 		end
-		-- make into digit strings
-		for i = 1, string.len(first) do
-			print("From: ", from[i], " To: ", to[i])
+		patt = patts[1]
+		for i = 2, string.len(first) do
+		--	print "multi-byte"
+			patt = patt + patts[i]
 		end
+		return patt
 	else
 		error("Ranges must be of equal byte width")
 		return {}
 	end
 end
+
 --tests
 teststr = "\"χἏ☒➤\"" --any old weird stuff, in quotes
 ascii = "\"readable\""
@@ -59,3 +63,5 @@ print(match(inquotes,teststr))
 print(match(inquotes,ascii))
 print(match(range_g,range_s))
 makerange(match(range_g,range_s))
+in_range = "aq"
+print(match(makerange(match(range_g,range_s)),in_range))
