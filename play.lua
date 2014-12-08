@@ -16,13 +16,14 @@ C = lpeg.C  -- captures a match
 Ct = lpeg.Ct -- a table with all captures from the pattern
 V = lpeg.V -- create a variable within a grammar
 
+-- greek = R"Α"
 
 clua = epnf.define ( function (_ENV)
 	START "form"
 	SUPPRESS ("element", "form", "atom", "pair")
     local WS = P' '^0 + P'\n'^0 + P',' + P'\07'
     symbol = C(R'az'^1)-- incorrect start
-    number = C(R'09'^1) -- likewise 
+    number = C(R'09'^1) / tonumber -- likewise 
 	atom   = WS * V"symbol" * WS + WS * V"number" * WS
 	list    =   WS * P'(' * V"element"^0 * P')'
 	vector  =   WS * P'[' * V"element"^0 * P']' 
@@ -36,7 +37,7 @@ end)
 
 function read (str)
 	ast = epnf.parsestring(clua,str)
-	dump_ast(ast, "")
+	dump_ast(ast, "", false)
 	return ast
 end
 
