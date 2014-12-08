@@ -19,16 +19,26 @@ V = lpeg.V -- create a variable within a grammar
 
 clua = epnf.define ( function (_ENV)
 	START "form"
-	suppress ("element")
-    local WS_     = P' '^0 + P'\n'^0 + P',' + P'\07'
+	SUPPRESS ("element", "form", "atom", "pair")
+    local WS = P' '^0 + P'\n'^0 + P',' + P'\07'
     symbol = C(R'az'^1)-- incorrect start
     number = C(R'09'^1) -- likewise 
-	atom   = WS_ * V"symbol" * WS_ + WS_ * V"number" * WS_
-	list    =   P'(' * V"element"^0 * P')' * WS_ 
-	element = V"atom" + V"form" 
-	form    = V"list"
+	atom   = WS * V"symbol" * WS + WS * V"number" * WS
+	list    =   WS * P'(' * V"element"^0 * P')'
+	vector  =   WS * P'[' * V"element"^0 * P']' 
+	pair    = V"element" * WS * V"element" * WS
+	hash    = WS * P'{' * V"pair" * P'}'
+	element = V"atom" + V"form" * WS 
+	form    = V"list" + V"vector" + V"hash"
 end)
 
 
- ast = epnf.parsestring(clua, "(foo bar)")
+function read (str)
+	ast = epnf.parsestring(clua,str)
+	epnf.dumpast(ast)
+	return ast
+end
+
+ ast = epnf.parsestring(clua, "(foo bar [baz bux 23] )")
 epnf.dumpast(ast)
+read("{qux flux}")
