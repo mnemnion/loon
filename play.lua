@@ -4,6 +4,11 @@ function rl()
 	dofile "play.lua"
 end
 
+-- Some tests
+
+list_string = "(foo 23 bar)"
+map  = "{ foo bar, baz 42}"
+
 match = lpeg.match -- match a pattern against a string
 P = lpeg.P -- match a string literally
 S = lpeg.S  -- match anything in a set
@@ -14,14 +19,17 @@ V = lpeg.V -- create a variable within a grammar
 
 symbol = R'az'^1-- incorrect start
 number = R'09'^1 -- likewise
-WS     = P' '^0 + P'\n'^0 -- correct modulo tabs
+WS     = P' '^0 + P'\n'^0 + P',' + P'\07'
 
-atom = symbol + number 
+atom = WS * symbol * WS + WS * number * WS
 
-seq = WS * atom * WS * atom^0 * WS
+seq =  atom * atom^0
 
 
 form = P{
-	"S";
-  S =  seq + WS * '(' * V"S" * P')' * WS   
+  "form" ;
+  form =  seq + WS * '(' * V"form" * P')' * WS  + V"list" ;
+  list = P"foo" ;
 }
+
+print(match(form,list_string))
