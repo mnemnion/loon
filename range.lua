@@ -5,16 +5,16 @@
 -- The solution: provide two strings. Construct a bytewise comparator that matches the range of the 
 -- first bytes, followed by the range of the second, and so on. 
 --
--- For ordinary Latin, this gives expected behavior. ["ab"-"cz"] would match any two bytes, provided the
+-- For ordinary Latin, this gives expected behavior. ("ab","cz") would match any two bytes, provided the
 -- first is in a-c and the latter is in b-z. For UTF-8, this should in fact decompose into exactly 
 -- what we want. Back-adaptation to old regexes was keenly on the mind of the designers. 
 -- 
--- Currently, we barf on a range like `["ab"-"c"]`. This precludes matching against Unicode characters of 
+-- Currently, we barf on a range like `("ab","c")`. This precludes matching against Unicode characters of 
 -- different widths, and is far faster than solving the general case.
 -- 
 -- This should come up quite seldom, as the various code classes don't cross width boundaries
 -- for just this reason. in the event you need a range spanning N'Ko and Indic, or Forms and 
--- Ancient Sym, CJK, you're on your own.
+-- Ancient Symbols, you're on your own.
 
 require "lpeg"
 
