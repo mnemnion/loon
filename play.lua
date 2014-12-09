@@ -2,11 +2,7 @@
 require "lpeg"
 epnf = require "lua-luaepnf/src/epnf"
 dofile "./tools/util.lua"
-
-function rl()
-	dofile "play.lua"
-end
-
+dofile "./backwalk.lua"
 
 match = lpeg.match -- match a pattern against a string
 P = lpeg.P -- match a string literally
@@ -37,6 +33,7 @@ end)
 
 function read (str)
 	ast = epnf.parsestring(clua,str)
+	walkast(ast)
 	dump_ast(ast, "", false)
 	return ast
 end

@@ -5,14 +5,13 @@ local function d_ast( node, prefix, nums)
     write(prefix )
     --write("{")
     if next( node ) ~= nil then
-      --write(  )
       if type( node.id ) == "string" and
          type( node.pos ) == "number" then
         write(node.id,
                "  ", tostring( node.pos ))
       end
       for k,v in pairs( node ) do
-        if k ~= "id" and k ~= "pos" then
+        if k ~= "id" and k ~= "pos" and k ~= "parent" then
           write("\n", prefix)
           if nums then write("  ", tostring( k ), " = " ) end
           d_ast( v, prefix.." ", nums )
