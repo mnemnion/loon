@@ -39,6 +39,4 @@ function read (str)
 end
 
 ast = read "(foo bar [baz bux (qux flux (pavilion)) 23] )"
-print("THE INDEX:  ",dump_ast(index, "", false), "===")
-read("{qux flux}")
-read("#{quux fluux}")
+
