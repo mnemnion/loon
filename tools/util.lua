@@ -5,6 +5,7 @@ local function d_ast( node, prefix, nums)
     write(prefix )
     --write("{")
     if next( node ) ~= nil then
+--      if node.parent then print "parent!" end
       if type( node.id ) == "string" and
          type( node.pos ) == "number" then
         write(node.id,

@@ -17,7 +17,7 @@ V = lpeg.V -- create a variable within a grammar
 clua = epnf.define ( function (_ENV)
 	START "form"
 	SUPPRESS ("element", "form", "atom", "pair")
-    local WS = P' '^0 + P'\n'^0 + P',' + P'\07'
+    local WS = P' '^0 + P'\n'^0 + P',' + P'\09'
     symbol = C(R'az'^1)-- incorrect start
     number = C(R'09'^1) / tonumber -- likewise 
 	atom   = WS * V"symbol" * WS + WS * V"number" * WS
@@ -32,12 +32,14 @@ end)
 
 
 function read (str)
-	ast = epnf.parsestring(clua,str)
+	local ast = epnf.parsestring(clua,str)
+	local index = {}
 	walkast(ast)
 	dump_ast(ast, "", false)
-	return ast
+	return ast, index
 end
 
-read "(foo bar [baz bux (qux flux (pavilion)) 23] )"
+ast_ts, index = read "(foo bar [baz bux (qux flux (pavilion)) 23] )"
+dump_ast(index, "", false)
 read("{qux flux}")
 read("#{quux fluux}")

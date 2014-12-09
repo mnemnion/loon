@@ -11,20 +11,29 @@
 -- This is the usual recursive function wrapped in pre and post matter. 
 
 local function isnode(maybetable)
-	if type(maybetable) == "table" then
+	-- this should be a metatable lookup
+	-- the metatable should be attached in the parsing pass
+	if (type(maybetable) == "table" ) then
+--		print ("yep "..maybetable.id)
 		return true
 	else 
+--		print "nope"
 		return false
 	end
 end
 
 local function walk_ast (ast, parent)
-	ast["parent"] = parent 
-	for _, v in pairs(ast) do
-		if isnode(maybetable) then
-			walk_ast(v,ast)
+	if isnode(ast) then
+		--index[#index+1] = ast
+		for _, v in pairs(ast) do
+			if isnode(ast) then
+				 walk_ast(v,ast)
+			end
 		end
-	end
+		ast["parent"] = parent 
+    end
 end
 
-function walkast(ast) walk_ast(ast, ast) end -- I am my own grandpa
+function walkast(ast) 
+	return walk_ast(ast, ast, {})
+end 
