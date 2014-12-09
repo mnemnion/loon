@@ -124,7 +124,7 @@ The underlying representation of lists and vectors may be a table, and normally 
 
 The tokens `< > \ /` are reserved as pairs. The angle brackets `<` and `>` are intended for type annotations.
 
-`\ /` are being held onto while I mull over their utility. I have an ambition to use them in a peculiar way: `\ (form) \ (form) / (form) / ` wherein the two backslashes must balance pairwise and the resulting pairs must balance recursively. I don't know what that's useful for, yet. I won't waste it as a confusing way to express a conditional, though. 
+`\ /` are being held onto while I mull over their utility. I have an ambition to use them in a peculiar way: `\ (form) \ (form) / (form) / ` wherein the two backslashes must balance pairwise and the resulting pairs must balance recursively. I don't know what that's useful for, yet. I won't waste it as a confusing way to express a conditional, though, or for object/attribute/value relationships, or the like.  
 
 This means we will have a different set of mathematical functions from a more familiar lisp. `(/ 3 4)` doesn't produce `3/4` like a proper numeric tower enthusiast would expect, it's just a syntax error. As we'll see, this matters much less in Clua than it otherwise might.  
 
@@ -146,7 +146,13 @@ Keywords are always equal to themselves, and never refer to another value.
 
 ###The Hash Modifier
 
-The `#` character, in general, modifies the following form. An example is `#{ forms }`, which produces a set, and does not require paired elements. `#_` causes the following form to be parsed and immediately discarded. 
+The `#` character, in general, modifies the following form. 
+
+`#{}` produces a set. Unlike a table, a set does not require paired forms within the region. 
+
+`#[]` produces a ring. A ring is a vector, with a zero element, which may be indexed modulo its length. 
+
+`#_` causes the following form to be parsed and immediately discarded. 
 
 The Clua reader may not currently be extended by the runtime to use the `#` modifier. At least not legally. But that doesn't matter because of
 
@@ -158,7 +164,7 @@ Of which I'm proud. Or will be when I write it.
 
 The resulting program can do anything at all, but should be programmed to parse conservatively. As soon as it's done doing something reasonable, it should hand back over to the reader, which will look for another `|`. If it doesn't find one, it just hands control back over to the new syntax handler. 
 
-One doesn't want to hand control back over at a place where the enclosing language allows for a `|`, for reasons that should be clear. The dispatch little language provides some sugar for these edge cases. 
+One doesn't want to hand control back over at a place where the enclosing language allows for a `|`, for reasons that should be clear. The dispatch little language provides some sugar for these cases. The average user is not expected to design entire syntaxes; the macro system will be more than adequate for that purpose, and there will be at least three provided. 
 
 ### Comments
 
@@ -167,21 +173,3 @@ Comments begin with `;`, continuing to the end of the line.
 Comments containing more than one `;`, with only whitespace between the `;` and the preceding newline, should be formatted in Markdown and otherwise conform to Clua documentation conventions. 
 
 The Clua runtime discards comments, which hold no place in the resulting syntax tree. 
-
-# Semantics
-
-Clua is designed to run atop LuaJIT. Early releases will remain compatible with Lua, but the intention is to start integrating with libraries at a level that will require us to pick a VM and stick with it. The choice is clear. 
-
-Clua is defined in terms of S-expressions in the syntactic sense, and leverages this in ways that are pleasant to a Lisp user. It is not a Lisp. Clua is Lua. Lua provides a more powerful semantics in the form of tables. 
-
-Lisps proper rely on a particular implementation of the tuple, one which happens to be fast on early hardware. For fast, we have LuaJIT, which erases most of the already low overhead of table lookups. 
-
-We don't disguise the fact that we have tables upon tables, and the ability to return multiple unstructured values. We revel in it. 
-
-## Incremental Transpiler
-
-The intention is that Clua is translated to Lua by reading, constructing the AST, and transforming the structure into the minimum necessary amount of Lua. No whole-string representation of the program is generated and there are no line errors from the Lua interpreter. 
-
-The result is an ordinary Lua environment. Code which translates down to chunks is called in the global context, functions and other values are entered into the environment, and so on. 
-
-I'm still studying precisely how to do this, but I expect it to prove tractable.  
