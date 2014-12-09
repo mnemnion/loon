@@ -76,13 +76,13 @@ The reader is fairly permissive in terms of the symbols it will accept, currentl
 
 ### Numbers
 
-The reader will attempt to make a number if it fails to make a symbol by encountering numbers in the range `[0-9]` or `-`. 
+The reader will attempt to make a number if it fails to make a symbol by encountering characters in the range `[0-9]` or `-`. 
 
 If the character is `-`, the reader will attempt a decimal negative number.
 
-If the number is a zero, the reader will first look for a radix, which is any valid Unicode alphabetic code point. `b, d, and x` have predefined meanings, providing binary, decimal, and hexadecimal decodings respectively. `i I` are not interpreted as radices. All other lowercase Latin characters are reserved and may not be redefined by a valid runtime.
+If the character is a `0`, the reader will first look for a radix, which is any valid Unicode alphabetic code point. `b, d, and x` have predefined meanings, providing binary, decimal, and hexadecimal decodings respectively. `i I` are not interpreted as radices. All other lowercase Latin characters are reserved and may not be redefined by a valid runtime.
 
-An unrecognized radix will provoke the reader to look for a decoder matching the radix value. If this fails it defaults to decimal behavior. 
+An unrecognized radix will provoke the reader to look for a decoder matching the radix value. If this fails it defaults to decimal behavior. The absence of a radix is decimal by default. 
 
 If the decimal reader encounters a `.`, it will resolve the digits following the decimal as the fractional value. `e E` interpret the following digits as an exponent. 
 
