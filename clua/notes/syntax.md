@@ -19,19 +19,35 @@ Tabs are deprecated.
 
 ###Single Tokens
 
-The characters ``. ` ~ ; : ' " #`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
+The characters ``. ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
 `.` represents field access. 
 
-`` ` `` and ` ~ ` quote and unquote within the macro system.
+`` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
 `;` begins a comment, which ends with a newline. 
 
 `:` must be followed by a valid symbol, which may not be separated by whitespace. This is a keyword.
 
-`'` is reserved syntax.
+`'` quotes the following form.
 
 `"` begins and ends strings, with `\` as an escape character for `"` in this context.
 
 `#` is a signal to the reader, which has various effects on the following form. 
 
+`|` is reserved syntax.
+
+### Paired Tokens
+
+The characters `( ) [ ] { } < > \ /` are not valid in symbols. They must be balanced: Any left member of the set
+must receive a right member of the set, in the order encountered by the reader, across all pairs. To illustrate, `({})` is valid `({}` is invalid, and `({)}` is invalid also. 
+
+`( )` constitute a list. 
+
+`[ ]` constitutes a vector. 
+
+`{ }` constitutes a table. 
+
+`< >` is reserved syntax, intended for type annotation.
+
+`\ /` is reserved syntax. Note that the backslash begins, and the slash ends, a pairing. `\o/`
