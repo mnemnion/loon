@@ -10,6 +10,13 @@
 
 -- This is the usual recursive function wrapped in pre and post matter. 
 
+-- Now that I've added an index, I'm considering a cleaner parent implementation, where the parent is simply a number
+-- which must be looked up against the index. To completely eliminate back references, the index might be a closure 
+-- which returns the table given the argument, thus `index(i)` rather than `index[i]`. 
+--
+-- It would be useful for our decorated AST to have no cycles, since we're guaranteed to traverse it in linear time 
+-- with no cycle checking. 
+
 local function isnode(maybetable)
 	-- this should be a metatable lookup
 	-- the metatable should be attached in the parsing pass
@@ -24,19 +31,25 @@ end
 
 function walk_ast (ast)
 	local index = {}
+	local ndx = function(ordinal)
+		return index[ordinal]
+	end
+	local function add_to_index(node)
+	end
+
 	local function walker (ast, parent)
+		index[#index+1] = ast 
 		if isnode(ast) then
 			for _, v in pairs(ast) do
 				if isnode(ast) then
 					 walker(v,ast)
 				end
 			end
-			ast["parent"] = parent
+			ast["parent"] = #index
 	    end
-		index[#index+1] = ast 
 --		print("index length is: ", #index)
 	end
 	walker(ast,ast)
-	ast.index = index
+	ast.index = ndx
 --	print("index length is now: ", #index)
 end
