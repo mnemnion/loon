@@ -33,13 +33,12 @@ end)
 
 function read (str)
 	local ast = epnf.parsestring(clua,str)
-	local index = {}
-	walkast(ast)
+    walk_ast(ast)
 	dump_ast(ast, "", false)
-	return ast, index
+	return ast
 end
 
-ast_ts, index = read "(foo bar [baz bux (qux flux (pavilion)) 23] )"
-dump_ast(index, "", false)
+ast = read "(foo bar [baz bux (qux flux (pavilion)) 23] )"
+print("THE INDEX:  ",dump_ast(index, "", false), "===")
 read("{qux flux}")
 read("#{quux fluux}")

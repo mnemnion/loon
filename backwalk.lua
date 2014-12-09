@@ -22,18 +22,21 @@ local function isnode(maybetable)
 	end
 end
 
-local function walk_ast (ast, parent)
-	if isnode(ast) then
-		--index[#index+1] = ast
-		for _, v in pairs(ast) do
-			if isnode(ast) then
-				 walk_ast(v,ast)
+function walk_ast (ast)
+	local index = {}
+	local function walker (ast, parent)
+		if isnode(ast) then
+			for _, v in pairs(ast) do
+				if isnode(ast) then
+					 walker(v,ast)
+				end
 			end
-		end
-		ast["parent"] = parent 
-    end
+			ast["parent"] = parent
+	    end
+		index[#index+1] = ast 
+--		print("index length is: ", #index)
+	end
+	walker(ast,ast)
+	ast.index = index
+--	print("index length is now: ", #index)
 end
-
-function walkast(ast) 
-	return walk_ast(ast, ast, {})
-end 

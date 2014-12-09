@@ -1,6 +1,7 @@
 local function write(...) return io.write(...) end
 
 local function d_ast( node, prefix, nums)
+  -- I need a non crappy one of these badly.
   if type( node ) == "table" then
     write(prefix )
     --write("{")
@@ -12,7 +13,7 @@ local function d_ast( node, prefix, nums)
                "  ", tostring( node.pos ))
       end
       for k,v in pairs( node ) do
-        if k ~= "id" and k ~= "pos" and k ~= "parent" then
+        if k ~= "id" and k ~= "pos" and k ~= "parent" and k ~= "index" then
           write("\n", prefix)
           if nums then write("  ", tostring( k ), " = " ) end
           d_ast( v, prefix.." ", nums )
@@ -25,6 +26,12 @@ local function d_ast( node, prefix, nums)
     else
       write(prefix, "\"", tostring( node ), "\"")
     end
+  end
+end
+
+function index_print(index)
+  for i,v in pairs(index) do
+    print("i: ",i," v: ", v)
   end
 end
 
