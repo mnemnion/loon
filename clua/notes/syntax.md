@@ -2,7 +2,7 @@
 
 Clua is defined in UTF-8 format.
 
-##Characters
+#Reading
 
 The following describes the behavior of the Clua reader with respect to various characters. 
 
