@@ -122,9 +122,13 @@ The underlying representation of lists and vectors may be a table, and normally 
 
 ### Reserved Pairs
 
-The tokens `< > \ /` are reserved as pairs. The angle brackets `<` and `>` are intended for type annotations.
+The tokens `< > \ /` are reserved as pairs. The angle brackets `<` and `>` are intended for type annotations. It (probably) doesn't make sense to say `<<form>>` as a type annotation, so we may use `<<` and `>>` for long strings. If so we'll allow a form as `<---<` `>--->` for guaranteed uniqueness of a string. 
 
 `\ /` are being held onto while I mull over their utility. I have an ambition to use them in a peculiar way: `\ (form) \ (form) / (form) / ` wherein the two backslashes must balance pairwise and the resulting pairs must balance recursively. I don't know what that's useful for, yet. I won't waste it as a confusing way to express a conditional, though, or for object/attribute/value relationships, or the like.  
+
+Perhaps table comprehensions? In this form `\ selector \ table / action /`. The problem with almost all such triples is that, while the selector might have moderately special syntax, the table just has to eval to table and the action just has to be a function. 
+
+Coroutines? I'm still a little unclear on what happens there in detail. 
 
 This means we will have a different set of mathematical functions from a more familiar lisp. `(/ 3 4)` doesn't produce `3/4` like a proper numeric tower enthusiast would expect, it's just a syntax error. As we'll see, this matters much less in Clua than it otherwise might.  
 
@@ -152,7 +156,11 @@ The `#` character, in general, modifies the following form.
 
 `#[]` produces a ring. A ring is a vector, with a zero element, which may be indexed modulo its length. 
 
+`#!` is reserve, causing the following form to be immutable. 
+
 `#_` causes the following form to be parsed and immediately discarded. 
+
+`#!#{}` creates an immutable set. `#_#!#{}` parses and discards an immutable set without creating it. `#!#_#{}` is a parse error, because there is a hash-modifier context and that statement doesn't make sense. 
 
 The Clua reader may not currently be extended by the runtime to use the `#` modifier. At least not legally. But that doesn't matter because of
 
