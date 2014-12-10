@@ -18,8 +18,22 @@ One of the uses of the syntax boundary that has me salivating is statements such
 
 **dispatch** has special behavior when it encounters a comment-bang. This is familiar syntax for a command shell, purposefully. If dispatch encounters lowercase latin letters up to a whitespace, it looks this string up to see if it has a reader with that name. A release version of the Loon environment ships with `clua, lua, moon, loona` as basic options. 
 
+MoonScript is really cool and I'd like to sugar it slightly, so a line of the form `|--|` followed by a newline is a block of moonscript. The closing idiom is `--|`, the comment parser is expected to check this. Moonscript is a language with meaningful whitespace, so we enforce a syntax requiring it to have its own line structure. Anything else would be confusing. 
+
+Technically anything can come between the `|--|`, dispatch treats that line as a comment. 
+
+Back to bang dispatch. If dispatch encounters a string after the comment-bang, it treats this as a file in the current context, and tries to load it as a syntax reader. We will provide a version of dispatch that can't do this, it's a convenience to the developer. 
+
 ## Ending the Parse
 
 Therefore, we want to `yield`-on-match whenever possible. This is possible anytime the syntax can't expect a `|`
 
 Lua doesn't use the `|` operator for anything, making it a convenient symbol in context. Clearly the parser won't yield in the middle of a string, and that's the only valid place to find one. 
+
+What if we want real problems, and add `|` as the syntax boundary marker for Loona? How could dispatch possibly figure out what's going on, how could it tell a new syntax context from the old one? 
+
+Well, in Loona, a bare `|` means 'start parsing as Clua'. So there's no difference between the yields in this case.
+
+Incredibly, MoonScript doesn't use `|` either. I guess it just isn't useful in a Lua context, unless you have syntax boundaries you want to enforce.
+
+And now you've met the syntax boundary marker. Behold its remarkable power. Gaze upon it. Remember macros? Remember them? Yeah we have them too. In Clua, and in Lun. 

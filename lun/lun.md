@@ -1,4 +1,6 @@
-#Loona
+#Lun
+
+Lun is pronounced `lun` in IPA. Americans, you would say "Loon". Please don't call it luhn. You will make me super sad. Think Lūn, we will probably stylize in that fashion. 
 
 Clua is one pillar of the Loon environment. The second is Moonscript. The third begins as Lua. We turn it into Loona.
 
@@ -15,3 +17,6 @@ If you want to add a bunch of abbreviations to Luna, or translate all the keywor
 If you like macros, however, I urge you to just use Clua. It's designed for that. 
 
 Changes to Loona will be mild, and will be Lua compatible by definition. That is, Loon will always run Lua if coerced, and any Loona (or Clua, or Moonscript) will interact with ordinary Lua in reasonably consistent ways.
+
+##Shell and Program syntax.
+
