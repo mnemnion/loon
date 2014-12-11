@@ -22,7 +22,7 @@ Tabs are deprecated.
 
 The characters ``. ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
-`.` represents field access, or the decimal in a numeric context.
+`.` represents method access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
 
 `` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
@@ -96,6 +96,12 @@ The reader, upon encountering a `"`, will construct a string. It does so by acce
 
 The reader specification does not provide an internal format for strings, other than to indicate that they should be valid UTF-8. The implementation expects the internal format to follow that of Lua. 
 
+###Keywords
+
+`:` begins a keyword. It must be followed by a symbol, with no whitespace. 
+
+Keywords are always equal to themselves, and never refer to another value. 
+
 #### Reminder
 
 Behavior described is in the outer context unless otherwise specified. Several single character tokens change that context in indicated ways.
@@ -142,11 +148,6 @@ The `'` character quotes the following form. The effects of this depend on the f
 
 `` ` `` and `~` are part of the macro system. That's what I have today. I have to go over all the macro systems very carefully, to repea^H^H^H^H^H avoid the previous mistakes. 
 
-###Keywords
-
-`:` begins a keyword. It must be followed by a symbol, with no whitespace. 
-
-Keywords are always equal to themselves, and never refer to another value. 
 
 ###The Hash Modifier
 

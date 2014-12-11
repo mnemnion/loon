@@ -22,6 +22,16 @@ The intention is that Clua is translated to Lua by reading, constructing the AST
 
 The result is an ordinary Lua environment. Code which translates down to chunks is called in the global context, functions and other values are entered into the environment, and so on. 
 
+## Symbols
+
+Lua has a loose distinction between strings and symbols, which is enforced through syntax. It's not sufficiently first class, by itself, for Clua. 
+
+Happily, strings now have metatables, so equality tests of `"foo"`, `'foo` in one context, and `'foo` from a second context will not report as equal, and the latter two will be of type `<Symbol>` rather than `<String>`.
+
+## Numbers
+
+What a number is needs to be user defined, for any reasonable mathematics to happen. This is why we provide a literal syntax for any number form you want, provided it has no whitespace. 
+
 ## Template Forms
 
 Normally, a Lisp starts with a small number of atomic operations, introduces a few special forms, and proceeds on that basis. 
@@ -72,6 +82,10 @@ Unquoting a list and calling it will require compilation, although we could prov
 
 In any case it's an idiom I expect to see mostly from old Lisp heads, and it isn't considered the Loony thing to do in general. I do intend, somehow, to preserve the general semantics. I believe this can be made to work. 
 
+I'm also slowly realizing that I'm probably wrong about this. Quoting something means you read it and defer evaluation. I believe we can do this in a consistent way. 
+
+Question to answer: if I `let` some variables in a lisp, then add them to a quoted list, return it, and evaluate it, what happens? That is, how do quoted lists interact with lexical closures? More importantly what do I want them to do? Probably lift out their context, but I'm not sure.
+
 ## Vectors
 
 Vectors get used a lot, since our lists are completely fake half the time. Arguments to functions are defined in a vector, and we use a syntactic vector in our destructuring let, to capture multiple return values in an elegant fashion. 
@@ -111,6 +125,12 @@ The meaning is clear enough: if the brackets contain a type, or a form returning
 The mechanism is also clear, it must be a metatable, what other option do we have? 
 
 How to make it function as a type system? That's not clear, and may be moderately difficult. Gradual typing is an art, to be sure, which has been reinvented repeatedly with varying degrees of success. 
+
+The edge cases, such a whether to constrain by failure or attempt a structural cast, can be figured out later. The gist is that type annotations attach metatables to values. 
+
+Which is almost impossibly cool. You can attach a metatable to a string; you can even attach a metatable to a number, by making it an anonymous function which, called, returns its value, then attaching a metatable to the function. In Lua, that's a moderate amount of work, in Clua, we can let you make a literal number a `<Liter>` and dividing it by a `<Kilo>` will yield a `<Ratio>` of type `<Density>`. Eventually. `<Kilo>`, being `(is-a <Mass>)`, should be castable to a `<Pound>`, for those benighted cases where we need one. And so on. This is tractable, but we need a langauge before we can subject it to such delightful uses. 
+
+Every metatable has a single metatable, leading back to _G. They may contain arbitrary numbers of *references* to metatables, naturally, enabling, I'm certain, a CLOS level of object orientation. 
 
 I expect this to be useful in interoperating with Rust, and possibly C++. But if you're using that steaming pile too long after Rust 1.0, you are making a mistake, my friend. 
 
