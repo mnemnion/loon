@@ -8,6 +8,14 @@ Lisps proper rely on a particular implementation of the tuple, one which happens
 
 We don't disguise the fact that we have tables upon tables, and the ability to return multiple unstructured values. We revel in it. 
 
+###Is it a Lisp though?
+
+Clua handily meets all nine points on [Paul Graham's](http://www.paulgraham.com/diff.html) list of what makes Lisp different. Any programmer who glances at it will call it a Lisp. Anyone who argues with the idea that it's a Lisp, knows what `funcall` does. 
+
+Look I feel you. I'm in favor of Lisp-2 myself, but Lua provides neither linked lists nor a separate namespace for functions, so we're stuck with it. Most people prefer Lisp-1, until they get a chance to try otherwise. For my taste, in English you can list a list, in fact that's very common, so `(list list)` is a fine idiom to my taste. 
+
+Similarly, I feel at least moderately bad about taking away all your lovingly crafted algorithms and tricks using cons cells, improper cells, A-lists, P-lists, and so on. YAGNI, holmes, this is all simpler than that, so you can focus on the part of Lisp where you do crazy things on account of having access to linguistic sillyputty. 
+
 ## Incremental Transpiler
 
 The intention is that Clua is translated to Lua by reading, constructing the AST, and transforming the structure into the minimum necessary amount of Lua. No whole-string representation of the program is generated and there are no line errors from the Lua interpreter. 
@@ -24,11 +32,11 @@ Therefore, our basic building block are template forms. You can define one, once
 
 It should be the case that the only Clua form that needs to be implemented in pure Lua is `deftemplate`. That would be nice. I'll be writing the whole shebang in Lua first, because that's how bootstrapping works. `deftemplate` is dead simple, of course, and could also be written in Clua, but I prefer to leave the straps on the boot. 
 
-I think these reasonably qualify as fexprs. Maybe?  
-
 I'm told this templating business is important to conducting operations on the World Wide Web. It may also be the case that there are many grammars to cope with in a coherent way, used out there. Blessedly, I would have no idea. 
 
-Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clua would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. 
+Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clua would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. Templates are expected to evaluate their contents, not merely read them (that's a macro), but parsing is a degenerate case of evaluation, as is returning a string, or writing to a file and returning the handle, or whatever you want. What. ever. you. want. 
+
+I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr if you pass it the Clua reader. 
 
 ## Lists
 
@@ -93,3 +101,16 @@ I'll be including quote, unquote, and quasiquote (which I don't even understand 
 ## Type Annotations
 
 Lua is a classically dynamic language, in that it has types, but it doesn't do much with them unless you tell it to. 
+
+When I'm good and ready, I'll start adding type annotations to Clua. We need them to work in a useful way, and need to discern what that is. Structurally, they're somewhat unusual in a Lisp, in that they're a proper form, meaning `< form >` is always syntactically correct, but they apply to the next form, formally and implicitly joining into a single form. So `{<int> 3 "foo"}` is syntactically correct, despite the requirement that a table contain an even number of forms.
+
+I believe a type annotation followed by another type annotation is also incorrect. It's not clear what the resulting potential chain of infinite concatenations would mean. 
+
+The meaning is clear enough: if the brackets contain a type, or a form returning a type, then the next form is either of that type, or must be of that type. If the form in the brackets returns another form (type of something that's not Type), then the next form is/must be of that type. 
+
+The mechanism is also clear, it must be a metatable, what other option do we have? 
+
+How to make it function as a type system? That's not clear, and may be moderately difficult. Gradual typing is an art, to be sure, which has been reinvented repeatedly with varying degrees of success. 
+
+I expect this to be useful in interoperating with Rust, and possibly C++. But if you're using that steaming pile too long after Rust 1.0, you are making a mistake, my friend. 
+
