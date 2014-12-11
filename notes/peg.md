@@ -48,12 +48,14 @@ rule : !not-this rule                rule - not-this
 
 rule : -not-this-period              -not-this-period
 
-rule : &if-also-this rule           #if-also-this
+rule : &if-also-this rule              #if-also-this
 
-rule : [a-b] ; range rule             -- customized
+rule : [a-b]                            R"ab"        -- customized
 
+rule : {set-rul}						S"set-rul" -- needs the Unicode treatment
+ 
 rule : "literal rule"                 P"literal rule"
 
-<hidden rule> : <hidden output> ; not captured, nor is a node created
+<hidden rule> : <hidden output>       SUPPRESS "hidden rule"
 
 ```
