@@ -22,7 +22,13 @@ We have no need to bootstrap from a level where consing makes sense. Clua doesn'
 
 Therefore, our basic building block are template forms. You can define one, once we complete the bootstrap, they're a user-level technology. They take a template, fill it with the arguments, and compile it. They can be recursive, and call other templates, and keep proper track of lexical scope, although it's possible to confuse a template since they don't know what's in the strings. Templates do keep an eagle eye out for `_ENV` and try to do the right thing, so it may be possible to make it, at least, difficult to accidentally subvert hygiene.
 
-It should be the case that the only Clua form that needs to be implemented in pure Lua is `deftemplate`. That would be nice. I'll be writing the whole shebang in Lua first, because that's how bootstrapping works. `deftemplate` is dead simple, of course, and could also be written in Clua, but I prefer to leave the straps on the boot.  
+It should be the case that the only Clua form that needs to be implemented in pure Lua is `deftemplate`. That would be nice. I'll be writing the whole shebang in Lua first, because that's how bootstrapping works. `deftemplate` is dead simple, of course, and could also be written in Clua, but I prefer to leave the straps on the boot. 
+
+I think these reasonably qualify as fexprs. Maybe?  
+
+I'm told this templating business is important to conducting operations on the World Wide Web. It may also be the case that there are many grammars to cope with in a coherent way, used out there. Blessedly, I would have no idea. 
+
+Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clua would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. 
 
 ## Lists
 
@@ -50,8 +56,40 @@ This is a fine interpreter, possibly dereferenced and slower, possibly not. I st
 
 Between LuaJIT and whole-program transpiling, I'll take my chances. We can always add a Closure-style (yes 's') whole program compiler later, if we're feeling ambitious. I'm okay with just letting Lua be small and LuaJIT be fast, and taking a hit if I have to. It's a respectable way to make a language, and again, I can't decide if it's worth the cost until I know the price. 
 
+## Quoted lists
+
+Exist in an entirely different form from 'lists'. They're vectors, lists are a series of function calls, some anonymous, some not, since a chunk is just an anonymous function. These you can cons. Then again, `(cons (list one) (list two))` never did the same thing as `(cons '(list one) '(list two))`, did it? 
+
+Unquoting a list and calling it will require compilation, although we could provide an interpreter, see above. I don't want the parser and Lua compiler to have to travel around inside binaries, and Lua is aggressive about stripping functions that aren't called if you give it the correct flag. 
+
+In any case it's an idiom I expect to see mostly from old Lisp heads, and it isn't considered the Loony thing to do in general. I do intend, somehow, to preserve the general semantics. I believe this can be made to work. 
+
 ## Vectors
 
 Vectors get used a lot, since our lists are completely fake half the time. Arguments to functions are defined in a vector, and we use a syntactic vector in our destructuring let, to capture multiple return values in an elegant fashion. 
 
 They behave exactly as you'd expect, if you expect a dense table that starts at 1 and uses -1 for reverse indexing. Clua should make plenty of sense to all three Lua-aware Clojurians.
+
+## Tables
+
+Are tables. We'll use a lot of them.
+
+Taking `first` on tables won't do what you expect, until you learn to expect it. `rest`, implemented properly, would be moderately expensive in space and time, requiring a surface copy of the entire table (list, vector...). Prefer `next` in such cases. If you `conj` a table, it will merge, but re-index the second table above the first, if there's an index.
+
+`next` will try to exhaust the index before falling back on pairs. We probably want to meta-tag `:has-index` on tables that do. 
+
+## Macros
+
+My current intention is that templates be clean and macros dirty. Sometimes you want variable capture, it's great for building state machines, for example. Not all macros are intended for reuse outside of their context. 
+
+Some people won't like that. Those people can write a `syntax-rules` to go with `defmacro`, which will be a template. 
+
+## $
+
+`$` is going to be important for Clua. It's a selector that operates on tables. You can use it to perform captures as well as rule-based replacement, it does what you'd expect if you spend time with selectors. I put it right under macros because we'll be using it a lot, since `$` can act on the AST of the code being evaluated. 
+
+I'll be including quote, unquote, and quasiquote (which I don't even understand yet), because a selector-based macro will have invisible effects on the structure, being declarative in nature, while the use of quote and unquote is admirably explicit. Sometimes you want one, sometimes the other. `$` is probably itself a macro. 
+
+## Type Annotations
+
+Lua is a classically dynamic language, in that it has types, but it doesn't do much with them unless you tell it to. 
