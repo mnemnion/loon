@@ -46,7 +46,7 @@ rule : a-number-between$2..5 		 -- fake it.
 
 rule : !not-this rule                rule - not-this
 
-rule : -not-this-period              -not-this-period
+rule : -not-this-period              -not-this-period       -- useless and confusing, remove. 
 
 rule : &if-also-this rule              #if-also-this
 
@@ -59,3 +59,35 @@ rule : "literal rule"                 P"literal rule"
 <hidden rule> : <hidden output>       SUPPRESS "hidden rule"
 
 ```
+
+So what does that look like exactly? Something like this:
+
+```
+
+rules : rule+
+
+rule : lhs _ ":" _ rhs
+
+lhs : symbol
+
+rhs : match
+
+match: cat-match / ord-match / _ atom-match _   -- I believe this provides precedence to cat
+
+cat-match : (match _)+
+
+ord-match : match "/" match   -- so a b c / d e f groups (a b c)/(d e f)
+
+atom-match :  option               ; note, this order is not meant to be efficient. 
+		   /  lazy 
+		   /  at-least 
+		   /  single 
+		   /  exactly 
+		   /  no-more-than 
+		   /  between 
+		   /  not-this
+		   /  if-also-this
+		   /  range
+		   /  set
+		   /  literal 
+

@@ -14,6 +14,16 @@ The intention is that Clua is translated to Lua by reading, constructing the AST
 
 The result is an ordinary Lua environment. Code which translates down to chunks is called in the global context, functions and other values are entered into the environment, and so on. 
 
+## Template Forms
+
+Normally, a Lisp starts with a small number of atomic operations, introduces a few special forms, and proceeds on that basis. 
+
+We have no need to bootstrap from a level where consing makes sense. Clua doesn't have cons cells, or proper lists, as a built-in type. What would you do with them, make Lua slower? `first` and `rest` probably draw from an iterator. Clua is Lua first, Clojure second, and only emotionally a Lisp. 
+
+Therefore, our basic building block are template forms. You can define one, once we complete the bootstrap, they're a user-level technology. They take a template, fill it with the arguments, and compile it. They can be recursive, and call other templates, and keep proper track of lexical scope, although it's possible to confuse a template since they don't know what's in the strings. Templates do keep an eagle eye out for `_ENV` and try to do the right thing, so it may be possible to make it, at least, difficult to accidentally subvert hygiene.
+
+It should be the case that the only Clua form that needs to be implemented in pure Lua is `deftemplate`. That would be nice. I'll be writing the whole shebang in Lua first, because that's how bootstrapping works. `deftemplate` is dead simple, of course, and could also be written in Clua, but I prefer to leave the straps on the boot.  
+
 ## Lists
 
 The usual approach to a new Lisp is to bootstrap: create linked lists, cons, car and cdr, reverse (for some reason, this is always written early). The axiomatic approach, if you will. Rich Hickey started with really good data structures. T
