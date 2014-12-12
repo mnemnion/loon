@@ -42,7 +42,7 @@ rule : more-than-two$+2               more-than-two^2
 
 rule : no-more-than-two$-2           no-more-than-two^-2
 
-rule : a-number-between$2..5 		 -- fake it.
+rule : a-number-between$2..5          -- fake it.
 
 rule : !not-this rule                rule - not-this
 
@@ -52,7 +52,7 @@ rule : &if-also-this rule              #if-also-this
 
 rule : [a-b]                            R"ab"        -- customized
 
-rule : {set-rul}						S"set-rul" -- needs the Unicode treatment
+rule : {set-rul}                        S"set-rul" -- needs the Unicode treatment
  
 rule : "literal rule"                 P"literal rule"
 
@@ -64,30 +64,31 @@ So what does that look like exactly? Something like this:
 
 ```
 
-rules : rule+
+     rules : rule+
 
-rule : lhs _ ":" _ rhs
+      rule : _lhs_ ":" _rhs_
 
-lhs : symbol
+       lhs : symbol
 
-rhs : "(" match+ ")" match* / match+
+       rhs : "(" match+ ")" rhs* / match+ rhs*
 
-match: ord-match / _atom-match WS -- I believe this provides precedence to cat
+     match : ord-match / _atom-match WS 
+     -- I believe this provides precedence to cat
 
-cat-match : (match _)+
+ cat-match : (match _)+
 
-ord-match : match "/" match   -- so a b c / d e f groups (a b c)/(d e f)
+ ord-match : match "/" match   -- so a b c / d e f groups (a b c)/(d e f)
 
 atom-match :  option               ; note, this order is not meant to be efficient. 
-		   /  lazy 
-		   /  at-least 
-		   /  single 
-		   /  exactly 
-		   /  no-more-than 
-		   /  between 
-		   /  not-this
-		   /  if-also-this
-		   /  range
-		   /  set
-		   /  literal 
+           /  lazy 
+           /  at-least 
+           /  single 
+           /  exactly 
+           /  no-more-than 
+           /  between 
+           /  not-this
+           /  if-also-this
+           /  range
+           /  set
+           /  literal 
 ```
