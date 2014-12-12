@@ -70,9 +70,9 @@ rule : lhs _ ":" _ rhs
 
 lhs : symbol
 
-rhs : match
+rhs : "(" match+ ")" match* / match+
 
-match: cat-match / ord-match / _ atom-match _   -- I believe this provides precedence to cat
+match: ord-match / _atom-match WS -- I believe this provides precedence to cat
 
 cat-match : (match _)+
 
@@ -90,4 +90,4 @@ atom-match :  option               ; note, this order is not meant to be efficie
 		   /  range
 		   /  set
 		   /  literal 
-
+```
