@@ -9,20 +9,20 @@ This is the grammar of Clua, expressed in the form in which it will, eventually,
       form :  [unary]* (_atom_ / _compound_) / _<comment>
 
      unary :  ","
-   	       /  "~"
-	       /  "`"
-	       /  reader-macro
+              /  "~"
+           /  "`"
+           /  reader-macro
 
       atom :  symbol 
-	       /  number 
-	       /  keyword
-	       /  string
+           /  number 
+           /  keyword
+           /  string
 
   compound :  list
-		   /  hash
-		   /  vector
-		   /  type 
-		   /  syntax
+           /  hash
+           /  vector
+           /  type 
+           /  syntax
 
    symbol  :  latin !(forbidden) ANYTHING
    keyword :  ":" symbol
@@ -34,8 +34,8 @@ This is the grammar of Clua, expressed in the form in which it will, eventually,
     syntax :  "|" dispatch* "|"
 
   dispatch :  "--|" moonscript "|--" 
-		   /  "--!" dispatch-string 
-		   /  lun
+           /  "--!" dispatch-string 
+           /  lun
        lun :  !"|" ANYTHING    ;-) looks like lua!  
 moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
 
@@ -43,4 +43,4 @@ moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
  <comment> :  ";" !"\n" ANYTHING "\n"
 ```
 
-... I think that's it. I didn't specify what can't go into a symbol in much detail. None of the quoted literal forms, that's for certain. 
+... I think that's it. I didn't specify what can't go into a symbol in much detail. None of the quoted literal forms, that's for certain. Actually, "--!" is the sole exception to this, that is a valid character string within a symbol.
