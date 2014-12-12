@@ -1,6 +1,6 @@
 #Grammar
 
-This is the grammar of Clua, expressed in the form in which it will, eventually, be compiled.
+This is the grammar of [Clua](clua.md), expressed in the form in which it will, eventually, be compiled.
 
 ```text
 
