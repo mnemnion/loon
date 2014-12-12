@@ -29,9 +29,9 @@ This is the grammar of Clua, expressed in the form in which it will, eventually,
 
     list   :  "(" form* ")"
     hash   :  "{" form:2* "}"
-    vector :  "[" form "]"
-    type   :  "<" form ">"
-    syntax :  "|" dispatch "|"
+    vector :  "[" form* "]"
+    type   :  "<" form* ">" !type form
+    syntax :  "|" dispatch* "|"
 
   dispatch :  "--|" moonscript "|--" 
 		   /  "--!" dispatch-string 
