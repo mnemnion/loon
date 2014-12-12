@@ -50,29 +50,13 @@ I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr 
 
 ## Lists
 
-The usual approach to a new Lisp is to bootstrap: create linked lists, cons, car and cdr, reverse (for some reason, this is always written early). The axiomatic approach, if you will. Rich Hickey started with really good data structures. T
+The usual approach to a new Lisp is to bootstrap: create linked lists, cons, car and cdr, reverse (for some reason, this is always written early). The axiomatic approach, if you will. Rich Hickey started with really good data structures.
 
 This is closer to what we're doing with Clua. `first` and `rest` will exist, as a semantic convenience. Reverse is almost useless with a vector class, and anything you'd do with a linked list involving shared structure, you can do with tables and should. 
 
 It actually makes more sense to think of lists as a unit of transpilation, than as anything else. Though a simple function call list in the global environment turns directly into a table lookup function call, as it would in standard Lua, `fn` and a few friends will need to call `loadstring` on a concatenated piece of Lua. Maybe. 
 
 We may be able to get away with function factories. In fact, the more I think about it... I think that'll work. Destructuring will be a challenge, it's not actually a macro in that there's no other syntax for catching several return values. `let` and `set` will be our most special forms, suffice to say. Given a function and several symbols, construct and return a function that calls the function and sets all symbols equal to those values. Can be done, but I'd rather pay the transpiler tax unless it can be done efficiently.
-
-Lists are one of several faces tables wear in the Clua environment, but the ordinary list is stored as a function with arguments. I'm still digging into the precise internal representation of functions in Lua, or rather what a 'chunk' is and whether/how I can get a deferred one. We may have to pay the cost of some additional indirection to get incremental transpilation to work, but we may expect LuaJIT to inline a host of anonymous functions as a first step in optimization. Only the profiler can tell for sure. 
-
-Here's the magic formula that gets us off the ground:
-
-```lua
-for i, v in ipairs(chunk) do
-	chunk[i](v)
-end
-``` 
-
-because a chunk is for the most part a series of function calls, and/or can be tranformed into one. 
-
-This is a fine interpreter, possibly dereferenced and slower, possibly not. I still have to figure out how to manually create scopes and hook them to things, but it's all (meta)tables. 
-
-Between LuaJIT and whole-program transpiling, I'll take my chances. We can always add a Closure-style (yes 's') whole program compiler later, if we're feeling ambitious. I'm okay with just letting Lua be small and LuaJIT be fast, and taking a hit if I have to. It's a respectable way to make a language, and again, I can't decide if it's worth the cost until I know the price. 
 
 ## Quoted lists
 
@@ -131,6 +115,8 @@ The edge cases, such a whether to constrain by failure or attempt a structural c
 Which is almost impossibly cool. You can attach a metatable to a string; you can even attach a metatable to a number, by making it an anonymous function which, called, returns its value, then attaching a metatable to the function. In Lua, that's a moderate amount of work, in Clua, we can let you make a literal number a `<Liter>` and dividing it by a `<Kilo>` will yield a `<Ratio>` of type `<Density>`. Eventually. `<Kilo>`, being `(is-a <Mass>)`, should be castable to a `<Pound>`, for those benighted cases where we need one. And so on. This is tractable, but we need a langauge before we can subject it to such delightful uses. 
 
 Every metatable has a single metatable, leading back to _G. They may contain arbitrary numbers of *references* to metatables, naturally, enabling, I'm certain, a CLOS level of object orientation. 
+
+Note that my understanding of how metatables work is both more complex and different from how they actually work. Still figuring out how to make them do what I want. 
 
 I expect this to be useful in interoperating with Rust, and possibly C++. But if you're using that steaming pile too long after Rust 1.0, you are making a mistake, my friend. 
 
