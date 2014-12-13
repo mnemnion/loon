@@ -62,6 +62,12 @@ Templates are read incrementally and recursively by reader calls, and evaluated 
 
 Templates return an `<Environment>`, that in which they've done their work.  They may also return anything else they want, provided the environment comes first. 
 
+###Template Hygiene
+
+Hygiene, in the usual sense, would subvert the purpose of template forms. The entire intention is to interleave evaluation and tree transformation in a sensible way.
+
+Templates will make extensive use of implicit gensyms. Every anonymous function gets interred in the environment with a gensym, so that it may be referred to in a larger string. The gensyms constitute the inner scope, and are set to nil at the end of evaluation, removing them from the closure. 
+
 ## Lists
 
 The usual approach to a new Lisp is to bootstrap: create linked lists, cons, car and cdr, reverse (for some reason, this is always written early). The axiomatic approach, if you will. Rich Hickey started with really good data structures.
