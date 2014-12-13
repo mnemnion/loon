@@ -46,7 +46,13 @@ I'm told this templating business is important to conducting operations on the W
 
 Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clua would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. Templates are expected to evaluate their contents, not merely read them (that's a macro), but parsing is a degenerate case of evaluation, as is returning a string, or writing to a file and returning the handle, or whatever you want. What. ever. you. want. 
 
-I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr if you pass it the Clua reader. 
+Specifically, a reader decomposes into a syntax and an evaluator for that syntax. What Lisp folks call a "reader" is actually a `<Syntax>` in Clu, aka `<||>` which we read as 'the type of the empty syntax'. What we call a reader evaluates its context, as well as parsing it.  
+
+I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr if you pass it the Clua reader. But it's more than a fexpr. If we ever decide to bypass the Lua layer, the templates can emit and compile LuaJIT bytecode directly. Or asm.js, or whatever's clever. 
+
+`#`, which is read as 'reader macro', calls the local reader when placed at the head position. 
+
+Templates are read incrementally and recursively by reader calls, and evaluated when the reader exits the form. This means that if you call a template from a template, evaluation happens within the template, if you call a reader within a template, evaluation happens upon return. I trust this is sufficiently clear. 
 
 ## Lists
 
@@ -90,11 +96,21 @@ My current intention is that templates be clean and macros dirty. Sometimes you 
 
 Some people won't like that. Those people can write a `syntax-rules` to go with `defmacro`, which will be a template. 
 
+Both templates and macros are compile-time forms. The difference is that macros work on the abstract syntax tree of the current syntax context, while templates are provided with a reader, which has *at least* one syntax attached, and which is in complete control of evaluation of the form. Macros can of course have compile-time effects, even side effects, but when they're done the have left behind an AST for later compilation. Template forms are what *do* the compilation.
+
+This leads to the most important thing to know about macros in Clu, which is that they happen before template expansion. All macros are expanded, all template forms are compiled, and then all functions run. Clu. 
+
 ## $
 
 `$` is going to be important for Clua. It's a selector that operates on tables. You can use it to perform captures as well as rule-based replacement, it does what you'd expect if you spend time with selectors. I put it right under macros because we'll be using it a lot, since `$` can act on the AST of the code being evaluated. 
 
-I'll be including quote, unquote, and quasiquote (which I don't even understand yet), because a selector-based macro will have invisible effects on the structure, being declarative in nature, while the use of quote and unquote is admirably explicit. Sometimes you want one, sometimes the other. `$` is probably itself a macro. 
+I'll be including quote, unquote, and quasiquote (which I don't even understand yet), because a selector-based macro will have invisible effects on the structure, being declarative in nature, while the use of quote and unquote is admirably explicit. Sometimes you want one, sometimes the other. `$` is probably itself a macro.
+
+## Destructuring form
+
+This is a possible use for the `\/` pair. A form such as `(\form/)` would destructure invisibly into its return values.
+
+I like this, but I'm leaving it out of the language for now. The destructuring `let` and `set` is easy to understand, and the anonymous form can be `(ret foo bar baz)`, where `ret` is a template form.  
 
 ## Type Annotations
 
