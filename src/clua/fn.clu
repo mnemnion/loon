@@ -1,0 +1,9 @@
+(deftemplate fn [<Vector>args, <Vector>chunk]
+	"template for fn"
+	(let args (unpack args)
+		(do  
+		(| function ( |) )
+		(# (interpolate "," args))
+		(# chunk)
+		(| end |))))
+	
