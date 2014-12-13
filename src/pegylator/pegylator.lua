@@ -17,7 +17,7 @@ C = lpeg.C  -- captures a match
 Ct = lpeg.Ct -- a table with all captures from the pattern
 V = lpeg.V -- create a variable within a grammar
 
-	valid_sym = Ru"AZ" + Ru"az" + P"-" 
+	valid_sym = R"AZ" + R"az" + P"-" 
 	digit = R"09"
 	sym = valid_sym + digit
 	symbol = valid_sym^-1 * sym^0
@@ -26,15 +26,14 @@ peg = epnf.define(function(_ENV)
 	START "rules"
 	local WS = P' '^0 + P'\n'^0 + P',' + P'\09'
 	--local Ru = Ru 
-	valid_sym = C(R"AZ"^1) + C(R"az"^1) + C(P"-"^1) 
-	digit = C(R"09"^1)
-	sym = V"valid_sym" + digit
-	symbol = V"valid_sym"^-1 * sym^0
+	--valid_sym = C(R"AZ"^1) + C(R"az"^1) + C(P"-"^1) 
+	--digit = C(R"09"^1)
+	--sym = V"valid_sym" + digit
+	--symbol = V"valid_sym"^-1 * sym^0
 	lhs   = V"symbol"^1
 	rhs   = V"symbol"^1 --expand
 	rule  = V"lhs" * P':' * V"rhs"
 	rules = C(V"rule"^1)
-	
 end)
 
 
