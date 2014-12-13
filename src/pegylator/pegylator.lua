@@ -18,5 +18,11 @@ Ct = lpeg.Ct -- a table with all captures from the pattern
 V = lpeg.V -- create a variable within a grammar
 
 
-pegsym = (R"AZ" * R"az")
-pegsynonym = (Ru"AZ" * Ru"az") -- works?
+
+symbol = (Ru"AZ" + Ru"az" + "-" )^1 
+
+
+symbol_s = "ASDFrgsrgaoijfsdf--akrtjhart__"
+
+print (match(symbol, symbol_s))
+assert(29 == (match(symbol, symbol_s)))

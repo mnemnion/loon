@@ -32,6 +32,10 @@ Happily, strings now have metatables, so equality tests of `"foo"`, `'foo` in on
 
 What a number is needs to be user defined, for any reasonable mathematics to happen. This is why we provide a literal syntax for any number form you want, provided it has no whitespace. 
 
+## Syntax
+
+`<Syntax>` is a first class type in Clu. A syntax takes a `<String>`, currently, and returns an `<Ast>`. A syntax does not evaluate.
+
 ## Template Forms
 
 Normally, a Lisp starts with a small number of atomic operations, introduces a few special forms, and proceeds on that basis. 
@@ -53,6 +57,8 @@ I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr 
 `#`, which is read as 'reader macro', calls the local reader when placed at the head position. 
 
 Templates are read incrementally and recursively by reader calls, and evaluated when the reader exits the form. This means that if you call a template from a template, evaluation happens within the template, if you call a reader within a template, evaluation happens upon return. I trust this is sufficiently clear. 
+
+Templates return an `<Environment>`, that in which they've done their work.  
 
 ## Lists
 
@@ -92,11 +98,9 @@ Taking `first` on tables won't do what you expect, until you learn to expect it.
 
 ## Macros
 
-My current intention is that templates be clean and macros dirty. Sometimes you want variable capture, it's great for building state machines, for example. Not all macros are intended for reuse outside of their context. 
+Templates, being evaluators attached to readers (which are core functions applied to a syntax), are dirty by definition. They create an environment, and evaluate inside that environment. `|foo|` will be the same as whatever `foo` happens to be laying around within that environment when evaluation happens. 
 
-Some people won't like that. Those people can write a `syntax-rules` to go with `defmacro`, which will be a template. 
-
-Both templates and macros are compile-time forms. The difference is that macros work on the abstract syntax tree of the current syntax context, while templates are provided with a reader, which has *at least* one syntax attached, and which is in complete control of evaluation of the form. Macros can of course have compile-time effects, even side effects, but when they're done the have left behind an AST for later compilation. Template forms are what *do* the compilation.
+Macros, therefore, will be strictly hygenic. Otherwise we have a real headache on our hands. Hygiene should be tractable by overriding the `__newindex` metatable for the macro's metatable.
 
 This leads to the most important thing to know about macros in Clu, which is that they happen before template expansion. All macros are expanded, all template forms are compiled, and then all functions run. Clu. 
 
