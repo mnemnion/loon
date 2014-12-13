@@ -1,3 +1,5 @@
+-- A modified epnf.
+
 local L = require( "lpeg" )
 
 local assert = assert
