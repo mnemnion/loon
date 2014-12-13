@@ -19,12 +19,15 @@ V = lpeg.V -- create a variable within a grammar
 
 
 
-valid_sym = (R"AZ" + R"az" + "-" )
+valid_sym = P((Ru"AZ") + (Ru"az") + "-" )
 
-digit = (R"09")
+digit = R"09"
 
+sym = valid_sym + digit
 
-symbol_s = "ASDFrgsrgaoijfsdf--akrtjhart__"
+symbol = valid_sym^-1 * sym^0
+
+symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 
 print (match(symbol, symbol_s))
-assert(29 == (match(symbol, symbol_s)))
+assert(#symbol_s +1 == (match(symbol, symbol_s)))
