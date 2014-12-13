@@ -132,7 +132,7 @@ The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `
 
 ## Destructuring
 
-Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first.  
+Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first. `(/ foo bar)` performs division and is not a syntax error. `div` is a synonym, so `(let {a,b,c} \'(div 2 3)/)` won't create a parse error.   
 
 ##Reader-Modifying Tokens
 
