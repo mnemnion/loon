@@ -21,25 +21,30 @@ require "lpeg"
 local function makerange(first, second)
 	local patts = {}
 	local patt  = {}
-	if (string.len(first) == string.len(second)) then
-		for i = 1, string.len(first) do
-			patts[i] = lpeg.R(string.sub(first,i,i)..string.sub(second,i,i))
+	if (second) then
+		if (string.len(first) == string.len(second)) then
+			for i = 1, string.len(first) do
+				patts[i] = lpeg.R(string.sub(first,i,i)..string.sub(second,i,i))
+			end
+			patt = patts[1]
+			for i = 2, string.len(first) do
+				patt = patt + patts[i]
+			end
+			return patt
+		else
+			error("Ranges must be of equal byte width")
+			return {}
 		end
-		patt = patts[1]
-		for i = 2, string.len(first) do
-			patt = patt + patts[i]
-		end
-		return patt
-	else
-		error("Ranges must be of equal byte width")
-		return {}
+	else 
+		return lpeg.R(first)
 	end
 end
 
 Ru = makerange
 
---tests
+--[[ tests
 greek = Ru("Α","Ω")
 latin = Ru("a", "z")
 print ("Greek ",lpeg.match(greek,"Β"))
 print ("Latin ",lpeg.match(latin,"b"))
+--]]

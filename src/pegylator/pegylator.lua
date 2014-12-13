@@ -5,6 +5,7 @@
 require "lpeg"
 --epnf = require "lua-luaepnf/src/epnf"
 dofile "../tools/util.lua"
+dofile "range.lua"
 local epnf = dofile "../tools/epnf.lua"
 --dofile "./backwalk.lua"
 
@@ -16,4 +17,6 @@ C = lpeg.C  -- captures a match
 Ct = lpeg.Ct -- a table with all captures from the pattern
 V = lpeg.V -- create a variable within a grammar
 
-print "hi"
+
+pegsym = (R"AZ" * R"az")
+pegsynonym = (Ru"AZ" * Ru"az") -- works?
