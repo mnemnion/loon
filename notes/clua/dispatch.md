@@ -8,7 +8,7 @@ Clua has a syntax boundary token, `|`, which immediately stops parsing, consumin
 
 The first thing dispatch does is try and parse as Lua. If it sees a comment-bang immediately, `--!`, dispatch continues to read up to the next whitespace character not found enclosed in a string. If it hasn't decided to do something else by then, it continues to parse using Lua. 
 
-Any reader in the Loon ecosystem is expected to co-operate with dispatch at all times. Eventually, and I mean as soon as I can get proper cooperation with LPEG, this will be done with coroutines. Basically, the parser will be expected to yield in sensible places. These needn't constitute valid parses on their own.
+Any reader in the Loon ecosystem is expected to co-operate with dispatch at all times. Specifically, this means that `|` must in some fashion be the terminal character of a reader's syntax. 
 
 One of the uses of the syntax boundary that has me salivating is statements such as `(let y | 4*x^3 - (3+g/torque)x^2 | )`. Here, we're expecting Clua to provide the left hand of an assignment, and Loona to provide the right hand. The parse contained between the `|` marks is strictly speaking a syntax error, since Lua has RHS and LHS rules in its grammar, and certain constructions cannot be found on the LHS. 
 
@@ -37,5 +37,7 @@ Well, in Loona, a bare `|` means 'start parsing as Clua'. So there's no differen
 Incredibly, MoonScript doesn't use `|` either. I guess it just isn't useful in a Lua context, unless you have syntax boundaries you want to enforce.
 
 On the other hand, many useful languages make use of `|`. Happily, a language without some kind of syntax error is truly unusual. The reader is responsible for detecting the end-of-parse boundary, and consuming everything up to, and requisitely including, a `|`. **dispatch** always consumes the last `|`, while the first one is consumed by the reader which calls dispatch. 
+
+In an HTML context, that might look like `<!--|>|`, because it has behavior for all input. The reader intercepts the comment and consumes the final `|`. 
 
 And now you've met the syntax boundary marker. Behold its remarkable power. Gaze upon it. Remember macros? Remember them? Yeah we have them too. In Clua, and in Lun. 
