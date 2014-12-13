@@ -26,7 +26,7 @@ Back to bang dispatch. If dispatch encounters a string after the comment-bang, i
 
 ## Ending the Parse
 
-Therefore, we want to `yield`-on-match whenever possible. This is possible anytime the syntax can't expect a `|`
+Therefore, we want to `yield`-on-match whenever possible. This is possible anytime the syntax can't expect a `|`.
 
 Lua doesn't use the `|` operator for anything, making it a convenient symbol in context. Clearly the parser won't yield in the middle of a string, and that's the only valid place to find one. 
 
@@ -35,5 +35,7 @@ What if we want real problems, and add `|` as the syntax boundary marker for Loo
 Well, in Loona, a bare `|` means 'start parsing as Clua'. So there's no difference between the yields in this case.
 
 Incredibly, MoonScript doesn't use `|` either. I guess it just isn't useful in a Lua context, unless you have syntax boundaries you want to enforce.
+
+On the other hand, many useful languages make use of `|`. Happily, a language without some kind of syntax error is truly unusual. The reader is responsible for detecting the end-of-parse boundary, and consuming everything up to, and requisitely including, a `|`. **dispatch** always consumes the last `|`, while the first one is consumed by the reader which calls dispatch. 
 
 And now you've met the syntax boundary marker. Behold its remarkable power. Gaze upon it. Remember macros? Remember them? Yeah we have them too. In Clua, and in Lun. 

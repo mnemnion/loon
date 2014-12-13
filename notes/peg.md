@@ -46,7 +46,7 @@ rule : a-number-between$2..5          -- fake it.
 
 rule : !not-this rule                rule - not-this
 
-rule : -not-this-period              -not-this-period       -- useless and confusing, remove. 
+rule : -not-this-period              -not-this-period   
 
 rule : &if-also-this rule              #if-also-this
 
@@ -87,6 +87,7 @@ atom-match :  option               ; note, this order is not meant to be efficie
            /  no-more-than 
            /  between 
            /  not-this
+           /  not-this-period
            /  if-also-this
            /  range
            /  set
