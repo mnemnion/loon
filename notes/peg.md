@@ -4,7 +4,7 @@ Clua, Lun, and the ported MoonScript should have only one dependency for their c
 
 No coincidence, generating PEGs with a rich functional syntax allows for Turing-complete recursive descent parsing, which is, ahem, all you need. More, often. The downside of the approach is that it's work to reuse grammars. One can't simply share them and generate any number of consistent parsing programs using that grammar. 
 
-I don't need this tool for Clua, or even for Loon, exactly. But it will make using Loon to do any old crazy nonsense easier, and besides, I want this tool for Clua. 
+This functionality is essential to the <Syntax> type in Clu, which generates abstract syntax trees from arbitrary data. 
 
 ##Things we can make from a grammar
 
