@@ -51,9 +51,7 @@ must receive a right member of the set, in the order encountered by the reader, 
 
 `< >` is reserved syntax, intended for type annotation.
 
-`\ /` is reserved syntax. Note that the backslash begins, and the slash ends, a pairing. `\o/`
-
-It may be the case that `\ /` are moved to the unary group. They will be a syntax error until I sort that out. 
+`\ /` destructures the enclosed element. Note that the backslash begins, and the slash ends, a pairing. `\o/`
 
 ## Atomic Tokens
 
@@ -126,17 +124,15 @@ The token `{` begins a table, which may an even number of forms and is delimited
 
 The underlying representation of lists and vectors may be a table, and normally is, given Lua. The semantics of Clua will not normally subvert this. 
 
-### Reserved Pairs
+## Types
 
-The tokens `< > \ /` are reserved as pairs. The angle brackets `<` and `>` are intended for type annotations. It (probably) doesn't make sense to say `<<form>>` as a type annotation, so we may use `<<` and `>>` for long strings. If so we'll allow a form as `<---<` `>--->` for guaranteed uniqueness of a string. 
+`<` and `>` mark a type annotation. They apply to the following form, if one exists, comprising a single form as a pair for the purposes of single parsing. `{ key <type> value}` is valid syntax, `key` is the first form in the pair and `<type> value` comprises the second. 
 
-`\ /` are being held onto while I mull over their utility. I have an ambition to use them in a peculiar way: `\ (form) \ (form) / (form) / ` wherein the two backslashes must balance pairwise and the resulting pairs must balance recursively. I don't know what that's useful for, yet. I won't waste it as a confusing way to express a conditional, though, or for object/attribute/value relationships, or the like.  
+The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lte` and `gte`. `<=>` returns the type `<Operator>`.
 
-Perhaps table comprehensions? In this form `\ selector \ table / action /`. The problem with almost all such triples is that, while the selector might have moderately special syntax, the table just has to eval to table and the action just has to be a function. 
+## Destructuring
 
-Coroutines? I'm still a little unclear on what happens there in detail. 
-
-This means we will have a different set of mathematical functions from a more familiar lisp. `(/ 3 4)` doesn't produce `3/4` like a proper numeric tower enthusiast would expect, it's just a syntax error. As we'll see, this matters much less in Clua than it otherwise might.  
+Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first.  
 
 ##Reader-Modifying Tokens
 

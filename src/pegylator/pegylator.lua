@@ -12,14 +12,16 @@ local epnf = dofile "../tools/epnf.lua"
 match = lpeg.match -- match a pattern against a string
 P = lpeg.P -- match a string literally
 S = lpeg.S  -- match anything in a set
-R = lpeg.R  -- match anything in a range
+R = Ru  -- match anything in a range
 C = lpeg.C  -- captures a match
 Ct = lpeg.Ct -- a table with all captures from the pattern
 V = lpeg.V -- create a variable within a grammar
 
 
 
-symbol = (Ru"AZ" + Ru"az" + "-" )^1 
+valid_sym = (R"AZ" + R"az" + "-" )
+
+digit = (R"09")
 
 
 symbol_s = "ASDFrgsrgaoijfsdf--akrtjhart__"

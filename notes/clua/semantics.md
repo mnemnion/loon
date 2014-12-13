@@ -26,7 +26,9 @@ The result is an ordinary Lua environment. Code which translates down to chunks 
 
 Lua has a loose distinction between strings and symbols, which is enforced through syntax. It's not sufficiently first class, by itself, for Clua. 
 
-Happily, strings now have metatables, so equality tests of `"foo"`, `'foo` in one context, and `'foo` from a second context will not report as equal, and the latter two will be of type `<Symbol>` rather than `<String>`.
+I think this is only important in a quoted context. I believe quoting promotes a primitive value to an anonymous table, so equality tests of `"foo"`, `'foo` in one context, and `'foo` from a second context will not report as equal, and the latter two will be of type `<Symbol>` rather than `<String>`.
+
+That makes the rewrite for `(unquote 'foo)` into `foo[1]`, which should pose few difficulties. 
 
 ## Numbers
 
@@ -58,7 +60,7 @@ I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr 
 
 Templates are read incrementally and recursively by reader calls, and evaluated when the reader exits the form. This means that if you call a template from a template, evaluation happens within the template, if you call a reader within a template, evaluation happens upon return. I trust this is sufficiently clear. 
 
-Templates return an `<Environment>`, that in which they've done their work.  
+Templates return an `<Environment>`, that in which they've done their work.  They may also return anything else they want, provided the environment comes first. 
 
 ## Lists
 
