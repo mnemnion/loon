@@ -31,20 +31,19 @@ peg = epnf.define(function(_ENV)
 	--digit = C(R"09"^1)
 	--sym = V"valid_sym" + digit
 	--symbol = V"valid_sym"^-1 * sym^0
-	local cat_space = WS^1
 	local WS = WS^0
 	local symbol =  C(symbol)
 	rules   = V"rule"
 	rule    = V"lhs" * P':' * V"rhs"
 	lhs     = WS * symbol * WS
-	rhs     =  (V"element" + V"cat_rule" + WS * V"atom_rule" * WS)^1
-	element =  WS * V"paren_rule" * WS  
-    paren_rule = WS * P"(" * WS * ( V"element"+ V"cat_rule")^1 * WS * P")"
-    cat_rule  = (V"element" + WS * V"atom_rule" ) * cat_space * V"element"^1
-	atom_rule = symbol
+	rhs     = V"element"^1
+	element  = V"choice" * WS * V"choice"^0
+	choice = V"factor" * (P"/" * V"factor") ^0
+	factor = V"atom_rule" * (P"(" * V"element" * P")")^0 * V"element"^0
+	atom_rule = WS * symbol * WS
 end)
 
-grammar_s = [[ A : B C ( D E ) /
+grammar_s = [[ A : B C ( D E ) / F G H
 			  C : "D" 
 			  D : E F G
 ]]
@@ -52,7 +51,7 @@ grammar_s = [[ A : B C ( D E ) /
 rule_s  = [[A : B]]
 
 dump_ast (match(peg,grammar_s))
---print (match(peg,grammar_s))
+dump_ast (match(peg,rule_s))
 symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 
 --print (match(symbol, symbol_s))
