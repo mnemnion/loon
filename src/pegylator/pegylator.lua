@@ -30,14 +30,18 @@ peg = epnf.define(function(_ENV)
 	--digit = C(R"09"^1)
 	--sym = V"valid_sym" + digit
 	--symbol = V"valid_sym"^-1 * sym^0
-	lhs   = V"symbol"^1
-	rhs   = V"symbol"^1 --expand
+	lhs   = symbol
+	rhs   = symbol --expand
 	rule  = V"lhs" * P':' * V"rhs"
-	rules = C(V"rule"^1)
+	rules = V"rule"
 end)
 
+grammar_s = [[ A : B / C
+			  C : "D" 
+			  D : E F G
+]]
 
-
+print (match(peg,grammar_s))
 
 symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 
