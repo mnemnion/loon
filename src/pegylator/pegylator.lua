@@ -37,7 +37,7 @@ peg = epnf.define(function(_ENV)
 	rules   = V"rule"
 	rule    = V"lhs" * P':' * V"rhs"
 	lhs     = WS * symbol * WS
-	rhs     = V"element" * V"more_elements"
+	rhs     = V"factor" * V"more_elements"
 	more_elements  = V"choice"  
 			       + V"cat"
 		       	   + V"factor"
