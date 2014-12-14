@@ -20,20 +20,24 @@ V = lpeg.V -- create a variable within a grammar
 	valid_sym = R"AZ" + R"az" + P"-" 
 	digit = R"09"
 	sym = valid_sym + digit
-	symbol = valid_sym^-1 * sym^0
+	WS = P' '^0 + P'\n'^0 + P',' + P'\09'
+	symbol = (valid_sym^1 * sym^0)
 
 peg = epnf.define(function(_ENV)
 	START "rules"
-	local WS = P' '^0 + P'\n'^0 + P',' + P'\09'
+	SUPPRESS ("WS")
 	--local Ru = Ru 
 	--valid_sym = C(R"AZ"^1) + C(R"az"^1) + C(P"-"^1) 
 	--digit = C(R"09"^1)
 	--sym = V"valid_sym" + digit
 	--symbol = V"valid_sym"^-1 * sym^0
-	lhs   = symbol
-	rhs   = symbol --expand
-	rule  = V"lhs" * P':' * V"rhs"
+	local symbol = WS * C(symbol) * WS
 	rules = V"rule"
+	rule  = V"lhs" * P':' * V"rhs"
+	lhs   = symbol
+	rhs   = V"paren_rule" + V"atom_rule"  
+	paren_rule = symbol
+	atom_rule = symbol
 end)
 
 grammar_s = [[ A : B / C
@@ -41,10 +45,10 @@ grammar_s = [[ A : B / C
 			  D : E F G
 ]]
 
-rule_s  = [[A:B]]
+rule_s  = [[A : B]]
 
-print (match(peg,grammar_s))
-print (match(peg,grammar_s))
+dump_ast (match(peg,grammar_s))
+dump_ast (match(peg,grammar_s))
 symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 
 --print (match(symbol, symbol_s))
