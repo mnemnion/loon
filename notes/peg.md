@@ -18,6 +18,8 @@ A parser, which creates a consistent type of abstract syntax tree out of the gra
 
 And a table validator, which can take an AST from that parser, and validate the information as something which could have at one time conformed to that grammar. This one is tricky because we allow elision of rule nodes and literal strings, which means we must know when both nodes and leaves can be missing as well as when they must be present. I think we just remove them from the grammar but haven't proven it to my own satisfaction. 
 
+Let's also make a registry, so our error messages can refer to nodes and leaves in their grammar form, not their functionalized Lua equivalent. `expected: form* "#";   got: "^" is how we want an error to read. 
+
 ## Standard PEG Syntax
 
 We want our PEGs to look familiar. I like Instaparse, personally, and I think a coroutine-based GSS is at least possible. Certainly a fast Rust GLL could be linked and loaded when I get around to writing it. But in the meantime, we want something like this:
