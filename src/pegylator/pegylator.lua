@@ -39,15 +39,23 @@ peg = epnf.define(function(_ENV)
 	cat = cat_space *  V"element" * V"more_elements"^0
 	element = V"pattern" + V"factor"
 	factor  = ( WS * P"(" * WS * V"rhs" * WS * P")") 
-	pattern = (V"atom" 
-			+  V"literal"	) - V"lhs"
-	atom    = WS * symbol
-	literal  = WS * P'"' * symbol * P'"' -- make into real string
-
+	pattern = -V"lhs" * WS 
+	        * ( V"compound"
+			+   V"simple")
+	compound =  V"enclosed"
+	simple   =  V"literal"
+			 +  V"prefixed"
+			 +  V"suffixed"
+			 +  V"atom" 
+	literal  =  P'"' * symbol * P'"' -- make into real string
+	enclosed = (symbol + V"factor") * P"*" + V"literal"  
+	prefixed = symbol
+	suffixed = symbol
+		atom    =  symbol
 end)
 
-grammar_s = [[ A : B C ( D E ) / F G H
-			  C : "D" 
+grammar_s = [[ A : B C ( D E / F ) / F G H
+			  I : "J" 
 			  D : E F G
 ]]
 
@@ -65,7 +73,19 @@ peg_s = [[
 	cat : <cat_space> element more_elements*
 	<element> : pattern / factor
 	factor : _"("_ rhs _")"
-	<pattern> : !lhs _symbol
+	<pattern> : _ !lhs (     
+           ; /  lazy 
+           /  at-least 
+           /  single 
+           /  exactly 
+           /  no-more-than 
+           /  between 
+           /  not-this
+           /  not-this-period
+           /  if-also-this
+           /  range
+           /  set
+           /  literal )  
 
 
 ]]

@@ -81,17 +81,5 @@ So what does that look like exactly? Something like this:
 
  ord-match : match "/" match   -- so a b c / d e f groups (a b c)/(d e f)
 
-atom-match :  option               ; note, this order is not meant to be efficient. 
-           /  lazy 
-           /  at-least 
-           /  single 
-           /  exactly 
-           /  no-more-than 
-           /  between 
-           /  not-this
-           /  not-this-period
-           /  if-also-this
-           /  range
-           /  set
-           /  literal 
+atom-match : 
 ```
