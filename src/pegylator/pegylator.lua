@@ -38,12 +38,12 @@ peg = epnf.define(function(_ENV)
 	more_elements  = (V"choice"  
 			       + V"cat")
 	choice = WS * P"/" * V"element" * V"more_elements"^0
-	cat = cat_space *  V"element" * V"more_elements"^0
-	element =  V"pattern" + V"factor"
-	factor  =  ( WS * P"(" * WS * V"rhs" * WS * P")") 
-	pattern =  -V"lhs" * WS 
-	        *  ( V"compound"
-			+    V"simple")
+	cat = cat_space * V"element" * V"more_elements"^0
+	element  =  V"pattern" + V"factor"
+	factor   =  ( WS * P"(" * WS * V"rhs" * WS * P")") 
+	pattern  =  -V"lhs" * WS 
+	         *  ( V"compound"
+			 +    V"simple")
 	compound =  V"factor"
 	simple   =  V"literal"
 			 +  V"prefixed"
@@ -53,21 +53,22 @@ peg = epnf.define(function(_ENV)
 	suffixed =  V"optional"
 			 +  V"more_than_one"
 			 +  V"maybe"
-	optional  = symbol * P"*"
-	more_than_one = symbol * P"+"
-	maybe         = symbol * P"?"
+	optional      =  symbol * P"*"
+	more_than_one =  symbol * P"+"
+	maybe         =  symbol * P"?"
 	prefixed =  V"if_not_this"
-			 + V"not_this"
-			 + V"if_and_this"
+			 +  V"not_this"
+			 +  V"if_and_this"
 	if_not_this = P"!" * symbol
-	not_this = P"-" * symbol
+	not_this    = P"-" * symbol
 	if_and_this = P"&" * symbol
-		atom    =  symbol
+		   atom =  symbol
 end)
 
 grammar_s = [[ A : B C ( E / F ) / F G H
 			  I : "J" 
-			  K : L* M+ N
+			  K : L* M+ N?
+			  O : !P &Q -R
 ]]
 
 rule_s  = [[A:B C(D E)/(F G H)
