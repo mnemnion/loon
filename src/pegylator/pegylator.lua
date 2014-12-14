@@ -25,7 +25,9 @@ V = lpeg.V -- create a variable within a grammar
 
 peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS", "rhs", "cat_space" , "element" ,"more_elements", "pattern")
+	SUPPRESS ("WS", "cat_space", "cat", 
+		      "element" ,"more_elements", "pattern",
+		      "simple", "compound", "prefixed", "suffixed" )
 	local cat_space = WS^1
 	local WS = WS^0
 	local symbol =  C(symbol)
@@ -37,26 +39,30 @@ peg = epnf.define(function(_ENV)
 			       + V"cat")
 	choice = WS * P"/" * V"element" * V"more_elements"^0
 	cat = cat_space *  V"element" * V"more_elements"^0
-	element = V"pattern" + V"factor"
-	factor  = ( WS * P"(" * WS * V"rhs" * WS * P")") 
-	pattern = -V"lhs" * WS 
-	        * ( V"compound"
-			+   V"simple")
-	compound =  V"enclosed"
+	element =  V"pattern" + V"factor"
+	factor  =  ( WS * P"(" * WS * V"rhs" * WS * P")") 
+	pattern =  -V"lhs" * WS 
+	        *  ( V"compound"
+			+    V"simple")
+	compound =  V"factor"
 	simple   =  V"literal"
 			 +  V"prefixed"
 			 +  V"suffixed"
 			 +  V"atom" 
 	literal  =  P'"' * symbol * P'"' -- make into real string
-	enclosed = (symbol + V"factor") * P"*" + V"literal"  
-	prefixed = symbol
-	suffixed = symbol
+	suffixed =  V"optional"
+			 +  V"more_than_one"
+			 +  V"maybe"
+	optional  = symbol * P"*"
+	more_than_one = symbol * P"+"
+	maybe         = symbol * P"?"
+	prefixed =  P"!" * symbol
 		atom    =  symbol
 end)
 
-grammar_s = [[ A : B C ( D E / F ) / F G H
+grammar_s = [[ A : B C ( E / F ) / F G H
 			  I : "J" 
-			  D : E F G
+			  K : L* M+ N
 ]]
 
 rule_s  = [[A:B C(D E)/(F G H)

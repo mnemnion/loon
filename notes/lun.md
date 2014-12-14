@@ -18,5 +18,11 @@ If you like macros, however, I urge you to just use Clua. It's designed for that
 
 Changes to Loona will be mild, and will be Lua compatible by definition. That is, Loon will always run Lua if coerced, and any Loona (or Clua, or Moonscript) will interact with ordinary Lua in reasonably consistent ways.
 
-##Shell and Program syntax.
+##No impicit chunking
+
+The outer context executes as a series of anonymous function calls. Expression, rather than statement oriented.
+
+This is for better behavior with REPLs, and semantic matching with Clu. Wrapping something in a `do` block chunks it. 
+
+Functions do not implicitly return, but we do parse some things differently: `2 + 3 + 4` on an emptly line calculates and throws away the value. The REPL can catch it. 
 
