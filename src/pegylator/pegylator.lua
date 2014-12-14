@@ -56,7 +56,12 @@ peg = epnf.define(function(_ENV)
 	optional  = symbol * P"*"
 	more_than_one = symbol * P"+"
 	maybe         = symbol * P"?"
-	prefixed =  P"!" * symbol
+	prefixed =  V"if_not_this"
+			 + V"not_this"
+			 + V"if_and_this"
+	if_not_this = P"!" * symbol
+	not_this = P"-" * symbol
+	if_and_this = P"&" * symbol
 		atom    =  symbol
 end)
 
