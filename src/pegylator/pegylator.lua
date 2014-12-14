@@ -41,8 +41,10 @@ grammar_s = [[ A : B / C
 			  D : E F G
 ]]
 
-print (match(peg,grammar_s))
+rule_s  = [[A:B]]
 
+print (match(peg,grammar_s))
+print (match(peg,grammar_s))
 symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 
 --print (match(symbol, symbol_s))
