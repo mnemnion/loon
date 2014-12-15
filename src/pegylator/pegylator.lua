@@ -32,19 +32,19 @@ peg = epnf.define(function(_ENV)
 	local cat_space = WS^1
 	local WS = WS^0
 	local symbol =  C(symbol)
-	rules   = V"rule"^1
-	rule    = V"lhs"  * V"rhs"
-	lhs     = WS * V"pattern" * WS * P":"
-	pattern = symbol 
-			+ V"hidden_pattern"
-	hidden_pattern = P"<" * symbol * P">"
-	rhs     = V"element" * V"more_elements"
+	rules   =  V"rule"^1
+	rule    =  V"lhs"  * V"rhs"
+	lhs     =  WS * V"pattern" * WS * P":"
+    rhs     =  V"element" * V"more_elements"
+	pattern =  symbol 
+			+  V"hidden_pattern"
+	hidden_pattern =  P"<" * symbol * P">"
+	element  =  V"match" + V"factor"
 	more_elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
-	choice = WS * P"/" * V"element" * V"more_elements"
-	cat = cat_space * V"element" * V"more_elements"
-	element  =  V"match" + V"factor"
+	choice =  WS * P"/" * V"element" * V"more_elements"
+	cat =  cat_space * V"element" * V"more_elements"
 	match    =  -V"lhs" * WS 
 	         *  ( V"compound"
 			 +    V"simple") 
@@ -56,23 +56,28 @@ peg = epnf.define(function(_ENV)
 	hidden_match =  WS * P"<"
 				 *  WS * V"rhs" * WS
 				 *  P">"
-	simple   =  V"literal"
-			 +  V"prefixed"
+	simple   =  V"prefixed"
 			 +  V"suffixed"
+			 +  V"enclosed"
 			 +  V"atom" 
-	literal  =  P'"' * symbol * P'"' -- make into real string
-	suffixed =  V"optional"
-			 +  V"more_than_one"
-			 +  V"maybe"
-	optional      =  symbol * P"*"
-	more_than_one =  symbol * P"+"
-	maybe         =  symbol * P"?"
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
 			 +  V"if_and_this"
 	if_not_this = P"!" * symbol
 	not_this    = P"-" * symbol
 	if_and_this = P"&" * symbol
+	suffixed =  V"optional"
+			 +  V"more_than_one"
+			 +  V"maybe"
+	enclosed =  V"literal"
+		     +  V"set"
+		     +  V"range"
+    literal =  P'"' * symbol * P'"'   -- make into real string
+    set     =  P"{" * sym^1 * P"}"    -- should match all char and escaped "}"
+    range   =  P"[" * symbol * P"]"   -- make into real range
+	optional      =  symbol * P"*"
+	more_than_one =  symbol * P"+"
+	maybe         =  symbol * P"?"
 		   atom =  symbol
 end)
 
@@ -81,6 +86,7 @@ grammar_s = [[ A : B C ( E / F ) / F G H
 			  K : L* M+ N?
 			  O : !P &Q -R
 			  <S> : <T (U V)>
+			  W : {XY} [a-z]
 ]]
 
 rule_s  = [[A:B C(D E)/(F G H)
@@ -104,10 +110,7 @@ peg_s = [[
            /  between 
            /  range
            /  set
-           /  literal )  
-
-
-]]
+           /  literal )  ]]
 dump_ast (match(peg,grammar_s))
 --dump_ast (match(peg,rule_s))
 --dump_ast (match(peg,"A     :B C D E "))
