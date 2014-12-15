@@ -23,7 +23,8 @@ V = lpeg.V -- create a variable within a grammar
 	WS = P' ' + P'\n' + P',' + P'\09'
 	white = P"_"
 	symbol = (valid_sym^1 * sym^0) + white
-	string = symbol
+	string_match = -P"\"" * -P"\\" * P(1)
+	string = (string_match + P"\\\"" + P"\\")^1
 	range_match =  -P"-" * -P"\\" * -P"]" * P(1)
 	range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
 	range_c  = range_capture^1 * P"-" * range_capture^1
@@ -88,7 +89,8 @@ end)
 
 range_s = [[ \]\--CD ]]
 
-set_s   = [[ abc\def\}g ]]
+set_s   = [[ abc\def\}g䷀䷁ ]]
+string_s = [[ asldfr\"adf  asdf\asdf]]
 
 
 grammar_s = [[ A : B C ( E / F ) / F G H
@@ -96,8 +98,7 @@ grammar_s = [[ A : B C ( E / F ) / F G H
 			  K : L* M+ N?
 			  O : !P &Q -R
 			  <S> : <T (U V)>
-			  W : {XY} [a-z]
-]]
+			  W : {XY} [a-z] ]]
 
 rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
@@ -131,3 +132,4 @@ symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 assert(#symbol_s+1 == (match(symbol, symbol_s)))
 assert(#range_s+1 == (match(range_c,range_s)))
 assert(#set_s+1 == (match(set_c,set_s)))
+assert(#string_s+1 == (match(string,string_s)))
