@@ -26,3 +26,13 @@ This is for better behavior with REPLs, and semantic matching with Clu. Wrapping
 
 Functions do not implicitly return, but we do parse some things differently: `2 + 3 + 4` on an emptly line calculates and throws away the value. The REPL can catch it. 
 
+##Keywords
+
+Lun will adopt `:keyword` syntax for Clu compatibility. This steps on `field:access()`, so we use `field@access`, allowing implicit `@field` references within `self` in functions so defined. 
+
+##Two-way translation
+
+Lun will rewrite your LuaJIT program in Lun. We'll maintain this ability as long as we're able. 
+
+It can of course rewrite Lun as Lua, as this is all it does. 
+

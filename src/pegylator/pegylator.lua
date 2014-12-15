@@ -44,7 +44,7 @@ peg = epnf.define(function(_ENV)
 	local set_c  =  C(set_c)
 	rules   =  V"rule"^1
 	rule    =  V"lhs"  * V"rhs"
-	lhs     =  WS * V"pattern" * WS * P":"
+	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
     rhs     =  V"element" * V"more_elements"
 	pattern =  symbol 
 			+  V"hidden_pattern"
@@ -54,7 +54,7 @@ peg = epnf.define(function(_ENV)
 			       +  V"cat"
 			       +  P""
 	choice =  WS * P"/" * V"element" * V"more_elements"
-	cat =  cat_space * V"element" * V"more_elements"
+	cat =  WS * V"element" * V"more_elements"
 	match    =  -V"lhs" * WS 
 	         *  ( V"compound"
 			 +    V"simple") 
@@ -85,9 +85,9 @@ peg = epnf.define(function(_ENV)
     literal =  P'"' * (string + P"") * P'"'  
     set     =  P"{" * set_c^1 * P"}"   
     range   =  P"[" * range_c * P"]"   
-	optional      =  symbol * P"*"
-	more_than_one =  symbol * P"+"
-	maybe         =  symbol * P"?"
+	optional      =  symbol * WS * P"*"
+	more_than_one =  symbol * WS * P"+"
+	maybe         =  symbol * WS * P"?"
     atom =  symbol
 end)
 
@@ -108,6 +108,8 @@ rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
 			  D : E F G
 ]]
+
+
 
 peg_s = [[
 	rules : rule +
@@ -141,12 +143,9 @@ peg_s = [[
 
 
 ]]
-
-dump_ast (match(peg,grammar_s))
+--dump_ast (match(peg,grammar_s))
 dump_ast (match(peg,peg_s))
---dump_ast (match(peg,rule_s))
---dump_ast (match(peg,"A     :B C D E "))
-symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr"
+symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
 --print (match(symbol, symbol_s))
 assert(#symbol_s+1 == (match(symbol, symbol_s)))
