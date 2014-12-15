@@ -81,9 +81,9 @@ peg = epnf.define(function(_ENV)
 	enclosed =  V"literal"
 		     +  V"set"
 		     +  V"range"
-    literal =  P'"' * (string + P"") * P'"'   -- make into real string
-    set     =  P"{" * set_c^1 * P"}"    -- should match all char and escaped "}"
-    range   =  P"[" * range_c * P"]"   -- make into real range
+    literal =  P'"' * (string + P"") * P'"'  
+    set     =  P"{" * set_c^1 * P"}"   
+    range   =  P"[" * range_c * P"]"   
 	optional      =  symbol * P"*"
 	more_than_one =  symbol * P"+"
 	maybe         =  symbol * P"?"
