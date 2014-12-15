@@ -73,9 +73,10 @@ peg = epnf.define(function(_ENV)
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
 			 +  V"if_and_this"
-	if_not_this = P"!" * symbol
-	not_this    = P"-" * symbol
-	if_and_this = P"&" * symbol
+	if_not_this = P"!" * V"allowed_prefixed" 
+	not_this    = P"-" * V"allowed_prefixed"
+	if_and_this = P"&" * V"allowed_prefixed"
+	allowed_prefixed = (V"compound" + V"suffixed" + V"atom")
 	suffixed =  V"optional"
 			 +  V"more_than_one"
 			 +  V"maybe"
@@ -84,10 +85,11 @@ peg = epnf.define(function(_ENV)
 		     +  V"range"
     literal =  P'"' * (string + P"") * P'"'  
     set     =  P"{" * set_c^1 * P"}"   
-    range   =  P"[" * range_c * P"]"   
-	optional      =  symbol * WS * P"*"
-	more_than_one =  symbol * WS * P"+"
-	maybe         =  symbol * WS * P"?"
+    range   =  P"[" * range_c * P"]"  
+    allowed_suffixed = (V"compound" + V"prefixed" + V"atom") 
+	optional      =  V"allowed_suffixed" * WS * P"*"
+	more_than_one =  V"allowed_suffixed" * WS * P"+"
+	maybe         =  V"allowed_suffixed" * WS * P"?"
     atom =  symbol
 end)
 
@@ -143,8 +145,8 @@ peg_s = [[
 
 
 ]]
---dump_ast (match(peg,grammar_s))
-dump_ast (match(peg,peg_s))
+dump_ast (match(peg,grammar_s))
+--dump_ast (match(peg,peg_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
 --print (match(symbol, symbol_s))
