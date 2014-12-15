@@ -111,20 +111,35 @@ rule_s  = [[A:B C(D E)/(F G H)
 peg_s = [[
 	rules : rule +
 	rule : lhs rhs
-	lhs : _symbol_ ":"
-	rhs : element more_elements*
-	<more_elements> : choice / cat / ""
-	cat : <cat_space> element more_elements*
-	<element> : pattern / factor
-	factor : _"("_ rhs _")"
-	<pattern> : _ !lhs (     
-           /  at-least 
-           /  exactly 
-           /  no-more-than 
-           /  between 
-           /  range
-           /  set
-           /  literal )  ]]
+	lhs       =  _pattern_ ":"
+    rhs       =  element more-elements
+	<pattern> =  symbol / hidden-pattern
+	hidden-pattern =  "<" symbol ">"
+	<element>  =  match" / factor
+	more-elements  =  choice  /  cat / ""
+	choice =  _"/" element more_elements
+	cat =  WS element more_elements
+	match    =  -lhs_ (compound / simple) 
+	compound =  factor / hidden-match 
+	factor   =  _"("_ rhs_ ")" 
+	hidden_match =  _"<"_ rhs_ ">"
+	simple   =  prefixed / suffixed / enclosed / atom 
+	prefixed =  if-not-this / not-this / if-and-this
+	if-not-this =  "!" symbol
+	not-this    =  "-" symbol
+	if-and-this =  "&" symbol
+	suffixed =  optional / more-than-one / maybe
+	enclosed =  literal / set / range
+	literal =  '"' (string / "") '"'  
+    set     =  "{" set_c^1 "}"   
+    range   =  "[" range_c "]"   
+	optional      =  symbol "*"
+	more_than_one =  symbol "+"
+	maybe         =  symbol "?"
+    atom =  symbol
+
+
+]]
 
 dump_ast (match(peg,grammar_s))
 --dump_ast (match(peg,rule_s))
