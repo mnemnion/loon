@@ -23,7 +23,9 @@ V = lpeg.V -- create a variable within a grammar
 	WS = P' ' + P'\n' + P',' + P'\09'
 	white = P"_"
 	symbol = (valid_sym^1 * sym^0) + white
-
+	string = symbol
+	range_c  = symbol
+	set_c    = sym
 peg = epnf.define(function(_ENV)
 	START "rules"
 	SUPPRESS ("WS", "cat_space", "cat", "match",
@@ -73,13 +75,15 @@ peg = epnf.define(function(_ENV)
 		     +  V"set"
 		     +  V"range"
     literal =  P'"' * symbol * P'"'   -- make into real string
-    set     =  P"{" * sym^1 * P"}"    -- should match all char and escaped "}"
-    range   =  P"[" * symbol * P"]"   -- make into real range
+    set     =  P"{" * set_c^1 * P"}"    -- should match all char and escaped "}"
+    range   =  P"[" * range_c * P"]"   -- make into real range
 	optional      =  symbol * P"*"
 	more_than_one =  symbol * P"+"
 	maybe         =  symbol * P"?"
 		   atom =  symbol
 end)
+
+
 
 grammar_s = [[ A : B C ( E / F ) / F G H
 			  I : "J" 

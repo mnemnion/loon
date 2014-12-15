@@ -20,6 +20,16 @@ And a table validator, which can take an AST from that parser, and validate the 
 
 Let's also make a registry, so our error messages can refer to nodes and leaves in their grammar form, not their functionalized Lua equivalent. `expected: form* "#";   got: "^" is how we want an error to read. 
 
+##Types of Table Validation
+
+We have three types of validation for tables. `duck` checks if the minimum attributes are met: if it quacks, swims, and flies, we don't care if it's a flamingo with laryngitis. `bull` also makes sure nothing is missing: if it's a steer, it's not a bull. Which brings us to `steer`, which, if given a bull, cuts the dangly bits off. `steer` does what it can to turn a table into an example of the AST, either deleting or adding nodes as appropriate. `steer` is destructive; the Lua convention is that mutation happens in-place, and you clone your table first if you need the original. 
+
+Since we're using a PEG, `steer` places the first possible literal match at missing positions. This behavior can be overridden on a rule-calling-rule basis. 
+
+##Decorators
+
+I want to add a syntax for overriding the default behavior of a match. Grammars should be purely declarative, so we can generate consistent machines from them. But sometimes we want to use the lpeg tools in a more nuanced way, and in particular we automate the use of `/` to assign functions to the arguments captured. 
+
 ## Standard PEG Syntax
 
 We want our PEGs to look familiar. I like Instaparse, personally, and I think a coroutine-based GSS is at least possible. Certainly a fast Rust GLL could be linked and loaded when I get around to writing it. But in the meantime, we want something like this:
@@ -59,26 +69,4 @@ rule : {set-rul}                        S"set-rul" -- needs the Unicode treatmen
 
 <hidden rule> : <hidden output>       SUPPRESS "hidden rule"
 
-```
-
-So what does that look like exactly? Something like this:
-
-```
-
-     rules : rule+
-
-      rule : _lhs_ ":" _rhs_
-
-       lhs : symbol
-
-       rhs : "(" match+ ")" rhs* / match+ rhs*
-
-     match : ord-match / _atom-match WS 
-     -- I believe this provides precedence to cat
-
- cat-match : (match _)+
-
- ord-match : match "/" match   -- so a b c / d e f groups (a b c)/(d e f)
-
-atom-match : 
 ```
