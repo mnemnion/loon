@@ -33,7 +33,7 @@ V = lpeg.V -- create a variable within a grammar
 
 peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS", "cat_space", "cat", "match",
+	SUPPRESS ("WS", "cat_space", "cat",
 		      "element" ,"more_elements", "pattern",
 		      "simple", "compound", "prefixed", "suffixed" )
 	local cat_space = WS^1
@@ -49,13 +49,15 @@ peg = epnf.define(function(_ENV)
 	pattern =  symbol 
 			+  V"hidden_pattern"
 	hidden_pattern =  P"<" * symbol * P">"
-	element  =  V"match" + V"factor"
+	element  =  -V"lhs" * WS 
+	         *  ( V"compound"
+			 +    V"simple")  
 	more_elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
 	choice =  WS * P"/" * V"element" * V"more_elements"
 	cat =  WS * V"element" * V"more_elements"
-	match    =  -V"lhs" * WS 
+	 -V"lhs" * WS 
 	         *  ( V"compound"
 			 +    V"simple") 
 	compound =  V"factor"
