@@ -37,6 +37,7 @@ peg = epnf.define(function(_ENV)
 	START "rules"
 	SUPPRESS ("WS", "cat_space", "cat",
 		      "element" ,"more_elements", "pattern",
+		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
 	local cat_space = WS^1
 	local WS = WS^0
@@ -124,7 +125,7 @@ peg_s = [[
     rhs       =  element more-elements
 	<pattern> =  symbol / hidden-pattern
 	hidden-pattern =  "<" symbol ">"
-	<element>  =  match" / factor
+	<element>  =  match / factor
 	more-elements  =  choice  /  cat / ""
 	choice =  _"/" element more_elements
 	cat =  WS element more_elements
@@ -139,8 +140,8 @@ peg_s = [[
 	if-and-this =  "&" symbol
 	suffixed =  optional / more-than-one / maybe
 	enclosed =  literal / set / range
-	literal =  '"' (string / "") '"'  
-    set     =  "{" set_c^1 "}"   
+	literal =  "\"" (string / "") "\""  
+    set     =  "{" set_c+ "}"   
     range   =  "[" range_c "]"   
 	optional      =  symbol "*"
 	more_than_one =  symbol "+"
