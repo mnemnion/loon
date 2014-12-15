@@ -24,8 +24,11 @@ V = lpeg.V -- create a variable within a grammar
 	white = P"_"
 	symbol = (valid_sym^1 * sym^0) + white
 	string = symbol
-	range_c  = symbol
-	set_c    = sym
+	range_match =  -P"-" * -P"\\" * -P"]" * P(1)
+	range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
+	range_c  = range_capture^1 * P"-" * range_capture^1
+	set_match = -P"}" * -P"\\" * P(1)
+	set_c    = (set_match + P"\\}" + P"\\")^1
 peg = epnf.define(function(_ENV)
 	START "rules"
 	SUPPRESS ("WS", "cat_space", "cat", "match",
@@ -74,15 +77,18 @@ peg = epnf.define(function(_ENV)
 	enclosed =  V"literal"
 		     +  V"set"
 		     +  V"range"
-    literal =  P'"' * symbol * P'"'   -- make into real string
+    literal =  P'"' * string * P'"'   -- make into real string
     set     =  P"{" * set_c^1 * P"}"    -- should match all char and escaped "}"
     range   =  P"[" * range_c * P"]"   -- make into real range
 	optional      =  symbol * P"*"
 	more_than_one =  symbol * P"+"
 	maybe         =  symbol * P"?"
-		   atom =  symbol
+    atom =  symbol
 end)
 
+range_s = [[ \]\--CD ]]
+
+set_s   = [[ abc\def\}g ]]
 
 
 grammar_s = [[ A : B C ( E / F ) / F G H
@@ -115,10 +121,13 @@ peg_s = [[
            /  range
            /  set
            /  literal )  ]]
+
 dump_ast (match(peg,grammar_s))
 --dump_ast (match(peg,rule_s))
 --dump_ast (match(peg,"A     :B C D E "))
 symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
 
 --print (match(symbol, symbol_s))
-assert(#symbol_s +1 == (match(symbol, symbol_s)))
+assert(#symbol_s+1 == (match(symbol, symbol_s)))
+assert(#range_s+1 == (match(range_c,range_s)))
+assert(#set_s+1 == (match(set_c,set_s)))
