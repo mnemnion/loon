@@ -17,12 +17,12 @@ C = lpeg.C  -- captures a match
 Ct = lpeg.Ct -- a table with all captures from the pattern
 V = lpeg.V -- create a variable within a grammar
 
-	valid_sym = R"AZ" + R"az" + P"-" 
+	valid_sym = R"AZ" + R"az" + P"-"  
 	digit = R"09"
 	sym = valid_sym + digit
 	WS = P' ' + P'\n' + P',' + P'\09'
 	white = P"_"
-	symbol = (valid_sym^1 * sym^0) + white
+	symbol = valid_sym * sym^0  + white -- incorrect: allows -symbol-name- 
 	string_match = -P"\"" * -P"\\" * P(1)
 	string = (string_match + P"\\\"" + P"\\")^1
 	range_match =  -P"-" * -P"\\" * -P"]" * P(1)
@@ -30,6 +30,7 @@ V = lpeg.V -- create a variable within a grammar
 	range_c  = range_capture^1 * P"-" * range_capture^1
 	set_match = -P"}" * -P"\\" * P(1)
 	set_c    = (set_match + P"\\}" + P"\\")^1
+
 peg = epnf.define(function(_ENV)
 	START "rules"
 	SUPPRESS ("WS", "cat_space", "cat", "match",
@@ -142,9 +143,10 @@ peg_s = [[
 ]]
 
 dump_ast (match(peg,grammar_s))
+dump_ast (match(peg,peg_s))
 --dump_ast (match(peg,rule_s))
 --dump_ast (match(peg,"A     :B C D E "))
-symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr--"
+symbol_s = "rgsr09gaoijfsdfkrtjhaADSFASDFAr"
 
 --print (match(symbol, symbol_s))
 assert(#symbol_s+1 == (match(symbol, symbol_s)))
