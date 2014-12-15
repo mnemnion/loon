@@ -21,11 +21,12 @@ V = lpeg.V -- create a variable within a grammar
 	digit = R"09"
 	sym = valid_sym + digit
 	WS = P' ' + P'\n' + P',' + P'\09'
-	symbol = (valid_sym^1 * sym^0)
+	white = P"_"
+	symbol = (valid_sym^1 * sym^0) + white
 
 peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS", "cat_space", "cat", 
+	SUPPRESS ("WS", "cat_space", "cat", "match",
 		      "element" ,"more_elements", "pattern",
 		      "simple", "compound", "prefixed", "suffixed" )
 	local cat_space = WS^1
@@ -33,18 +34,28 @@ peg = epnf.define(function(_ENV)
 	local symbol =  C(symbol)
 	rules   = V"rule"^1
 	rule    = V"lhs"  * V"rhs"
-	lhs     = WS * symbol * WS * P":"
-	rhs     = V"element" * V"more_elements"^0 
-	more_elements  = (V"choice"  
-			       + V"cat")
-	choice = WS * P"/" * V"element" * V"more_elements"^0
-	cat = cat_space * V"element" * V"more_elements"^0
-	element  =  V"pattern" + V"factor"
-	factor   =  ( WS * P"(" * WS * V"rhs" * WS * P")") 
-	pattern  =  -V"lhs" * WS 
+	lhs     = WS * V"pattern" * WS * P":"
+	pattern = symbol 
+			+ V"hidden_pattern"
+	hidden_pattern = P"<" * symbol * P">"
+	rhs     = V"element" * V"more_elements"
+	more_elements  =  V"choice"  
+			       +  V"cat"
+			       +  P""
+	choice = WS * P"/" * V"element" * V"more_elements"
+	cat = cat_space * V"element" * V"more_elements"
+	element  =  V"match" + V"factor"
+	match    =  -V"lhs" * WS 
 	         *  ( V"compound"
-			 +    V"simple")
+			 +    V"simple") 
 	compound =  V"factor"
+			 +  V"hidden_match" 
+	factor   =  WS * P"(" 
+			 *  WS * V"rhs" * WS 
+			 *  P")" 
+	hidden_match =  WS * P"<"
+				 *  WS * V"rhs" * WS
+				 *  P">"
 	simple   =  V"literal"
 			 +  V"prefixed"
 			 +  V"suffixed"
@@ -69,6 +80,7 @@ grammar_s = [[ A : B C ( E / F ) / F G H
 			  I : "J" 
 			  K : L* M+ N?
 			  O : !P &Q -R
+			  <S> : <T (U V)>
 ]]
 
 rule_s  = [[A:B C(D E)/(F G H)
@@ -86,15 +98,10 @@ peg_s = [[
 	<element> : pattern / factor
 	factor : _"("_ rhs _")"
 	<pattern> : _ !lhs (     
-           ; /  lazy 
            /  at-least 
-           /  single 
            /  exactly 
            /  no-more-than 
            /  between 
-           /  not-this
-           /  not-this-period
-           /  if-also-this
            /  range
            /  set
            /  literal )  

@@ -26,17 +26,16 @@ We want our PEGs to look familiar. I like Instaparse, personally, and I think a 
 
 ```text
 
-rule :  concatenated rule          concatenated * rule
+!rule :  concatenated rule          concatenated * rule
 
-rule : ordered / rule               ordered + rule
+!rule : ordered / rule               ordered + rule
 
-rule : optional* rule ; greedy      optional^0 rule
- 
-rule : \lazy-optional rule           -- Don't have?
+!rule : optional* rule ; greedy      optional^0 rule
 
-rule : at-least-one+ rule            at-least-one^1
 
-rule : one-or-zero?                  one-or-zero^-1
+!rule : at-least-one+ rule            at-least-one^1
+
+!rule : one-or-zero?                  one-or-zero^-1
 
 rule : exactly$2                     exactly * exactly
 
@@ -44,19 +43,19 @@ rule : more-than-two$+2               more-than-two^2
 
 rule : no-more-than-two$-2           no-more-than-two^-2
 
-rule : a-number-between$2..5          -- fake it.
+rule : a-number-between$2..5           a * a * a^-3
 
-rule : !not-this rule                rule - not-this
+!rule : !not-this rule                rule - not-this
 
-rule : -not-this-period              -not-this-period   
+!rule : -not-this-period              -not-this-period   
 
-rule : &if-also-this rule              #if-also-this
+!rule : &if-also-this rule              #if-also-this
 
 rule : [a-b]                            R"ab"        -- customized
 
 rule : {set-rul}                        S"set-rul" -- needs the Unicode treatment
  
-rule : "literal rule"                 P"literal rule"
+!rule : "literal rule"                 P"literal rule"
 
 <hidden rule> : <hidden output>       SUPPRESS "hidden rule"
 
