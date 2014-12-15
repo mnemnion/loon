@@ -24,12 +24,12 @@ V = lpeg.V -- create a variable within a grammar
 	white = P"_"
 	symbol = (valid_sym^1 * sym^0) + white
 	string_match = -P"\"" * -P"\\" * P(1)
-	string = C(string_match + P"\\\"" + P"\\")^1
+	string = (string_match + P"\\\"" + P"\\")^1
 	range_match =  -P"-" * -P"\\" * -P"]" * P(1)
-	range_capture = C(range_match + P"\\-" + P"\\]" + P"\\")
+	range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
 	range_c  = range_capture^1 * P"-" * range_capture^1
 	set_match = -P"}" * -P"\\" * P(1)
-	set_c    = C(set_match + P"\\}" + P"\\")^1
+	set_c    = (set_match + P"\\}" + P"\\")^1
 peg = epnf.define(function(_ENV)
 	START "rules"
 	SUPPRESS ("WS", "cat_space", "cat", "match",
@@ -38,6 +38,9 @@ peg = epnf.define(function(_ENV)
 	local cat_space = WS^1
 	local WS = WS^0
 	local symbol =  C(symbol)
+	local string =  C(string)
+	local range_c = C(range_c)
+	local set_c  =  C(set_c)
 	rules   =  V"rule"^1
 	rule    =  V"lhs"  * V"rhs"
 	lhs     =  WS * V"pattern" * WS * P":"
