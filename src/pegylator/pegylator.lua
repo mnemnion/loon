@@ -59,6 +59,7 @@ peg = epnf.define(function(_ENV)
 	         *  ( V"compound"
 			 +    V"simple") 
 	compound =  V"factor"
+			 +  V"enclosed"
 			 +  V"hidden_match" 
 	factor   =  WS * P"(" 
 			 *  WS * V"rhs" * WS 
@@ -68,7 +69,6 @@ peg = epnf.define(function(_ENV)
 				 *  P">"
 	simple   =  V"prefixed"
 			 +  V"suffixed"
-			 +  V"enclosed"
 			 +  V"atom" 
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
