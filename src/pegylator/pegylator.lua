@@ -4,9 +4,11 @@
 
 require "lpeg"
 --epnf = require "lua-luaepnf/src/epnf"
-dofile "../tools/util.lua"
+require "tools/ansi"
+local util = require "tools/util"
+local dump_ast = util.dump_ast
 dofile "range.lua"
-local epnf = dofile "../tools/epnf.lua"
+local epnf = dofile "tools/epnf.lua"
 --dofile "./backwalk.lua"
 
 match = lpeg.match -- match a pattern against a string
@@ -148,7 +150,7 @@ peg_s = [[
 
 ]]
 dump_ast (match(peg,grammar_s))
---dump_ast (match(peg,peg_s))
+dump_ast (match(peg,peg_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
 --print (match(symbol, symbol_s))
