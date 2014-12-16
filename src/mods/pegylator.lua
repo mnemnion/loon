@@ -147,7 +147,50 @@ local peg_s = [[
 	maybe         =  symbol "?"
     atom =  symbol
 ]]
-dump_ast (match(peg,grammar_s))
+
+local clu_s = [[
+
+     clu :  form* / EOF
+
+      form :  unary* (_atom_ / _compound_) / _<comment>
+
+     unary :  ","
+              /  "~"
+           /  "`"
+           /  reader-macro
+
+      atom :  symbol 
+           /  number 
+           /  keyword
+           /  string
+
+  compound :  list
+           /  hash
+           /  vector
+           /  type 
+           /  syntax
+
+   symbol  :  latin !(forbidden) ANYTHING
+   keyword :  ":" symbol
+
+    list   :  "(" form* ")"
+    hash   :  "{" form:2* "}"
+    vector :  "[" form* "]"
+    type   :  "<" form* ">" !type form
+    syntax :  "|" dispatch* "|"
+
+  dispatch :  "--|" moonscript "|--" 
+           /  "--!" dispatch-string 
+           /  lun
+       lun :  !"|" ANYTHING    ;-) looks like lua!  
+moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
+
+     latin :  ([A-Z] / [a-z])
+ <comment> :  ";" !"\n" ANYTHING "\n"
+
+]]
+--dump_ast (match(peg,grammar_s))
+dump_ast(match(peg,clu_s))
 --dump_ast (match(peg,peg_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 

@@ -1,10 +1,10 @@
 #Grammar
 
-This is the grammar of [Clua](clua.md), expressed in the form in which it will, eventually, be compiled.
+This is the grammar of [clu](clu.md), expressed in the form in which it will, eventually, be compiled.
 
 ```text
 
-     clua :  form* / EOF
+     clu :  form* / EOF
 
       form :  [unary]* (_atom_ / _compound_) / _<comment>
 
