@@ -18,6 +18,8 @@ local C = lpeg.C  -- captures a match
 local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 
+	local comment_m  = -P"\n" * P(1)
+	local comment_c = P";" * comment_m^0 + P"\n"
 	local valid_sym = R"AZ" + R"az" + P"-"  
 	local digit = R"09"
 	local sym = valid_sym + digit
@@ -45,6 +47,7 @@ local peg = epnf.define(function(_ENV)
 	local range_c    =  C(range_c)
 	local set_c      =  C(set_c)
 	local some_num_c =  C(some_num_c)
+	local cmnt    =  C(comment_c)
 	rules   =  V"rule"^1
 	rule    =  V"lhs"  * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
@@ -54,7 +57,9 @@ local peg = epnf.define(function(_ENV)
 	hidden_pattern =  P"<" * symbol * P">"
 	element  =  -V"lhs" * WS 
 	         *  ( V"compound"
-			 +    V"simple")  
+			 +    V"simple") 
+			 +  V"comment" 
+	comment = cmnt
 	more_elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
@@ -85,6 +90,7 @@ local peg = epnf.define(function(_ENV)
 	suffixed =  V"optional"
 			 +  V"more_than_one"
 			 +  V"maybe"
+			 +  V"option_some"
 			 +  V"some_number"
 	enclosed =  V"literal"
 		     +  V"set"
@@ -97,6 +103,7 @@ local peg = epnf.define(function(_ENV)
 	more_than_one =  V"allowed_suffixed" * WS * P"+"
 	maybe         =  V"allowed_suffixed" * WS * P"?"
 	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
+	option_some   =  V"some_number" * ( C"*" + C"+" + C"?")
     atom =  symbol
 end)
 
@@ -174,7 +181,7 @@ local clu_s = [[
    keyword :  ":" symbol
 
     list   :  "(" form* ")"
-    hash   :  "{" form:2* "}"
+    hash   :  "{" form$2* "}"
     vector :  "[" form* "]"
     type   :  "<" form* ">" !type form
     syntax :  "|" dispatch* "|"
