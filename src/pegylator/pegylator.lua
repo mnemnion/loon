@@ -11,31 +11,30 @@ dofile "range.lua"
 local epnf = dofile "tools/epnf.lua"
 --dofile "./backwalk.lua"
 
-match = lpeg.match -- match a pattern against a string
-P = lpeg.P -- match a string literally
-S = lpeg.S  -- match anything in a set
-R = Ru  -- match anything in a range
-C = lpeg.C  -- captures a match
-Ct = lpeg.Ct -- a table with all captures from the pattern
-V = lpeg.V -- create a variable within a grammar
+local match = lpeg.match -- match a pattern against a string
+local P = lpeg.P -- match a string literally
+local S = lpeg.S  -- match anything in a set
+local R = Ru  -- match anything in a range
+local C = lpeg.C  -- captures a match
+local Ct = lpeg.Ct -- a table with all captures from the pattern
+local V = lpeg.V -- create a variable within a grammar
+	local valid_sym = R"AZ" + R"az" + P"-"  
+	local digit = R"09"
+	local sym = valid_sym + digit
+	local WS = P' ' + P'\n' + P',' + P'\09'
+	local white = P"_"
+	local symbol = valid_sym * sym^0  + white -- incorrect: allows -symbol-name- 
+	local string_match = -P"\"" * -P"\\" * P(1)
+	local string = (string_match + P"\\\"" + P"\\")^1
+	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
+	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
+	local range_c  = range_capture^1 * P"-" * range_capture^1
+	local set_match = -P"}" * -P"\\" * P(1)
+	local set_c    = (set_match + P"\\}" + P"\\")^1
 
-	valid_sym = R"AZ" + R"az" + P"-"  
-	digit = R"09"
-	sym = valid_sym + digit
-	WS = P' ' + P'\n' + P',' + P'\09'
-	white = P"_"
-	symbol = valid_sym * sym^0  + white -- incorrect: allows -symbol-name- 
-	string_match = -P"\"" * -P"\\" * P(1)
-	string = (string_match + P"\\\"" + P"\\")^1
-	range_match =  -P"-" * -P"\\" * -P"]" * P(1)
-	range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
-	range_c  = range_capture^1 * P"-" * range_capture^1
-	set_match = -P"}" * -P"\\" * P(1)
-	set_c    = (set_match + P"\\}" + P"\\")^1
-
-peg = epnf.define(function(_ENV)
+local peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS", "cat_space", "cat",
+	SUPPRESS ("WS", "cat_space", "cat", "enclosed",
 		      "element" ,"more_elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
@@ -98,27 +97,25 @@ peg = epnf.define(function(_ENV)
     atom =  symbol
 end)
 
-range_s = [[ \]\--CD ]]
+local range_s = [[ \]\--CD ]]
 
-set_s   = [[ abc\def\}g䷀䷁ ]]
-string_s = [[ asldfr\"adf  asdf\asdf]]
-
-
-grammar_s = [[ A : B C ( E / F ) / F G H
+local set_s   = [[ abc\def\}g䷀䷁ ]]
+local string_s = [[ asldfr\"adf  asdf\asdf]]
+local grammar_s = [[ A : B C ( E / F ) / F G H
 			  I : "J" 
 			  K : L* M+ N?
 			  O : !P &Q -R
 			  <S> : <T (U V)>
 			  W : {XY} [a-z] ]]
 
-rule_s  = [[A:B C(D E)/(F G H)
+local rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
 			  D : E F G
 ]]
 
 
 
-peg_s = [[
+local peg_s = [[
 	rules : rule +
 	rule : lhs rhs
 	lhs       =  _pattern_ ":"
@@ -127,8 +124,8 @@ peg_s = [[
 	hidden-pattern =  "<" symbol ">"
 	<element>  =  match / factor
 	more-elements  =  choice  /  cat / ""
-	choice =  _"/" element more_elements
-	cat =  WS element more_elements
+	choice =  _"/" element more-elements
+	cat =  WS element more-elements
 	match    =  -lhs_ (compound / simple) 
 	compound =  factor / hidden-match 
 	factor   =  _"("_ rhs_ ")" 
@@ -144,11 +141,9 @@ peg_s = [[
     set     =  "{" set_c+ "}"   
     range   =  "[" range_c "]"   
 	optional      =  symbol "*"
-	more_than_one =  symbol "+"
+	more-than-one =  symbol "+"
 	maybe         =  symbol "?"
     atom =  symbol
-
-
 ]]
 dump_ast (match(peg,grammar_s))
 dump_ast (match(peg,peg_s))

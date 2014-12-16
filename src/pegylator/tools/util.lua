@@ -32,7 +32,7 @@ local function d_ast( node, prefix, nums)
   else if (type(node) == "number") then -- todo: cover all type cases
       write(prefix,"*", tostring(node), "*")
     else
-      write(prefix, "\"", green,  tostring( node ), clear, "\"")
+      write(prefix, green, "\"", clear , tostring( node ), green, "\"", clear)
     end
   end
 end
