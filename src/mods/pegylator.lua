@@ -77,8 +77,8 @@ local peg = epnf.define(function(_ENV)
 	hidden_match =  WS * P"<"
 				 *  WS * V"rhs" * WS
 				 *  P">"
-	simple   =  V"prefixed"
-			 +  V"suffixed"
+	simple   =  V"suffixed"
+			 +  V"prefixed"
 			 +  V"atom" 
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
@@ -90,7 +90,7 @@ local peg = epnf.define(function(_ENV)
 	suffixed =  V"optional"
 			 +  V"more_than_one"
 			 +  V"maybe"
-			 +  V"option_some"
+			 +  V"with_suffix"
 			 +  V"some_number"
 	enclosed =  V"literal"
 		     +  V"set"
@@ -103,7 +103,7 @@ local peg = epnf.define(function(_ENV)
 	more_than_one =  V"allowed_suffixed" * WS * P"+"
 	maybe         =  V"allowed_suffixed" * WS * P"?"
 	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
-	option_some   =  V"some_number" * ( C"*" + C"+" + C"?")
+	with_suffix   =  V"some_number" * ( C"*" + C"+" + C"?")
     atom =  symbol
 end)
 
@@ -119,6 +119,7 @@ local grammar_s = [[ A : B C ( E / F ) / F G H
 			  W : {XY} [a-z] 
 			  A : B$2 C$-3 D$4..5 E$+4]]
 
+local deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
 local rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
 			  D : E F G
@@ -197,8 +198,9 @@ moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
 
 ]]
 --dump_ast (match(peg,grammar_s))
-dump_ast(match(peg,clu_s))
+--dump_ast(match(peg,clu_s))
 --dump_ast (match(peg,peg_s))
+dump_ast(match(peg,deco_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
 --print (match(symbol, symbol_s))
