@@ -31,19 +31,20 @@ local V = lpeg.V -- create a variable within a grammar
 	local range_c  = range_capture^1 * P"-" * range_capture^1
 	local set_match = -P"}" * -P"\\" * P(1)
 	local set_c    = (set_match + P"\\}" + P"\\")^1
-
+	local some_num_c =   digit^1 * P".." * digit^1
+					 +   (P"+" + P"-")^0 * digit^1
 local peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS", "cat_space", "cat", "enclosed",
+	SUPPRESS ("WS", "cat", "enclosed",
 		      "element" ,"more_elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
-	local cat_space = WS^1
-	local WS = WS^0
-	local symbol =  C(symbol)
-	local string =  C(string)
-	local range_c = C(range_c)
-	local set_c  =  C(set_c)
+	local WS         =  WS^0
+	local symbol     =  C(symbol)
+	local string     =  C(string)
+	local range_c    =  C(range_c)
+	local set_c      =  C(set_c)
+	local some_num_c =  C(some_num_c)
 	rules   =  V"rule"^1
 	rule    =  V"lhs"  * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
@@ -84,16 +85,18 @@ local peg = epnf.define(function(_ENV)
 	suffixed =  V"optional"
 			 +  V"more_than_one"
 			 +  V"maybe"
+			 +  V"some_number"
 	enclosed =  V"literal"
 		     +  V"set"
 		     +  V"range"
-    literal =  P'"' * (string + P"") * P'"'  
+    literal =  P'"' * (string + P"") * P'"'  --watch for "" later
     set     =  P"{" * set_c^1 * P"}"   
     range   =  P"[" * range_c * P"]"  
     allowed_suffixed = (V"compound" + V"prefixed" + V"atom") 
 	optional      =  V"allowed_suffixed" * WS * P"*"
 	more_than_one =  V"allowed_suffixed" * WS * P"+"
 	maybe         =  V"allowed_suffixed" * WS * P"?"
+	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
     atom =  symbol
 end)
 
@@ -106,7 +109,8 @@ local grammar_s = [[ A : B C ( E / F ) / F G H
 			  K : L* M+ N?
 			  O : !P &Q -R
 			  <S> : <T (U V)>
-			  W : {XY} [a-z] ]]
+			  W : {XY} [a-z] 
+			  A : B$2 C$-3 D$4..5 E$+4]]
 
 local rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
