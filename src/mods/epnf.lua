@@ -20,6 +20,20 @@ end
 -- module table
 local epnf = {}
 
+-- Node metatable
+
+local function N () 
+  local meta = {}
+  meta["__call"] = function ()
+    print "Cannot call Node without evaluator"
+  end
+  meta["isnode"] = true
+  meta["__index"] = meta 
+  return meta
+end
+
+
+epnf.Node = N()
 
 -- maximum of two numbers while avoiding math lib as a dependency
 local function max( a, b )

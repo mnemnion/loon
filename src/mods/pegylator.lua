@@ -8,7 +8,7 @@ local util = require "util"
 local epeg = require "epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
-local epnf = require "epnf"
+ epnf = require "epnf"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
