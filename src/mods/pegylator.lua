@@ -203,6 +203,7 @@ dump_ast (match(peg,peg_s))
 --dump_ast(match(peg,deco_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
+tree = match(peg,grammar_s)
 --print (match(symbol, symbol_s))
 assert(#symbol_s+1 == (match(symbol, symbol_s)))
 assert(#range_s+1 == (match(range_c,range_s)))

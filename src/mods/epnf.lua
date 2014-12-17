@@ -22,7 +22,16 @@ local epnf = {}
 
 -- Node metatable
 
-local N = dofile "node.lua"
+
+local function N () 
+  local meta = {}
+  meta["__call"] = function ()
+    print "Cannot call Node without evaluator"
+  end
+  meta["isnode"] = true
+  meta["__index"] = meta 
+  return meta
+end
 
 epnf.Node = N()
 
@@ -81,10 +90,13 @@ local function parse_error( s, p, n, e )
   end
 end
 
+--remove
+epnf.localized = "I'm local"
 
 local function make_ast_node( id, pos, t )
   t.id = id
   t.pos = pos
+  t.loc = epnf.localized
   setmetatable(t,Node)
   return t
 end
