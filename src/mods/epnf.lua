@@ -23,17 +23,7 @@ local epnf = {}
 -- Node metatable
 
 
-local function N () 
-  local meta = {}
-  meta["__call"] = function ()
-    print "Cannot call Node without evaluator"
-  end
-  meta["isnode"] = true
-  meta["__index"] = meta 
-  return meta
-end
-
-epnf.Node = N()
+epnf.Node = dofile "node.lua"
 
 -- maximum of two numbers while avoiding math lib as a dependency
 local function max( a, b )
@@ -90,21 +80,18 @@ local function parse_error( s, p, n, e )
   end
 end
 
---remove
-epnf.localized = "I'm local"
 
 local function make_ast_node( id, pos, t )
   t.id = id
   t.pos = pos
-  t.loc = epnf.localized
-  setmetatable(t,Node)
+  setmetatable(t,epnf.Node)
   return t
 end
 
 local function anon_node (t)  
   for i,v in ipairs(t) do 
     if type (v) == "table" then  
-      setmetatable(v,Node)
+      setmetatable(v,epnf.Node)
     end
   end
   return unpack(t)

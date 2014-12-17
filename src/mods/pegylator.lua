@@ -49,7 +49,7 @@ local peg = epnf.define(function(_ENV)
 	local some_num_c =  C(some_num_c)
 	local cmnt    =  C(comment_c)
 	rules   =  V"rule"^1
-	rule    =  V"lhs"  * V"rhs"
+	rule    =  Cp() * V"lhs"  * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
     rhs     =  V"element" * V"elements"
 	pattern =  symbol 

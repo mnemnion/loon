@@ -13,8 +13,7 @@ local function d_ast( node, prefix, nums)
     --write("{")
     if next( node ) ~= nil then
       if node.parent then write("p: ",node.parent, "  ") end
-      if type( node.id ) == "string" and
-         type( node.pos ) == "number" then
+      if node.isnode then
         write(magenta, node.id, clear, 
                "  ", cyan, tostring( node.pos ), clear)
       end
