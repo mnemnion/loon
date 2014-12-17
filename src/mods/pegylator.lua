@@ -8,7 +8,8 @@ local util = require "util"
 local epeg = require "epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
- epnf = require "epnf"
+local epnf = require "epnf"
+select_rule = dofile "transform.lua"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
@@ -197,9 +198,11 @@ moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
  <comment> :  ";" !"\n" ANYTHING "\n"
 
 ]]
+
+
 --dump_ast (match(peg,grammar_s))
 --dump_ast(match(peg,clu_s))
-dump_ast (match(peg,peg_s))
+--dump_ast (match(peg,peg_s))
 --dump_ast(match(peg,deco_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
