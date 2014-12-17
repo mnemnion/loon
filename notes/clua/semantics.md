@@ -130,7 +130,9 @@ Lua is a classically dynamic language, in that it has types, but it doesn't do m
 
 When I'm good and ready, I'll start adding type annotations to Clua. We need them to work in a useful way, and need to discern what that is. Structurally, they're somewhat unusual in a Lisp, in that they're a proper form, meaning `< form >` is always syntactically correct, but they apply to the next form, formally and implicitly joining into a single form. So `{<int> 3 "foo"}` is syntactically correct, despite the requirement that a table contain an even number of forms.
 
-I believe a type annotation followed by another type annotation is also incorrect. It's not clear what the resulting potential chain of infinite concatenations would mean. 
+A type followed by another type should be valid, and should not require a chain, though it should accomodate one. 
+
+I'm starting to think this is overly clever and `{<int 3> "foo"}` is the correct form. This gives us `<Meta <Type>>` as meaning a Type that has the metatable (is of the type) Meta. Really S-expressions should always win, I've been writing too much Algol.
 
 The meaning is clear enough: if the brackets contain a type, or a form returning a type, then the next form is either of that type, or must be of that type. If the form in the brackets returns another form (type of something that's not Type), then the next form is/must be of that type. 
 

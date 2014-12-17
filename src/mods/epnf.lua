@@ -22,16 +22,7 @@ local epnf = {}
 
 -- Node metatable
 
-local function N () 
-  local meta = {}
-  meta["__call"] = function ()
-    print "Cannot call Node without evaluator"
-  end
-  meta["isnode"] = true
-  meta["__index"] = meta 
-  return meta
-end
-
+local N = dofile "node.lua"
 
 epnf.Node = N()
 
@@ -94,7 +85,17 @@ end
 local function make_ast_node( id, pos, t )
   t.id = id
   t.pos = pos
+  setmetatable(t,Node)
   return t
+end
+
+local function anon_node (t)  
+  for i,v in ipairs(t) do 
+    if type (v) == "table" then  
+      setmetatable(v,Node)
+    end
+  end
+  return unpack(t)
 end
 
 
@@ -147,7 +148,8 @@ function epnf.define( func, g )
     __index = env_index,
     __newindex = function( _, name, val )
       if suppressed[ name ] then
-        g[ name ] = val
+        local v = L.Ct( val ) / anon_node
+        g[ name ] = v
       else
         g[ name ] = (L.Cc( name ) * L_Cp * L.Ct( val )) / make_ast_node
       end
