@@ -206,7 +206,8 @@ moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
 --dump_ast(match(peg,deco_s))
 symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
 
-tree = match(peg,grammar_s)
+tree = match(peg,deco_s)
+ast.pr(tree)
 --print (match(symbol, symbol_s))
 assert(#symbol_s+1 == (match(symbol, symbol_s)))
 assert(#range_s+1 == (match(range_c,range_s)))

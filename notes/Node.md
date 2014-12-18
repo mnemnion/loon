@@ -17,3 +17,8 @@ as mentioned, `__newindex` is responsible for checking for cached functions in u
 Hopefully we can have a cheap __newindex for generating ASTs from the flats, and an expensive one for modifying existing ASTs.
 
 If we add Cor and Cow, which may not prove necessary, __newindex will have to handle those types. 
+
+### __add
+
+adding concatentes two Nodes into a new Node.
+
