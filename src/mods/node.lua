@@ -4,6 +4,7 @@
 
 
 local function N () 
+  -- <Node> metatable
   local meta = {}
   meta["__call"] = function ()
     print "Cannot call Node without evaluator"
@@ -13,4 +14,15 @@ local function N ()
   return meta
 end
 
-return N()
+local N = N()
+
+local function F ()
+	-- <Forest> metatable
+	local meta = {}
+	meta["isnode"] = false 
+	meta["__index"] = meta
+	setmetatable(meta,N)
+	return meta
+end
+
+return N

@@ -22,3 +22,17 @@ If we add Cor and Cow, which may not prove necessary, __newindex will have to ha
 
 adding concatentes two Nodes into a new Node.
 
+### __tostring
+
+Working on this right now. 
+
+
+### copy
+
+This is moderately complex. 
+
+First we have to make a new table, attach the Node metatable (which we take directly from the new top node), and clone over all literal contents. Then we have to resolve the 'parent' reference to point to self, detaching the new Node from the old tree. 
+
+Next we have to shallow copy all the subnodes into new tables and stuff them with the parent reference. Then we have to hand those down to a recursive, subsidiary function that enables them to do the same thing.
+
+We probably want to make the head node contain a back reference to the node it was copied from, so we can chain backwards. This reference should be weak, so it doesn't prevent collection of the original AST whenever we release the parent reference to it.  

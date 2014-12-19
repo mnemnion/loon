@@ -31,86 +31,43 @@ local function select_rule (id, ast)
 	return vec
 end
 
-local function rule_print (val, rule)
-	if type(rule) == "table" then
-		io.write(rule[1],val,rule[2],clear)
-		--print(rule[1],val,rule[2],clear)
-	elseif type(rule) == "function" then
-		print"functioncall"
-		print(rule(val), clear)
-		--io.write(rule(val),clear)
-	else error "rule must be a table or function"
-	end
-end
+local function write(...) return io.write(...) end
 
-
-local function table_pr(table, t_rules)
-	--print (table["isnode"])
-	--print (t_rules)
-	local predicated = false
-	for predicate, fn in pairs(t_rules) do
-	--print ("pred: ", predicate, green, table[predicate],clear)
-		if type (table[predicate]) == "boolean" then
-			if table[predicate] then 
-				predicated = true
-				rule_print(table,fn)
-			end
-		elseif type (predicate) == "function" then
-			if predicate(table) then
-				rule_print(table, fn)
-			end
-		end
-		--]]
-		if not predicated then
-			tostring(table)
-		end
-	end
-end
-
-local function resolve_print (k,v,rules) 
-	if type(v) == "number" then
-		rule_print(v, rules["number"])
-	elseif type(v) == "string" then
-		rule_print(v,rules["string"])
-	elseif type(v) == "table" then
-		table_pr(v,rules["table"])
-	end
-	io.write("\n")
-end
-
-local function ast_pr (ast, prefix, rules)
-	for k,v in pairs(ast) do
-		resolve_print(k,v, rules)
-		if type(v) == "table" then
-			if v.isnode then
-				ast_pr(v, prefix, rules)
-			end
-		end
-	end
-end
-
-local function node_pr(ast)
-	return "id: "..ast.id.." pos: "..ast.pos.." "
-end
-
-local default_rules = {
-	number = {cyan, ""},
-	string = { '"'..green, clear..'"'},
-	table  = {
-		isnode  = node_pr
-	},
-}
-
-local function pr(node, prefix, rules)
-  if rules == nil then
-	 rules = default_rules
+local function d_ast( node, prefix, nums)
+  -- I need a non crappy one of these badly.
+  if type( node ) == "table" then
+    write(prefix )
+    --write("{")
+    if next( node ) ~= nil then
+      if node.parent then write("p: ",node.parent, "  ") end
+      if node.isnode then
+        write(magenta, node.id, clear, 
+               "  ", cyan, tostring( node.pos ), clear)
+      end
+      for k,v in pairs( node ) do
+        if k ~= "id" and k ~= "pos" and k ~= "parent" and k ~= "index" then
+          write("\n", prefix)
+          if nums then write("  ", tostring( k ), " = " ) end
+          d_ast( v, prefix.." ", nums )
+        end
+      end
+    end
+    --write( " }" )
+  else if (type(node) == "number") then -- todo: cover all type cases
+      write(prefix,"*", tostring(node), "*")
+    else
+      write(prefix, green, "\"", clear , tostring( node ), green, "\"", clear)
+    end
   end
-  ast_pr(node," ", rules)
-  io.write("\n")
+end
+
+function dump_ast(node, prefix, nums)
+  d_ast(node," ", nums)
+  write("\n")
 end
 
 
 return {
 	select_rule = select_rule ,
-	pr = pr
+	pr = dump_ast
 }
