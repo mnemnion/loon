@@ -4,7 +4,7 @@
 
 local lpeg = require "lpeg"
 local ansi = require "ansi"
-local util = require "util"
+util = require "util"
 local epeg = require "epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()

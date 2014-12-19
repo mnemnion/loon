@@ -16,18 +16,17 @@ local F = function ()
   return meta
 end
 
- closed = function ()
-  local private = "private dancer"
-  local subprivate = "privy secretary"
-  local ndx = {}
-  local meta = F()
-  meta["__call"] = function() print(private) end
-  ndx.subcall = function() print(subprivate) end
-  setmetatable (ndx,meta)
-  return ndx
+local function dive(tree)
+  -- quick and dirty recurser. blows up the stack if 
+  -- there are any cyclic references. 
+  -- internal sanity check.
+  for k,v in pairs(tree) do 
+    if type(v) == "table" then
+      dive(v)
+    end
+  end
+  return nil, "contains no cyclic references"
 end
-
-closed = closed()
 ---[[ Unused
 local function index_print(index)
   for i,v in pairs(index) do
@@ -45,4 +44,5 @@ local function byte_string(str)
 end
 --]]
 
-return {F = F}
+return {F = F,
+        dive = dive}

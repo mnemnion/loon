@@ -26,29 +26,32 @@ end
 
 
 local function index_gen ()
-	local index = {}
+	local first = {}
+	local last  = {}
 	local closed = {}
 	local depth = {}
 	local length = 0
 	local meta  = util.F()
 	meta.__call = function(_, ordinal)
-		return index[ordinal], depth[ordinal]
+		return first[ordinal], last[ordinal], depth[ordinal]
 	end
 	-- This override requires 5.2
 	meta.__len = function() return length end
 	closed.len = function() return length end
 	closed.add = function(table, deep)
 		length = length+1
-		index[length] = table
-		index[table]  = length -- Janus table!
+		first[length] = table
+		first[table]  = length -- Janus table!
  		depth[length] = deep
  		depth[table]  = deep
+	end
+	closed.close = function(table)
+		last[first[table]] = length
+		last[table] = length
 	end
 	setmetatable(closed,meta)
 	return closed
 end
-
- ndx = index_gen()
 
 function backwalk.walk_ast (ast)
 	local index = index_gen()
@@ -62,8 +65,8 @@ function backwalk.walk_ast (ast)
 				end
 			end
 			ast.parent = make_backref(parent)
+			index.close(ast)
 	    end
---		print("index length is: ", #index)
 	end
 	walker(ast,ast,0)
 	ast.index = index
