@@ -16,36 +16,31 @@
 --
 -- It would be useful for our decorated AST to have no cycles, since we're guaranteed to traverse it in linear time 
 -- with no cycle checking. 
+local backwalk = {}
 
-local function isnode(maybetable)
-	-- this should be a metatable lookup
-	-- the metatable should be attached in the parsing pass
-	if (type(maybetable) == "table" ) then
---		print ("yep "..maybetable.id)
-		return true
-	else 
---		print "nope"
-		return false
-	end
+local function make_backref (ast)
+	--returns a function that returns the AST. 
+	local ref = ast
+	return function() return ref end
 end
 
-function walk_ast (ast)
+
+function backwalk.walk_ast (ast)
 	local index = {}
 	local ndx = function(ordinal)
 		return index[ordinal]
 	end
-	local function add_to_index(node)
-	end
 
 	local function walker (ast, parent)
-		index[#index+1] = ast 
-		if isnode(ast) then
+		if ast.isnode then
+			index[#index+1] = ast 
 			for _, v in pairs(ast) do
-				if isnode(ast) then
+				if type(v) == "table" and v.isnode then
 					 walker(v,ast)
 				end
 			end
-			ast["parent"] = #index
+			ast["parent_index"] = #index
+			ast.parent = make_backref(parent)
 	    end
 --		print("index length is: ", #index)
 	end
@@ -53,3 +48,5 @@ function walk_ast (ast)
 	ast.index = ndx
 --	print("index length is now: ", #index)
 end
+
+return backwalk

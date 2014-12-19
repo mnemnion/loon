@@ -27,3 +27,9 @@
 ###0.0.3
 
 - Code generation (main engine)
+
+	- write unit tests for each type of rule conversion
+
+	- write transforms for each type of rule conversion
+
+	- profit

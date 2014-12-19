@@ -1,5 +1,6 @@
 --AST tools
 local ansi = require "ansi"
+local walker = require "backwalk"
 local cyan = tostring(ansi.cyan)
 local magenta = tostring(ansi.magenta)
 local clear = tostring(ansi.clear)
@@ -39,35 +40,38 @@ local function d_ast( node, prefix, nums)
     write(prefix )
     --write("{")
     if next( node ) ~= nil then
-      if node.parent then write("p: ",node.parent, "  ") end
+      
       if node.isnode then
+      	write('\n',prefix)
+      	if node.parent then write("p: ",node.parent().id, "  ") end
         write(magenta, node.id, clear, 
                "  ", cyan, tostring( node.pos ), clear)
       end
       for k,v in pairs( node ) do
         if k ~= "id" and k ~= "pos" and k ~= "parent" and k ~= "index" then
-          write("\n", prefix)
+          write()
           if nums then write("  ", tostring( k ), " = " ) end
-          d_ast( v, prefix.." ", nums )
+          d_ast( v, prefix.."  ", nums )
         end
       end
     end
     --write( " }" )
   else if (type(node) == "number") then -- todo: cover all type cases
-      write(prefix,"*", tostring(node), "*")
+     -- write(prefix,"*", tostring(node), "*")
     else
-      write(prefix, green, "\"", clear , tostring( node ), green, "\"", clear)
+      write("\n",prefix, green, "\"", clear , tostring( node ), green, "\"", clear)
     end
   end
 end
 
 function dump_ast(node, prefix, nums)
-  d_ast(node," ", nums)
+  d_ast(node,"", nums)
   write("\n")
 end
 
 
 return {
 	select_rule = select_rule ,
-	pr = dump_ast
+	pr = dump_ast,
+	walk = walker.walk_ast
 }

@@ -9,7 +9,7 @@ local epeg = require "epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "epnf"
-ast = dofile "transform.lua"
+ast = require "ast"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
