@@ -29,38 +29,31 @@ local function index_gen ()
 	local index = {}
 	local closed = {}
 	local depth = {}
+	local length = 0
 	local meta  = util.F()
-	local ndx = function(_, ordinal)
+	meta.__call = function(_, ordinal)
 		return index[ordinal], depth[ordinal]
 	end
-	closed.set = function(ordinal, table, deep)
-		index[ordinal] = table
-		depth[ordinal] = deep
+	-- This override requires 5.2
+	meta.__len = function() return length end
+	closed.len = function() return length end
+	closed.add = function(table, deep)
+		length = length+1
+		index[length] = table
+		depth[length] = deep
 	end
-	meta.__call = ndx
 	setmetatable(closed,meta)
 	return closed
 end
 
-ndx = index_gen()
+ ndx = index_gen()
 
 function backwalk.walk_ast (ast)
-	local index = {}
-	local depth = {}
-	local ndx = function(_, ordinal)
-		return index[ordinal], depth[ordinal]
-	end
-
-	function index.setdepth(ordinal, value)
-		table.insert(depth,ordinal,value)
-	end 
-
-	setmetatable(index,{__call = ndx})
+	local index = index_gen()
 	local function walker (ast, parent, deep)
-		depth[#depth+1] = deep
-		deep = deep+1
+		deep = deep + 1
 		if ast.isnode then
-			index[#index+1] = ast 
+			index.add(ast,deep)
 			for _, v in pairs(ast) do
 				if type(v) == "table" and v.isnode then
 					 walker(v,ast, deep)
