@@ -16,14 +16,33 @@
 --
 -- It would be useful for our decorated AST to have no cycles, since we're guaranteed to traverse it in linear time 
 -- with no cycle checking. 
+
+local util = require "util"
 local backwalk = {}
 
 local function make_backref (ast)
-	--returns a function that returns the AST. 
-	local ref = ast
-	return function() return ref end
+	return function() return ast end
 end
 
+
+local function index_gen ()
+	local index = {}
+	local closed = {}
+	local depth = {}
+	local meta  = util.F()
+	local ndx = function(_, ordinal)
+		return index[ordinal], depth[ordinal]
+	end
+	closed.set = function(ordinal, table, deep)
+		index[ordinal] = table
+		depth[ordinal] = deep
+	end
+	meta.__call = ndx
+	setmetatable(closed,meta)
+	return closed
+end
+
+ndx = index_gen()
 
 function backwalk.walk_ast (ast)
 	local index = {}
@@ -31,6 +50,11 @@ function backwalk.walk_ast (ast)
 	local ndx = function(_, ordinal)
 		return index[ordinal], depth[ordinal]
 	end
+
+	function index.setdepth(ordinal, value)
+		table.insert(depth,ordinal,value)
+	end 
+
 	setmetatable(index,{__call = ndx})
 	local function walker (ast, parent, deep)
 		depth[#depth+1] = deep

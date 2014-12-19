@@ -76,15 +76,10 @@ local function parse(grammar, string)
 	return walker.walk_ast(ast)
 end
 
-local function ast_copy(ast)
-	-- depth copies full contents of an ast, attaching the existing metatable,
-	-- avoiding back references and the index (and anything else we need to avoid later)
-	-- then walks it and attaches a 'backward' top link to the old version of the AST. 
-	-- this backward link should be weak, meaning we hide it in a table that we call like a function. 
-end
 return {
 	select_rule = select_rule ,
 	pr = dump_ast,
+	copy = clone_ast,
 	walk = walker.walk_ast,
 	parse = parse
 }

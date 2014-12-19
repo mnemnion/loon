@@ -4,43 +4,38 @@ local magenta = tostring(ansi.magenta)
 local clear = tostring(ansi.clear)
 local green = tostring(ansi.green)
 
-local function write(...) return io.write(...) end
 
-local function d_ast( node, prefix, nums)
-  -- I need a non crappy one of these badly.
-  if type( node ) == "table" then
-    write(prefix )
-    --write("{")
-    if next( node ) ~= nil then
-      if node.parent then write("p: ",node.parent, "  ") end
-      if node.isnode then
-        write(magenta, node.id, clear, 
-               "  ", cyan, tostring( node.pos ), clear)
-      end
-      for k,v in pairs( node ) do
-        if k ~= "id" and k ~= "pos" and k ~= "parent" and k ~= "index" then
-          write("\n", prefix)
-          if nums then write("  ", tostring( k ), " = " ) end
-          d_ast( v, prefix.." ", nums )
-        end
-      end
-    end
-    --write( " }" )
-  else if (type(node) == "number") then -- todo: cover all type cases
-      write(prefix,"*", tostring(node), "*")
-    else
-      write(prefix, green, "\"", clear , tostring( node ), green, "\"", clear)
-    end
-  end
+local F = function ()
+  -- A method for functionalizing tables.
+  -- This lets us define both fn() and fn.subfn()
+  -- over a proper closure. 
+  -- All lookups on the "function" will return nil. 
+  local meta = {}
+  meta["__index"] = function() return nil end
+  meta["__newindex"] = function() return nil end
+  return meta
 end
 
-function index_print(index)
+ closed = function ()
+  local private = "private dancer"
+  local subprivate = "privy secretary"
+  local ndx = {}
+  local meta = F()
+  meta["__call"] = function() print(private) end
+  ndx.subcall = function() print(subprivate) end
+  setmetatable (ndx,meta)
+  return ndx
+end
+
+closed = closed()
+---[[ Unused
+local function index_print(index)
   for i,v in pairs(index) do
     print("i: ",i," v: ", v)
   end
 end
 
-function byte_string(str) 
+local function byte_string(str) 
   -- Converts a string to an array of bytes.
   local bytes = {}
   for i = 1, string.len(str) do
@@ -48,10 +43,6 @@ function byte_string(str)
   end
   return bytes
 end
+--]]
 
-function dump_ast(node, prefix, nums)
-  d_ast(node," ", nums)
-  write("\n")
-end
-
-return { dump_ast = dump_ast}
+return {F = F}
