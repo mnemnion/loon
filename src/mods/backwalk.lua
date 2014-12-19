@@ -40,7 +40,9 @@ local function index_gen ()
 	closed.add = function(table, deep)
 		length = length+1
 		index[length] = table
-		depth[length] = deep
+		index[table]  = length -- Janus table!
+ 		depth[length] = deep
+ 		depth[table]  = deep
 	end
 	setmetatable(closed,meta)
 	return closed

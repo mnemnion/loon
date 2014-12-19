@@ -76,10 +76,23 @@ local function parse(grammar, string)
 	return walker.walk_ast(ast)
 end
 
+local function dive(ast)
+	-- quick and dirty recurser. blows up the stack if 
+	-- there are any cyclic references. 
+	-- internal sanity check.
+	for k,v in pairs(ast) do 
+		if type(v) == "table" then
+			dive(v)
+		end
+	end
+	return nil, "contains no cyclic references"
+end
+
 return {
 	select_rule = select_rule ,
 	pr = dump_ast,
 	copy = clone_ast,
 	walk = walker.walk_ast,
-	parse = parse
+	parse = parse,
+	dive = dive
 }
