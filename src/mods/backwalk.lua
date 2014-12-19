@@ -28,10 +28,10 @@ end
 function backwalk.walk_ast (ast)
 	local index = {}
 	local depth = {}
-	local ndx = function(ordinal)
+	local ndx = function(_, ordinal)
 		return index[ordinal], depth[ordinal]
 	end
-
+	setmetatable(index,{__call = ndx})
 	local function walker (ast, parent, deep)
 		depth[#depth+1] = deep
 		deep = deep+1
@@ -47,7 +47,7 @@ function backwalk.walk_ast (ast)
 --		print("index length is: ", #index)
 	end
 	walker(ast,ast,0)
-	ast.index = ndx
+	ast.index = index
 --	print("index length is now: ", #index)
 	return ast 
 end
