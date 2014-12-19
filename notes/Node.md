@@ -22,6 +22,18 @@ A Node which has an index may be stepped through without recursion, allowing Lua
 
 ##Metamethods
 
+## root
+
+Returns the root node of the Node. 
+
+## range
+
+Not all Nodes have an index, which woudl be a waste.
+
+Calling node.range() will return the index itself, and the range over the index which contains the node. 
+
+It does this by calling root(), calling itself on the index, and returning the range along with the index.  
+
 ###__call
 
 Calling an AST node compiles it and executes it, with the evaluator specified by the reference node. An AST is normally generated with a particular kind of evaluation in mind, so we attach that intention to the reference node. 

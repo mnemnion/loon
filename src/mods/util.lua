@@ -11,7 +11,9 @@ local F = function ()
   -- over a proper closure. 
   -- All lookups on the "function" will return nil. 
   local meta = {}
-  meta["__index"] = function() return nil end
+  meta["__index"] = function() 
+    error "table is behaving as a function and may not be indexed"
+  end
   meta["__newindex"] = function() return nil end
   return meta
 end
