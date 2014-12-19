@@ -3,9 +3,11 @@ local lpeg = require "lpeg"
 local ansi = require "ansi"
 local walker = require "backwalk"
 local cyan = tostring(ansi.cyan)
+local blue = tostring(ansi.blue)
 local magenta = tostring(ansi.magenta)
 local clear = tostring(ansi.clear)
 local green = tostring(ansi.green)
+local red = tostring(ansi.red)
 
 local function select_rule (id, ast) 
 -- select_rule (<String>, <Node>) -> <Index <Node>>
@@ -33,42 +35,24 @@ local function select_rule (id, ast)
 	return vec
 end
 
-local function write(...) return io.write(...) end
-
-local function d_ast( node, prefix, nums)
-  -- I need a non crappy one of these badly.
-  if type( node ) == "table" then
-    write(prefix )
-    --write("{")
-    if next( node ) ~= nil then
-      
-      if node.isnode then
-      	write('\n',prefix)
-      	if node.parent then 
-      		write("p: ",node.parent().id, "  ") end
-        write(magenta, node.id, clear, 
-               "  ", cyan, tostring( node.pos ), clear)
-      end
-      for k,v in pairs( node ) do
-        if k ~= "id" and k ~= "pos" and k ~= "parent" and k ~= "index" then
-          write()
-          if nums then write("  ", tostring( k ), " = " ) end
-          d_ast( v, prefix.."  ", nums )
-        end
-      end
-    end
-    --write( " }" )
-  else if (type(node) == "number") then -- todo: cover all type cases
-     -- write(prefix,"*", tostring(node), "*")
-    else
-      write("\n",prefix, green, "\"", clear , tostring( node ), green, "\"", clear)
-    end
-  end
+local function node_pr(node,_,depth)
+	local prefix = string.rep("  ",depth-1)
+	io.write(prefix,blue,node.parent().id," ",
+			 magenta,node.id," ",
+			 cyan,node.pos,clear,"\n")
+	for i,v in ipairs(node) do
+		if type(v) ~= "table" then
+			io.write (prefix,green,'"',clear,v,green,'"',clear,"\n")
+		end
+	end
 end
 
-local function dump_ast(node, prefix, nums)
-  d_ast(node,"", nums)
-  write("\n")
+local function ast_pr(ast)
+	-- now we can print an AST.
+	local ndx = ast.index
+	for i= 1,ndx.len() do 
+		node_pr(ndx(i))
+	end
 end
 
 local function parse(grammar, string)
@@ -78,7 +62,7 @@ end
 
 return {
 	select_rule = select_rule ,
-	pr = dump_ast,
+	pr = ast_pr,
 	copy = clone_ast,
 	walk = walker.walk_ast,
 	parse = parse
