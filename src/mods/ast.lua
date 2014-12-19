@@ -47,6 +47,14 @@ local function node_pr(node,_,depth)
 	end
 end
 
+local function groot(node)
+	if node.parent() == node then
+		return node
+	else 
+		return groot(node.parent()) 
+	end
+end
+
 local function ast_pr(ast)
 	-- now we can print an AST.
 	local ndx = ast.index
@@ -63,6 +71,7 @@ end
 return {
 	select_rule = select_rule ,
 	pr = ast_pr,
+	groot = groot,
 	copy = clone_ast,
 	walk = walker.walk_ast,
 	parse = parse

@@ -2,6 +2,9 @@
 
 -- Note that this should be a singleton: called exactly once by a given program. 
 
+local ast = require "ast"
+
+
 local function N () 
   -- <Node> metatable
   local meta = {}
@@ -11,6 +14,7 @@ local function N ()
   meta["isnode"] = true
   meta["__index"] = meta 
   meta["index"] = index
+  meta["root"] = ast.groot
   return meta
 end
 
