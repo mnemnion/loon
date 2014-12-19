@@ -1,4 +1,5 @@
 --AST tools
+local lpeg = require "lpeg"
 local ansi = require "ansi"
 local walker = require "backwalk"
 local cyan = tostring(ansi.cyan)
@@ -43,7 +44,8 @@ local function d_ast( node, prefix, nums)
       
       if node.isnode then
       	write('\n',prefix)
-      	if node.parent then write("p: ",node.parent().id, "  ") end
+      	if node.parent then 
+      		write("p: ",node.parent().id, "  ") end
         write(magenta, node.id, clear, 
                "  ", cyan, tostring( node.pos ), clear)
       end
@@ -64,14 +66,25 @@ local function d_ast( node, prefix, nums)
   end
 end
 
-function dump_ast(node, prefix, nums)
+local function dump_ast(node, prefix, nums)
   d_ast(node,"", nums)
   write("\n")
 end
 
+local function parse(grammar, string)
+	local ast = lpeg.match(grammar,string)
+	return walker.walk_ast(ast)
+end
 
+local function ast_copy(ast)
+	-- depth copies full contents of an ast, attaching the existing metatable,
+	-- avoiding back references and the index (and anything else we need to avoid later)
+	-- then walks it and attaches a 'backward' top link to the old version of the AST. 
+	-- this backward link should be weak, meaning we hide it in a table that we call like a function. 
+end
 return {
 	select_rule = select_rule ,
 	pr = dump_ast,
-	walk = walker.walk_ast
+	walk = walker.walk_ast,
+	parse = parse
 }

@@ -27,26 +27,29 @@ end
 
 function backwalk.walk_ast (ast)
 	local index = {}
+	local depth = {}
 	local ndx = function(ordinal)
-		return index[ordinal]
+		return index[ordinal], depth[ordinal]
 	end
 
-	local function walker (ast, parent)
+	local function walker (ast, parent, deep)
+		depth[#depth+1] = deep
+		deep = deep+1
 		if ast.isnode then
 			index[#index+1] = ast 
 			for _, v in pairs(ast) do
 				if type(v) == "table" and v.isnode then
-					 walker(v,ast)
+					 walker(v,ast, deep)
 				end
 			end
-			ast["parent_index"] = #index
 			ast.parent = make_backref(parent)
 	    end
 --		print("index length is: ", #index)
 	end
-	walker(ast,ast)
+	walker(ast,ast,0)
 	ast.index = ndx
 --	print("index length is now: ", #index)
+	return ast 
 end
 
 return backwalk

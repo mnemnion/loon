@@ -10,6 +10,8 @@ Calling an AST node compiles it  and executes it, with the evaluator specified b
 
 This compilation happens once, and the result is memoized. `__newindex` on any node is responsible for clearing the function cache on all upstream nodes. 
 
+use this wisdom: % t = setmetatable({a=1},{__call=function(self, a, b) print(a, b, self.a) end}) t("asdf", "foo")
+
 ###__newindex
 
 as mentioned, `__newindex` is responsible for checking for cached functions in upstream nodes. It is also responsible for making sure that the reference index is updated, back references are maintained, region information in the tree is correct, and so on. 
@@ -24,15 +26,9 @@ adding concatentes two Nodes into a new Node.
 
 ### __tostring
 
-Working on this right now. 
+Rewrite to use the index. 
 
 
 ### copy
 
-This is moderately complex. 
-
-First we have to make a new table, attach the Node metatable (which we take directly from the new top node), and clone over all literal contents. Then we have to resolve the 'parent' reference to point to self, detaching the new Node from the old tree. 
-
-Next we have to shallow copy all the subnodes into new tables and stuff them with the parent reference. Then we have to hand those down to a recursive, subsidiary function that enables them to do the same thing.
-
-We probably want to make the head node contain a back reference to the node it was copied from, so we can chain backwards. This reference should be weak, so it doesn't prevent collection of the original AST whenever we release the parent reference to it.  
+Copying: Make a new table, copy anything that isn't an index or a backref, add all children in the same fashion, then walk the new bare AST to decorate it with an index and proper back references. Include a 'back' 
