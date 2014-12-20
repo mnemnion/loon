@@ -9,13 +9,15 @@ local function N ()
   -- <Node> metatable
   local meta = {}
   meta["__call"] = function ()
-    print "Cannot call Node without evaluator"
+    io.write "Cannot call Node without evaluator"
   end
+  meta["__index"] = meta
+  meta["__tostring"] = ast.tostring
   meta["isnode"] = true
-  meta["__index"] = meta 
   meta["index"] = index
   meta["root"] = ast.root
   meta["range"] = ast.range
+  meta["clone"] = ast.copy
   return meta
 end
 

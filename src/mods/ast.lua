@@ -30,22 +30,30 @@ end
 
 local function node_pr(node,_,depth)
 	local prefix = ("  "):rep(depth-1)
-	io.write(prefix,blue,tostring(node.parent())," ",
-			 magenta,node.id," ",
-			 cyan,node.pos,clear,"\n")
+	local phrase = prefix..
+		     --blue,node.parent().id," ",
+			 magenta..node.id.." "..
+			 cyan..node.pos..clear.."\n"
 	for i,v in ipairs(node) do
 		if type(v) == "string" then
-			io.write (prefix,green,'"',clear,v,green,'"',clear,"\n")
+			phrase = phrase..prefix..green..'"'..clear..v..green..'"'..clear.."\n"
 		end
 	end
+	return phrase
+end
+
+local function ast_tostring(ast)
+	-- now we can print an AST.
+	local ndx, first, last = ast:range()
+	local str = ""
+	for i= first,last do 
+		str = str..node_pr(ndx(i))
+	end
+	return str
 end
 
 local function ast_pr(ast)
-	-- now we can print an AST.
-	local ndx, first, last = ast_range(ast)
-	for i= first,last do 
-		node_pr(ndx(i))
-	end
+	io.write(ast_tostring(ast))
 end
 
 local function deepcopy(orig) -- from luafun
@@ -101,6 +109,7 @@ end
 
 return {
 	select_rule = select_rule ,
+	tostring = ast_tostring,
 	pr = ast_pr,
 	root = root,
 	range= ast_range,
