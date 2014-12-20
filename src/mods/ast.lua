@@ -41,7 +41,7 @@ local function node_pr(node,_,depth)
 			 magenta,node.id," ",
 			 cyan,node.pos,clear,"\n")
 	for i,v in ipairs(node) do
-		if type(v) ~= "table" then
+		if type(v) == "string" then
 			io.write (prefix,green,'"',clear,v,green,'"',clear,"\n")
 		end
 	end
@@ -53,6 +53,12 @@ local function root(node)
 	else 
 		return root(node.parent()) 
 	end
+end
+
+local function ast_range(node)
+	local root = node:root()
+	local first, last, _ =  root.index(node)
+	return root.index, first, last
 end
 
 local function ast_pr(ast)
@@ -72,6 +78,7 @@ return {
 	select_rule = select_rule ,
 	pr = ast_pr,
 	root = root,
+	range= ast_range,
 	copy = clone_ast,
 	walk = walker.walk_ast,
 	parse = parse

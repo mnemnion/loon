@@ -47,6 +47,8 @@ Returns the root node of the Node.
 
 ### range
 
+` ast.range(<Node>) =>  <Node index> <num first>, <num last> `
+
 Not all Nodes have an index, which woudl be a waste.
 
 Calling node.range() will return the index itself, and the range over the index which contains the node. 
