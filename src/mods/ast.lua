@@ -36,7 +36,7 @@ local function select_rule (id, ast)
 end
 
 local function node_pr(node,_,depth)
-	local prefix = string.rep("  ",depth-1)
+	local prefix = ("  "):rep(depth-1)
 	io.write(prefix,blue,node.parent().id," ",
 			 magenta,node.id," ",
 			 cyan,node.pos,clear,"\n")
@@ -47,11 +47,11 @@ local function node_pr(node,_,depth)
 	end
 end
 
-local function groot(node)
+local function root(node)
 	if node.parent() == node then
 		return node
 	else 
-		return groot(node.parent()) 
+		return root(node.parent()) 
 	end
 end
 
@@ -71,7 +71,7 @@ end
 return {
 	select_rule = select_rule ,
 	pr = ast_pr,
-	groot = groot,
+	root = root,
 	copy = clone_ast,
 	walk = walker.walk_ast,
 	parse = parse

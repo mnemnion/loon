@@ -14,7 +14,7 @@ local function N ()
   meta["isnode"] = true
   meta["__index"] = meta 
   meta["index"] = index
-  meta["root"] = ast.groot
+  meta["root"] = ast.root
   return meta
 end
 
