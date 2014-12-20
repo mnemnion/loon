@@ -2,7 +2,7 @@
 
 -- Note that this should be a singleton: called exactly once by a given program. 
 
-local ast = require "ast"
+local ast = require "peg/ast"
 
 
 local function N () 

@@ -23,7 +23,7 @@ local epnf = {}
 -- Node metatable
 
 
-epnf.Node = dofile "node.lua"
+epnf.Node = require "peg/node"
 
 -- maximum of two numbers while avoiding math lib as a dependency
 local function max( a, b )

@@ -4,12 +4,12 @@
 
 local lpeg = require "lpeg"
 local ansi = require "ansi"
-util = require "util"
-local epeg = require "epeg"
+local util = require "util"
+local epeg = require "peg/epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
-local epnf = require "epnf"
-ast = require "ast"
+local epnf = require "peg/epnf"
+ast = require "peg/ast"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
