@@ -15,6 +15,7 @@ local function N ()
   meta["__index"] = meta 
   meta["index"] = index
   meta["root"] = ast.root
+  meta["range"] = ast.range
   return meta
 end
 

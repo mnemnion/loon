@@ -9,6 +9,11 @@ local clear = tostring(ansi.clear)
 local green = tostring(ansi.green)
 local red = tostring(ansi.red)
 
+local copy_contents = { id = true,
+					   pos = true, -- remove
+					   span = true
+					   }
+
 local function root(node)
 	if node.parent() == node then
 		return node
@@ -25,7 +30,7 @@ end
 
 local function node_pr(node,_,depth)
 	local prefix = ("  "):rep(depth-1)
-	io.write(prefix,blue,node.parent().id," ",
+	io.write(prefix,blue,tostring(node.parent())," ",
 			 magenta,node.id," ",
 			 cyan,node.pos,clear,"\n")
 	for i,v in ipairs(node) do
@@ -41,6 +46,25 @@ local function ast_pr(ast)
 	for i= first,last do 
 		node_pr(ndx(i))
 	end
+end
+
+local function deepcopy(orig) -- from luafun
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' and orig.isnode then
+        copy = setmetatable({},getmetatable(orig))
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+    elseif orig_type ~= "function" then
+            copy = orig
+    end
+    return copy
+end
+
+local function ast_copy(ast)
+	local clone = deepcopy(ast)
+	return walker.walk_ast(clone)
 end
 
 local function select_rule (id, ast) 
@@ -80,7 +104,7 @@ return {
 	pr = ast_pr,
 	root = root,
 	range= ast_range,
-	copy = clone_ast,
+	copy = ast_copy,
 	walk = walker.walk_ast,
 	parse = parse
 }
