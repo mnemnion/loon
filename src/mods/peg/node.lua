@@ -18,18 +18,10 @@ local function N ()
   meta["root"] = ast.root
   meta["range"] = ast.range
   meta["clone"] = ast.copy
+  meta["select"] = ast.select
   return meta
 end
 
 local N = N()
-
-local function F ()
-	-- <Forest> metatable
-	local meta = {}
-	meta["isnode"] = false 
-	meta["__index"] = meta
-	setmetatable(meta,N)
-	return meta
-end
 
 return N

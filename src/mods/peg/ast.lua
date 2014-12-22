@@ -2,6 +2,7 @@
 local lpeg = require "lpeg"
 local ansi = require "ansi"
 local walker = require "peg/backwalk"
+local Forest = require "peg/forest"
 local cyan = tostring(ansi.cyan)
 local blue = tostring(ansi.blue)
 local magenta = tostring(ansi.magenta)
@@ -75,32 +76,31 @@ local function ast_copy(ast)
 	return walker.walk_ast(clone)
 end
 
-local function select_rule (id, ast) 
--- select_rule (<String>, <Node>) -> <Index <Node>>
-	local vec = {}
-	local meta = {}
-	if ast.isnode then
-		meta = getmetatable(ast)
-	else
-		error "second argument must be of type <Node>" 
-	end
-	local function selector(id,ast)
-		if ast.isnode then
-			if ast.id == id then
-				vec[#vec+1] = ast  
+local function select_rule(ast,id)
+	local catch = setmetatable({},Forest)
+	if type(ast) == "table" and ast.isnode then
+		local ndx, first, last = ast:range()
+		--print("Node: ", ast.id, "first ", first, "last ",last)
+		for i = first, last do
+			print (ndx[i].id)
+			if ndx[i].id == id then
+				catch[#catch+1] = ndx[i]
 			end
 		end
-		for _, v in pairs(ast) do
-			if type(v) == "table" and v.isnode then
-				selector(id,v)
+	elseif type(ast) == "table" and ast.isforest then
+		for i = 1, #ast do
+			print "forest"
+			local nursery = select_rule(ast[i],id)
+			for j = 1, #nursery do
+				print ("nursery: ", nursery[1].id)
+				catch[#catch+1] = nursery[1]
 			end
 		end
 	end
-	selector(id,ast)
-	setmetatable(vec,meta)
-	return vec
+	return catch
 end
 
+Forest["select"] = select_rule
 
 local function parse(grammar, string)
 	local ast = lpeg.match(grammar,string)
@@ -108,7 +108,7 @@ local function parse(grammar, string)
 end
 
 return {
-	select_rule = select_rule ,
+	select = select_rule ,
 	tostring = ast_tostring,
 	pr = ast_pr,
 	root = root,

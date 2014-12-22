@@ -37,17 +37,17 @@ Node.first is the cursor into the string where the match begins, last is the cur
 
 span is the amount of string underneath the node. This is in terms of captures, not regions. 
 
-Not all 
+Not all Nodes will have a span, in which case a 'span' value may be calculated from `first` and `last`
 
 ##Metamethods
 
-### root
+### root()
 
 Returns the root node of the Node. 
 
-### range
+### range()
 
-` ast.range(<Node>) =>  <Node index> <num first>, <num last> `
+` ast.range(<Node>) =>  <Node index> <num first>, <num last>	 `
 
 Not all Nodes have an index, which woudl be a waste.
 
@@ -55,9 +55,13 @@ Calling node.range() will return the index itself, and the range over the index 
 
 It does this by calling root(), calling itself on the index, and returning the range along with the index. 
 
-### span
+### span()
 
 There is also a span metamethod. If a span field is not present, the value `Node.last - Node.first` is returned. Otherwise it returns `Node.span`. Note that this means that, for any Node, `Node["span"]` is either a number or a function returning a number. 
+
+### select(id)
+
+Returns a Forest of all Nodes matching id under the calling Node. 
 
 ###__call
 
