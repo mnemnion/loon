@@ -2,6 +2,19 @@
 
 I'm well on my way to capturing grammars for the PEGylator. Now to plot out the necessary transformations.
 
+
+##Critical Path
+
+- Recursion Sorting
+
+- Rule Transformation
+
+- Templating
+
+###Nice to have
+
+- Side Balancing
+
 ##Side balancing
 
 All left-hand references reachable from the start rule are detected. The rest are marked dead.
@@ -11,6 +24,14 @@ All right-hand references in living rules must have a left-hand definition.
 ##Recursion detection
 
 We cycle-count the tree, separating rules into regular and recursive. 
+
+Specifically: we generate a table. LHS is the rule name, RHS is everything that rule calls. 
+
+We start with an LHS, and count: tabulate the RHS, lookup each on the LHS, tabulate the RHS, and continue. 
+
+Naturally, we refrain from visiting anything on the LHS more than once. We mark these rules as cyclic.
+
+All rules marked cyclic are transformed with a cyclic template, all other rules with a regular template. 
 
 ## Code generation
 

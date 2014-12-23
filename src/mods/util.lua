@@ -1,15 +1,31 @@
- local ansi = require "ansi"
+local ansi = require "ansi"
 local cyan = tostring(ansi.cyan)
 local magenta = tostring(ansi.magenta)
 local clear = tostring(ansi.clear)
 local green = tostring(ansi.green)
 
+local util = {}
 
-local F = function ()
-  -- A method for functionalizing tables.
-  -- This lets us define both fn() and fn.subfn()
-  -- over a proper closure. 
-  -- All lookups on the "function" will return nil. 
+function util.publish(mod)
+-- a utility for publishing modules.
+-- makes a copy of the module, stripping all
+-- values starting with `__`.
+-- It returns the stripped form
+local catch = {}
+  for k,v in pairs(mod) do
+      if type (k) == "string" 
+       and k:sub(1,2) ~= "--" then
+           catch[k] = v
+      else end
+    end
+  return catch
+end
+
+function util.F ()
+-- A method for functionalizing tables.
+-- This lets us define both fn() and fn.subfn()
+-- over a proper closure. 
+-- All lookups on the "function" will return nil. 
   local meta = {}
   meta["__index"] = function(self,ordinal) 
     return self(ordinal)
@@ -18,7 +34,7 @@ local F = function ()
   return meta
 end
 
-local function dive(tree)
+function util.dive(tree)
   -- quick and dirty recurser. blows up the stack if 
   -- there are any cyclic references. 
   -- internal sanity check.
@@ -29,22 +45,6 @@ local function dive(tree)
   end
   return nil, "contains no cyclic references"
 end
----[[ Unused
-local function index_print(index)
-  for i,v in pairs(index) do
-    print("i: ",i," v: ", v)
-  end
-end
 
-local function byte_string(str) 
-  -- Converts a string to an array of bytes.
-  local bytes = {}
-  for i = 1, string.len(str) do
-    bytes[i] = string.byte(str,i)
-  end
-  return bytes
-end
---]]
 
-return {F = F,
-        dive = dive}
+return util
