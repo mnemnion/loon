@@ -42,7 +42,7 @@ local function node_pr(node, depth, str)
 			if type(v) == "string" then
 				phrase = phrase..prefix.."  "..green..'"'..clear..v..green..'"'..clear.."\n"
 			elseif type(v) == "table" and v.span then
-				phrase = phrase..prefix..red..str:sub(v[1],v[2]-1)..clear.."\n"
+				phrase = phrase..prefix..red..str:sub(v[1],v[2])..clear.."\n"
 			end
 		end
 		return phrase
@@ -90,17 +90,17 @@ local function select_rule(ast,id)
 		local ndx, first, last = ast:range()
 		--print("Node: ", ast.id, "first ", first, "last ",last)
 		for i = first, last do
-			print (ndx[i].id)
+	--		print (ndx[i].id)
 			if ndx[i].id == id then
 				catch[#catch+1] = ndx[i]
 			end
 		end
 	elseif type(ast) == "table" and ast.isforest then
 		for i = 1, #ast do
-			print "forest"
+			--print "forest"
 			local nursery = select_rule(ast[i],id)
 			for j = 1, #nursery do
-				print ("nursery: ", nursery[1].id)
+			--	print ("nursery: ", nursery[1].id)
 				catch[#catch+1] = nursery[1]
 			end
 		end

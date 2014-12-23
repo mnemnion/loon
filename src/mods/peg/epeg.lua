@@ -1,4 +1,5 @@
 -- extended PEG module
+require "lpeg"
 
 local function makerange(first, second)
 	local patts = {}
@@ -22,7 +23,21 @@ local function makerange(first, second)
 	end
 end
 
+
+local function spanner(first, last)
+	local vals = {}
+	vals.span = true
+	vals[1] = first
+	vals[2] = last-1
+	return vals
+end
+
+local function Csp (patt)
+	return lpeg.Cp() * patt * lpeg.Cp() / spanner
+end
+
 local Ru = makerange
 
 
-return { R = Ru }
+return { R = Ru,
+		Csp = Csp, }

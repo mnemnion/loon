@@ -10,22 +10,16 @@ local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
 ast = require "peg/ast"
+local grammar = require "peg/grammars"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
 local S = lpeg.S  -- match anything in a set
 local R = epeg.R  -- match anything in a range
 local C = lpeg.C  -- captures a match
+local Csp = epeg.Csp -- captures start and end position of match
 local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
-
-local function spanner(first, last)
-	local vals = {}
-	vals.span = true
-	vals[1] = first
-	vals[2] = last
-	return vals
-end
 
 	local comment_m  = -P"\n" * P(1)
 	local comment_c = P";" * comment_m^0 + P"\n"
@@ -51,12 +45,12 @@ end
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
 	local WS         =  WS^0
-	local symbol     =  (Cp() * symbol * Cp())    / spanner
-	local string     =  (Cp() * string * Cp())    / spanner
-	local range_c    =  (Cp() * range_c * Cp())   / spanner
-	local set_c      =  (Cp() * set_c * Cp())     / spanner
-	local some_num_c =  (Cp() * some_num_c * Cp())/ spanner
-	local cmnt       =  (Cp() * comment_c * Cp()) / spanner
+	local symbol     =  Csp(symbol)
+	local string     =  Csp(string) 
+	local range_c    =  Csp(range_c)  
+	local set_c      =  Csp(set_c)
+	local some_num_c =  Csp(some_num_c)
+	local cmnt       =  Csp(comment_c) 
 
 
 	rules   =  V"rule"^1
@@ -114,117 +108,26 @@ end
 	more_than_one =  V"allowed_suffixed" * WS * P"+"
 	maybe         =  V"allowed_suffixed" * WS * P"?"
 	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
-	with_suffix   =  V"some_number" * ( C"*" + C"+" + C"?")
+	with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
     atom =  symbol
 end)
 
-local range_s = [[ \]\--CD ]]
-
-local set_s   = [[ abc\def\}g䷀䷁ ]]
-local string_s = [[ asldfr\"adf  asdf\asdf]]
-local grammar_s = [[ A : B C ( E / F ) / F G H
-			  I : "J" 
-			  K : L* M+ N?
-			  O : !P &Q -R
-			  <S> : <T (U V)>
-			  W : {XY} [a-z] 
-			  A : B$2 C$-3 D$4..5 E$+4]]
-
- deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
-local rule_s  = [[A:B C(D E)/(F G H)
-			  C : "D" 
-			  D : E F G
-]]
-
-local peg_s = [[
-	rules : rule +
-	rule : lhs rhs
-	lhs       =  _pattern_ ":"
-    rhs       =  element more-elements
-	<pattern> =  symbol / hidden-pattern
-	hidden-pattern =  "<" symbol ">"
-	<element>  =  match / factor
-	more-elements  =  choice  /  cat / ""
-	choice =  _"/" element more-elements
-	cat =  WS element more-elements
-	match    =  -lhs_ (compound / simple) 
-	compound =  factor / hidden-match 
-	factor   =  _"("_ rhs_ ")" 
-	hidden_match =  _"<"_ rhs_ ">"
-	simple   =  prefixed / suffixed / enclosed / atom 
-	prefixed =  if-not-this / not-this / if-and-this
-	if-not-this =  "!" symbol
-	not-this    =  "-" symbol
-	if-and-this =  "&" symbol
-	suffixed =  optional / more-than-one / maybe
-	enclosed =  literal / set / range
-	literal =  "\"" (string / "") "\""  
-    set     =  "{" set_c+ "}"   
-    range   =  "[" range_c "]"   
-	optional      =  symbol "*"
-	more-than-one =  symbol "+"
-	maybe         =  symbol "?"
-    atom =  symbol
-]]
-
-local clu_s = [[
-
-     clu :  form* / EOF
-
-      form :  unary* (_atom_ / _compound_) / _<comment>
-
-     unary :  ","
-              /  "~"
-           /  "`"
-           /  reader-macro
-
-      atom :  symbol 
-           /  number 
-           /  keyword
-           /  string
-
-  compound :  list
-           /  hash
-           /  vector
-           /  type 
-           /  syntax
-
-   symbol  :  latin !(forbidden) ANYTHING
-   keyword :  ":" symbol
-
-    list   :  "(" form* ")"
-    hash   :  "{" form$2* "}"
-    vector :  "[" form* "]"
-    type   :  "<" form* ">" !type form
-    syntax :  "|" dispatch* "|"
-
-  dispatch :  "--|" moonscript "|--" 
-           /  "--!" dispatch-string 
-           /  lun
-       lun :  !"|" ANYTHING    ;-) looks like lua!  
-moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
-
-     latin :  ([A-Z] / [a-z])
- <comment> :  ";" !"\n" ANYTHING "\n"
-
-]]
 
 
---dump_ast (match(peg,grammar_s))
---dump_ast(match(peg,clu_s))
---dump_ast (match(peg,peg_s))
---dump_ast(match(peg,deco_s))
-symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
+--dump_ast (match(grammar.peg,grammar_s))
+--dump_ast(match(grammar.peg,clu_s))
+--dump_ast (match(grammar.peg,peg_s))
+--dump_ast(match(grammar.peg,deco_s))
 
-tree = ast.parse(peg,deco_s)
+tree = ast.parse(peg,grammar.deco_s)
 ast.pr(tree)
 
 assert(tree == tree.index(5):root())
 
---print (match(symbol, symbol_s))
-assert(#symbol_s+1 == (match(symbol, symbol_s)))
-assert(#range_s+1 == (match(range_c,range_s)))
-assert(#set_s+1 == (match(set_c,set_s)))
-assert(#string_s+1 == (match(string,string_s)))
+--print (match(grammar.symbol, symbol_s))
+assert(#grammar.symbol_s+1 == (match(symbol, grammar.symbol_s)))
+assert(#grammar.range_s+1 == (match(range_c,grammar.range_s)))
+assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
+assert(#grammar.string_s+1 == (match(string,grammar.string_s)))
 
 return { peg = peg }
