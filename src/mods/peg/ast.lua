@@ -35,10 +35,9 @@ local function node_pr(node,_,depth)
 		local phrase = prefix..
 			     --blue,node.parent().id," ",
 				 magenta..node.id.." "..
-				 cyan..node.pos..clear.."\n"
-		if node.last then
-			phrase = phrase:sub(1,-2).."last"
-		end
+				 cyan..node.pos..clear..
+				 "-"..cyan..node.last..clear.."\n"
+
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
 				phrase = phrase..prefix..green..'"'..clear..v..green..'"'..clear.."\n"
