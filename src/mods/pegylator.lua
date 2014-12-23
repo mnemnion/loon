@@ -19,6 +19,14 @@ local C = lpeg.C  -- captures a match
 local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 
+local function spanner(first, last)
+	local vals = {}
+	vals.span = true
+	vals[1] = first
+	vals[2] = last
+	return vals
+end
+
 	local comment_m  = -P"\n" * P(1)
 	local comment_c = P";" * comment_m^0 + P"\n"
 	local valid_sym = R"AZ" + R"az" + P"-"  
@@ -43,16 +51,16 @@ local V = lpeg.V -- create a variable within a grammar
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
 	local WS         =  WS^0
-	local symbol     =  C(symbol)
-	local string     =  C(string)
-	local range_c    =  C(range_c)
-	local set_c      =  C(set_c)
-	local some_num_c =  C(some_num_c)
-	local cmnt       =  C(comment_c)
+	local symbol     =  (Cp() * symbol * Cp())    / spanner
+	local string     =  (Cp() * string * Cp())    / spanner
+	local range_c    =  (Cp() * range_c * Cp())   / spanner
+	local set_c      =  (Cp() * set_c * Cp())     / spanner
+	local some_num_c =  (Cp() * some_num_c * Cp())/ spanner
+	local cmnt       =  (Cp() * comment_c * Cp()) / spanner
 
-	T       =  Cp()
+
 	rules   =  V"rule"^1
-	rule    =  Cp() * V"lhs"  * V"rhs"
+	rule    =  V"lhs"  * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
     rhs     =  V"element" * V"elements"
 	pattern =  symbol

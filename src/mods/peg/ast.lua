@@ -29,7 +29,7 @@ local function ast_range(node)
 	return root.index, first, last
 end
 
-local function node_pr(node,_,depth)
+local function node_pr(node, depth, str)
 	if node.isnode then
 		local prefix = ("  "):rep(depth-1)
 		local phrase = prefix..
@@ -40,7 +40,9 @@ local function node_pr(node,_,depth)
 
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
-				phrase = phrase..prefix..green..'"'..clear..v..green..'"'..clear.."\n"
+				phrase = phrase..prefix.."  "..green..'"'..clear..v..green..'"'..clear.."\n"
+			elseif type(v) == "table" and v.span then
+				phrase = phrase..prefix..red..str:sub(v[1],v[2]-1)..clear.."\n"
 			end
 		end
 		return phrase
@@ -50,9 +52,11 @@ end
 local function ast_tostring(ast)
 	-- now we can print an AST.
 	local ndx, first, last = ast:range()
+	local og = ndx(1).str
 	local str = ""
 	for i= first,last do 
-		str = str..node_pr(ndx(i))
+		local node,_,depth = ndx(i)
+		str = str..node_pr(node,depth,og)
 	end
 	return str
 end
@@ -106,8 +110,9 @@ end
 
 Forest["select"] = select_rule
 
-local function parse(grammar, string)
-	local ast = lpeg.match(grammar,string)
+local function parse(grammar, str)
+	local ast = lpeg.match(grammar,str)
+	ast.str = str
 	return walker.walk_ast(ast)
 end
 

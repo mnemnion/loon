@@ -91,7 +91,9 @@ end
 
 local function anon_node (t) 
   for i,v in ipairs(t) do 
-    if type (v) == "table" and (v.last == nil) then  
+    if type (v) == "table" and 
+       (v.last == nil) and
+       (v.span == nil) then  
       setmetatable(v,epnf.Node)
     end
   end
