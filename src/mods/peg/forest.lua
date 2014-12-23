@@ -23,6 +23,7 @@ local function F ()
   	meta["isforest"] = true
   	--the below is added to F in ast.lua 
   	--meta["select"] = ast.select_rule 
+  	--meta["with"]   = ast.select_rule
 	return meta
 end
 

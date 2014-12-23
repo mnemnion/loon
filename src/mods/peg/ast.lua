@@ -124,11 +124,19 @@ local function select_with(ast,id)
 				break
 			end
 		end
+	elseif type(ast) == "table" and ast.isforest then
+			for i = 1, #ast do
+			local nursery = select_with(ast[i],id)
+			for j = 1, #nursery do
+				catch[#catch+1] = nursery[1]
+			end
+		end
 	end
 	return catch
 end
 
 Forest["select"] = select_rule
+Forest["with"]   = select_with
 
 local function parse(grammar, str)
 	local ast = lpeg.match(grammar,str)
