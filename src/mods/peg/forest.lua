@@ -21,8 +21,8 @@ local function F ()
 	meta["__index"] = meta
 	meta["__tostring"] = forest_tostring
   	meta["isforest"] = true
-  	--meta["select"] = ast.select_rule (added to F in ast.lua) 
-	setmetatable(meta,N)
+  	--the below is added to F in ast.lua 
+  	--meta["select"] = ast.select_rule 
 	return meta
 end
 

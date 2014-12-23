@@ -25,6 +25,24 @@ local function makecolor(value)
     return setmetatable({ value = schar(27) .. '[' .. tostring(value) .. 'm' }, colormt)
 end
 
+local function byte_panic(byte_p)
+       if not (0 < byte_p and byte_p <= 255) then
+        error "foreground value must be 8 bit unsigned"
+    end
+end 
+
+local function ansi_fg(byte)
+    byte_panic(byte)
+    return schar(27).."[38;5;"..byte.."m"
+end
+
+local function ansi_bg(byte)
+    byte_panic(byte)
+    return schar(27).."[48;5;"..byte.."m"
+end
+
+_M["fg"], _M["bg"] = ansi_fg, ansi_bg
+
 local colors = {
     -- attributes
     reset = 0,

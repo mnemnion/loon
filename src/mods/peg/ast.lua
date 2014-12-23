@@ -30,20 +30,25 @@ local function ast_range(node)
 	return root.index, first, last
 end
 
+local c = { id = magenta,
+			num = grey,
+			str = red,
+			span = clear,}
+
 local function node_pr(node, depth, str)
 	if node.isnode then
 		local prefix = ("  "):rep(depth-1)
 		local phrase = prefix..
 			     --blue,node.parent().id," ",
-				 magenta..node.id.." "..
-				 cyan..node.first..clear..
-				 "-"..cyan..node.last..clear.."\n"
+				 c.id..node.id.." "..
+				 c.num..node.first..
+				 "-"..c.num..node.last..clear.."\n"
 
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
-				phrase = phrase..prefix.."  "..green..'"'..clear..v..green..'"'..clear.."\n"
+				phrase = phrase..prefix.."  "..'"'..c.str..v..clear..'"'.."\n"
 			elseif type(v) == "table" and v.span then
-				phrase = phrase..prefix..grey..str:sub(v[1],v[2])..clear.."\n"
+				phrase = phrase..prefix..c.span..str:sub(v[1],v[2])..clear.."\n"
 			end
 		end
 		return phrase
@@ -109,6 +114,20 @@ local function select_rule(ast,id)
 	return catch
 end
 
+local function select_with(ast,id)
+	local catch = setmetatable({},Forest)
+	if type(ast) == "table" and ast.isnode then
+		local ndx, first, last = ast:range()
+		for i = first, last do
+			if ndx[i].id == id then
+				catch[#catch+1] = ndx[first]
+				break
+			end
+		end
+	end
+	return catch
+end
+
 Forest["select"] = select_rule
 
 local function parse(grammar, str)
@@ -119,6 +138,7 @@ end
 
 return {
 	select = select_rule ,
+	with = select_with ,
 	tostring = ast_tostring,
 	pr = ast_pr,
 	root = root,

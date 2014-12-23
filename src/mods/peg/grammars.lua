@@ -47,7 +47,8 @@ local g = {}
 	optional      =  symbol "*"
 	more-than-one =  symbol "+"
 	maybe         =  symbol "?"
-    atom =  symbol
+    atom =  symbol / ws 
+    ws = "_"
 ]]
 
  g.clu_s = [[

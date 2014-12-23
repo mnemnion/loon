@@ -19,6 +19,7 @@ local function N ()
   meta["range"] = ast.range
   meta["clone"] = ast.copy
   meta["select"] = ast.select
+  meta["with"] = ast.with
   return meta
 end
 
