@@ -110,33 +110,50 @@ local function select_rule(ast,id)
 				catch[#catch+1] = nursery[1]
 			end
 		end
+	else error "select: First argument must be of type Node or Forest" end
+	return catch
+end
+
+local forest = {}
+
+
+function select_with_node(ast,id)
+	local catch = {}
+	local ndx, first, last = ast:range()
+	for i = first, last do
+		if ndx[i].id == id then
+			catch[#catch+1] = ndx[first]
+			break
+		end
 	end
 	return catch
 end
 
-local function select_with(ast,id)
+function forest.select_with (ast,id)
 	local catch = setmetatable({},Forest)
+	for i = 1, #ast do
+		local nursery = select_with_node(ast[i],id)
+		for j = 1, #nursery do
+			catch[#catch+1] = nursery[1]
+		end
+	end
+	return catch
+end 
+
+local function select_with(ast,id)
+	local catch = {}
 	if type(ast) == "table" and ast.isnode then
-		local ndx, first, last = ast:range()
-		for i = first, last do
-			if ndx[i].id == id then
-				catch[#catch+1] = ndx[first]
-				break
-			end
-		end
+		catch = setmetatable(select_with_node(ast,id),Forest)
 	elseif type(ast) == "table" and ast.isforest then
-			for i = 1, #ast do
-			local nursery = select_with(ast[i],id)
-			for j = 1, #nursery do
-				catch[#catch+1] = nursery[1]
-			end
-		end
+		catch = forest.select_with(ast,id)
+	else
+		error "with: First argument must be of type Node or Forest" 
 	end
 	return catch
 end
 
 Forest["select"] = select_rule
-Forest["with"]   = select_with
+Forest["with"]   = forest.select_with
 
 local function parse(grammar, str)
 	local ast = lpeg.match(grammar,str)
