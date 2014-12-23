@@ -59,7 +59,7 @@ function backwalk.walk_ast (ast)
 		deep = deep + 1
 		if ast.isnode then
 			index.add(ast,deep)
-			for _, v in pairs(ast) do
+			for _, v in ipairs(ast) do
 				if type(v) == "table" and v.isnode then
 					 walker(v,ast, deep)
 				end

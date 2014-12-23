@@ -16,6 +16,7 @@ local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
 local S = lpeg.S  -- match anything in a set
 local R = epeg.R  -- match anything in a range
+local B = lpeg.B
 local C = lpeg.C  -- captures a match
 local Csp = epeg.Csp -- captures start and end position of match
 local Ct = lpeg.Ct -- a table with all captures from the pattern
@@ -23,12 +24,12 @@ local V = lpeg.V -- create a variable within a grammar
 
 	local comment_m  = -P"\n" * P(1)
 	local comment_c = P";" * comment_m^0 + P"\n"
-	local valid_sym = R"AZ" + R"az" + P"-"  
+	local letter = R"AZ" + R"az" 
+	local valid_sym = letter + P"-"  
 	local digit = R"09"
 	local sym = valid_sym + digit
 	local WS = P' ' + P'\n' + P',' + P'\09'
-	local white = P"_"
-	local symbol = valid_sym * sym^0  + white -- incorrect: allows -symbol-name- 
+	local symbol = letter * ( -(P"-" * WS) * sym )^0  -- incorrect: allows -symbol-name- 
 	local string_match = -P"\"" * -P"\\" * P(1)
 	local string = (string_match + P"\\\"" + P"\\")^1
 	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
@@ -109,7 +110,8 @@ local V = lpeg.V -- create a variable within a grammar
 	maybe         =  V"allowed_suffixed" * WS * P"?"
 	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
 	with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
-    atom =  symbol
+    atom =  V"ws" + symbol 
+    ws = Csp(P"_")
 end)
 
 
@@ -119,7 +121,7 @@ end)
 --dump_ast (match(grammar.peg,peg_s))
 --dump_ast(match(grammar.peg,deco_s))
 
-tree = ast.parse(peg,grammar.deco_s)
+tree = ast.parse(peg,grammar.peg_s)
 ast.pr(tree)
 
 assert(tree == tree.index(5):root())

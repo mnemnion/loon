@@ -9,6 +9,7 @@ local magenta = tostring(ansi.magenta)
 local clear = tostring(ansi.clear)
 local green = tostring(ansi.green)
 local red = tostring(ansi.red)
+local grey = tostring(ansi.dim)..tostring(ansi.white)
 
 local copy_contents = { id = true,
 					   pos = true, -- remove
@@ -42,7 +43,7 @@ local function node_pr(node, depth, str)
 			if type(v) == "string" then
 				phrase = phrase..prefix.."  "..green..'"'..clear..v..green..'"'..clear.."\n"
 			elseif type(v) == "table" and v.span then
-				phrase = phrase..prefix..red..str:sub(v[1],v[2])..clear.."\n"
+				phrase = phrase..prefix..grey..str:sub(v[1],v[2])..clear.."\n"
 			end
 		end
 		return phrase
