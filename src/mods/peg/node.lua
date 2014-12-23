@@ -5,6 +5,7 @@
 local ast = require "peg/ast"
 
 
+
 local function N () 
   -- <Node> metatable
   local meta = {}
@@ -18,10 +19,13 @@ local function N ()
   meta["root"] = ast.root
   meta["range"] = ast.range
   meta["clone"] = ast.copy
-  meta["select"] = ast.select
+  meta["select"] = ast.__select_with_node
   meta["with"] = ast.with
   return meta
 end
+
+--this feels dirty
+--ast.__select_with_node = nil
 
 local N = N()
 
