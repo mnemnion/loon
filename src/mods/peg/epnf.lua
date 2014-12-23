@@ -81,15 +81,15 @@ local function parse_error( s, p, n, e )
 end
 
 
-local function make_ast_node( id, pos, t, last )
+local function make_ast_node( id, first, t, last )
     t.id = id
-    t.pos = pos
+    t.first = first
     t.last = last
     setmetatable(t,epnf.Node)
   return t
 end
 
-local function anon_node (id, t) 
+local function anon_node (t) 
   for i,v in ipairs(t) do 
     if type (v) == "table" and (v.last == nil) then  
       setmetatable(v,epnf.Node)
@@ -148,7 +148,7 @@ function epnf.define( func, g )
     __index = env_index,
     __newindex = function( _, name, val )
       if suppressed[ name ] then
-        local v = (L.Cc(name) * L.Ct( val )) / anon_node
+        local v = L.Ct( val ) / anon_node
           g[ name ] = v
       else
         local v = (L.Cc( name ) * L_Cp * L.Ct( val ) * L_Cp) / make_ast_node

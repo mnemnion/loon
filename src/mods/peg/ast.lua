@@ -35,7 +35,7 @@ local function node_pr(node,_,depth)
 		local phrase = prefix..
 			     --blue,node.parent().id," ",
 				 magenta..node.id.." "..
-				 cyan..node.pos..clear..
+				 cyan..node.first..clear..
 				 "-"..cyan..node.last..clear.."\n"
 
 		for i,v in ipairs(node) do
