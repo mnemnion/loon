@@ -30,17 +30,22 @@ local function ast_range(node)
 end
 
 local function node_pr(node,_,depth)
-	local prefix = ("  "):rep(depth-1)
-	local phrase = prefix..
-		     --blue,node.parent().id," ",
-			 magenta..node.id.." "..
-			 cyan..node.pos..clear.."\n"
-	for i,v in ipairs(node) do
-		if type(v) == "string" then
-			phrase = phrase..prefix..green..'"'..clear..v..green..'"'..clear.."\n"
+	if node.isnode then
+		local prefix = ("  "):rep(depth-1)
+		local phrase = prefix..
+			     --blue,node.parent().id," ",
+				 magenta..node.id.." "..
+				 cyan..node.pos..clear.."\n"
+		if node.last then
+			phrase = phrase:sub(1,-2).."last"
 		end
+		for i,v in ipairs(node) do
+			if type(v) == "string" then
+				phrase = phrase..prefix..green..'"'..clear..v..green..'"'..clear.."\n"
+			end
+		end
+		return phrase
 	end
-	return phrase
 end
 
 local function ast_tostring(ast)

@@ -36,7 +36,7 @@ local V = lpeg.V -- create a variable within a grammar
 	local set_c    = (set_match + P"\\}" + P"\\")^1
 	local some_num_c =   digit^1 * P".." * digit^1
 					 +   (P"+" + P"-")^0 * digit^1
-local peg = epnf.define(function(_ENV)
+ peg = epnf.define(function(_ENV)
 	START "rules"
 	SUPPRESS ("WS", "cat", "enclosed",
 		      "element" ,"elements", "pattern",
@@ -48,64 +48,66 @@ local peg = epnf.define(function(_ENV)
 	local range_c    =  C(range_c)
 	local set_c      =  C(set_c)
 	local some_num_c =  C(some_num_c)
-	local cmnt    =  C(comment_c)
-	rules   =  V"rule"^1
-	rule    =  Cp() * V"lhs"  * V"rhs"
-	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
-    rhs     =  V"element" * V"elements"
-	pattern =  symbol 
-			+  V"hidden_pattern"
-	hidden_pattern =  P"<" * symbol * P">"
+	local cmnt       =  C(comment_c)
+
+	T       =  Cp()
+	rules   =  V"rule"^1 * V"T"
+	rule    =  Cp() * V"lhs"  * V"rhs" * V"T"
+	lhs     =  WS * V"pattern" * WS * ( P":" + P"=") * V"T"
+    rhs     =  V"element" * V"elements" * V"T"
+	pattern =  symbol * V"T"
+			+  V"hidden_pattern" * V"T"
+	hidden_pattern =  P"<" * symbol * P">" * V"T"
 	element  =  -V"lhs" * WS 
 	         *  ( V"compound"
-			 +    V"simple") 
-			 +  V"comment" 
+			 +    V"simple") * V"T"
+			 +  V"comment" * V"T"
 	comment = cmnt
 	elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
-	choice =  WS * P"/" * V"element" * V"elements"
-	cat =  WS * V"element" * V"elements"
+	choice =  WS * P"/" * V"element" * V"elements" * V"T"
+	cat =  WS * V"element" * V"elements" 
 	 -V"lhs" * WS 
 	         *  ( V"compound"
 			 +    V"simple") 
-	compound =  V"factor"
+	compound =  V"factor" 
 			 +  V"enclosed"
 			 +  V"hidden_match" 
 	factor   =  WS * P"(" 
 			 *  WS * V"elements" * WS 
-			 *  P")" 
+			 *  P")" * V"T"
 	hidden_match =  WS * P"<"
 				 *  WS * V"elements" * WS
-				 *  P">"
+				 *  P">" * V"T"
 	simple   =  V"suffixed"
 			 +  V"prefixed"
 			 +  V"atom" 
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
 			 +  V"if_and_this"
-	if_not_this = P"!" * V"allowed_prefixed" 
-	not_this    = P"-" * V"allowed_prefixed"
-	if_and_this = P"&" * V"allowed_prefixed"
+	if_not_this = P"!" * V"allowed_prefixed" * V"T"
+	not_this    = P"-" * V"allowed_prefixed" * V"T"
+	if_and_this = P"&" * V"allowed_prefixed" * V"T"
 	allowed_prefixed = (V"compound" + V"suffixed" + V"atom")
-	suffixed =  V"optional"
-			 +  V"more_than_one"
-			 +  V"maybe"
-			 +  V"with_suffix"
-			 +  V"some_number"
-	enclosed =  V"literal"
-		     +  V"set"
-		     +  V"range"
-    literal =  P'"' * (string + P"") * P'"'  --watch for "" later
-    set     =  P"{" * set_c^1 * P"}"   
-    range   =  P"[" * range_c * P"]"  
+	        suffixed =  V"optional"
+			         +  V"more_than_one"
+			         +  V"maybe"
+			         +  V"with_suffix"
+		        	 +  V"some_number"
+	        enclosed =  V"literal"
+		             +  V"set"
+	        	     +  V"range"
+             literal =  P'"' * (string + P"") * P'"' * V"T"
+             set     =  P"{" * set_c^1 * P"}" * V"T"  
+             range   =  P"[" * range_c * P"]" * V"T" 
     allowed_suffixed = (V"compound" + V"prefixed" + V"atom") 
-	optional      =  V"allowed_suffixed" * WS * P"*"
-	more_than_one =  V"allowed_suffixed" * WS * P"+"
-	maybe         =  V"allowed_suffixed" * WS * P"?"
-	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
-	with_suffix   =  V"some_number" * ( C"*" + C"+" + C"?")
-    atom =  symbol
+	optional      =  V"allowed_suffixed" * WS * P"*" * V"T"
+	more_than_one =  V"allowed_suffixed" * WS * P"+" * V"T"
+	maybe         =  V"allowed_suffixed" * WS * P"?" * V"T"
+	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c * V"T"
+	with_suffix   =  V"some_number" * ( C"*" + C"+" + C"?") * V"T"
+    atom =  symbol * V"T"
 end)
 
 local range_s = [[ \]\--CD ]]
@@ -120,7 +122,7 @@ local grammar_s = [[ A : B C ( E / F ) / F G H
 			  W : {XY} [a-z] 
 			  A : B$2 C$-3 D$4..5 E$+4]]
 
-local deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
+ deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
 local rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
 			  D : E F G

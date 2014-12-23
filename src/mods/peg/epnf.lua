@@ -82,15 +82,22 @@ end
 
 
 local function make_ast_node( id, pos, t )
-  t.id = id
-  t.pos = pos
-  setmetatable(t,epnf.Node)
+  if id == "T" then 
+     t.last = pos
+     for i,v in ipairs(t) do
+        t[i] = nil
+      end
+  else
+    t.id = id
+    t.pos = pos
+    setmetatable(t,epnf.Node)
+  end
   return t
 end
 
-local function anon_node (t)  
+local function anon_node (id, t) 
   for i,v in ipairs(t) do 
-    if type (v) == "table" then  
+    if type (v) == "table" and (v.last == nil) then  
       setmetatable(v,epnf.Node)
     end
   end
@@ -147,10 +154,11 @@ function epnf.define( func, g )
     __index = env_index,
     __newindex = function( _, name, val )
       if suppressed[ name ] then
-        local v = L.Ct( val ) / anon_node
-        g[ name ] = v
+        local v = (L.Cc(name) * L.Ct( val )) / anon_node
+          g[ name ] = v
       else
-        g[ name ] = (L.Cc( name ) * L_Cp * L.Ct( val )) / make_ast_node
+        local v = (L.Cc( name ) * L_Cp * L.Ct( val )) / make_ast_node
+        g[ name ] = v
       end
     end
   } )
