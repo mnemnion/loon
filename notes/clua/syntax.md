@@ -20,9 +20,11 @@ Tabs are deprecated.
 
 ###Unary Tokens
 
-The characters ``. ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
+The characters ``.  @ ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
-`.` represents method access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
+`.` represents field access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
+
+`@` represents method access within a symbol, or as a prefix, method access to the first argument of a function. 
 
 `` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
@@ -49,7 +51,7 @@ must receive a right member of the set, in the order encountered by the reader, 
 
 `{ }` constitutes a table. 
 
-`< >` is reserved syntax, intended for type annotation.
+`< >` constitutes a metatable. 
 
 `\ /` destructures the enclosed element. Note that the backslash begins, and the slash ends, a pairing. `\o/`
 
@@ -78,7 +80,7 @@ The reader will attempt to make a number if it fails to make a symbol by encount
 
 If the character is `-`, the reader will attempt a decimal negative number.
 
-If the character is a `0`, the reader will first look for a radix, which is any valid Unicode alphabetic code point. `b, d, and x` have predefined meanings, providing binary, decimal, and hexadecimal decodings respectively. `i I` are not interpreted as radices. All other lowercase Latin characters are reserved and may not be redefined by a valid runtime.
+If the character is a `0`, the reader will first look for a radix, which is any valid Unicode alphabetic code point. `b, d, and x` have predefined meanings, providing binary, decimal, and hexadecimal decodings respectively. `i I e E` are not interpreted as radices. All other lowercase Latin characters are reserved and may not be redefined by a valid runtime.
 
 An unrecognized radix will provoke the reader to look for a decoder matching the radix value. If this fails it defaults to decimal behavior. The absence of a radix is decimal by default. 
 
@@ -126,13 +128,13 @@ The underlying representation of lists and vectors may be a table, and normally 
 
 ## Types
 
-`<` and `>` mark a type annotation. They apply to the following form, if one exists, comprising a single form as a pair for the purposes of single parsing. `{ key <type> value}` is valid syntax, `key` is the first form in the pair and `<type> value` comprises the second. 
+`<` and `>` mark a type annotation.  `<>` is the empty metatable.
 
-The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lte` and `gte`. `<=>` returns the type `<Operator>`.
+The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lte` and `gte`. `<=>` returns the type `Operator`, which is a metatable. 
 
 ## Destructuring
 
-Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first. `(/ foo bar)` performs division and is not a syntax error. `div` is a synonym, so `(let {a,b,c} \'(div 2 3)/)` won't create a parse error.   
+Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first. `(/ foo bar)` performs division and is not a syntax error. `div` is a synonym, so `(let {a,b,c} \'(div 2 3)/)` won't create a parse error. The values will be `a <- div, b <-2, c <-3`.
 
 ##Reader-Modifying Tokens
 
