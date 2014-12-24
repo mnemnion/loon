@@ -32,13 +32,33 @@ local function byte_panic(byte_p)
 end 
 
 local function ansi_fg(byte)
-    byte_panic(byte)
-    return schar(27).."[38;5;"..byte.."m"
+    local store = {} -- repeated allocation is a sin.
+    local function make (byte)
+        byte_panic(byte)
+        return schar(27).."[38;5;"..byte.."m"
+    end
+    if store[byte] then
+        return store[byte]
+    else
+        local color = make(byte)
+        store[byte] = color
+        return color
+    end
 end
 
 local function ansi_bg(byte)
-    byte_panic(byte)
-    return schar(27).."[48;5;"..byte.."m"
+    local store = {}
+    local function make (byte)
+        byte_panic(byte)
+        return schar(27).."[48;5;"..byte.."m"
+    end
+    if store[byte] then
+        return store[byte]
+    else
+        local color = make(byte)
+        store[byte] = color
+        return color
+    end
 end
 
 _M["fg"], _M["bg"] = ansi_fg, ansi_bg

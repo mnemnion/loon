@@ -3,7 +3,7 @@
 -- A parser generator for LPEG.
 
 local lpeg = require "lpeg"
-local ansi = require "ansi"
+ansi = require "ansi"
 local util = require "util"
 local epeg = require "peg/epeg"
 local dump_ast = util.dump_ast
