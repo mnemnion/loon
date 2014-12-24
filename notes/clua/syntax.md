@@ -20,9 +20,11 @@ Tabs are deprecated.
 
 ###Unary Tokens
 
-The characters ``. ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
+The characters ``. ` ~ ; : ' " # @ |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
-`.` represents method access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
+`.` represents field access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
+
+`@` represents method access within a symbol, or as a prefix, method access to the first argument of a function. 
 
 `` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
