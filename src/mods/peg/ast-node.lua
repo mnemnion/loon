@@ -11,11 +11,6 @@ local green = tostring(ansi.green)
 local red = tostring(ansi.red)
 local grey = tostring(ansi.dim)..tostring(ansi.white)
 
-local copy_contents = { id = true,
-					   pos = true, -- remove
-					   span = true
-					   }
-
 local function root(node)
 	if node.parent() == node then
 		return node
@@ -39,11 +34,10 @@ local function node_pr(node, depth, str)
 	if node.isnode then
 		local prefix = ("  "):rep(depth-1)
 		local phrase = prefix..
-			     --blue,node.parent().id," ",
+			  -- blue,node.parent().id," ",
 				 c.id..node.id.." "..
 				 c.num..node.first..
 				 "-"..c.num..node.last..clear.."\n"
-
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
 				phrase = phrase..prefix.."  "..'"'..c.str..v..clear..'"'.."\n"
@@ -124,7 +118,7 @@ local function select_rule(ast,id)
 	return catch
 end
 
-function select_with_node(ast,id)
+local function select_with_node(ast,id)
 	local catch = setmetatable({},Forest)
 	local ndx, first, last = ast:range()
 	for i = first, last do
@@ -159,8 +153,19 @@ local function select_with(ast,id)
 	return catch
 end
 
+function forest.pick(ast,id)
+-- similar to select, :pick returns a bare vector of Forests,
+-- rather than a flattened Forest. 
+	local catch = {}
+	for i = 1, #ast do
+		catch[#catch+1] = select_node(ast[i],id)
+	end
+	return catch 
+end
+
 Forest["select"] = select_rule
 Forest["with"]   = forest.select_with
+Forest["pick"]   = forest.pick
 
 local function parse(grammar, str)
 	local ast = lpeg.match(grammar,str)

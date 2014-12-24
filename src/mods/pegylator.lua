@@ -3,7 +3,7 @@
 -- A parser generator for LPEG.
 
 local lpeg = require "lpeg"
- ansi = require "ansi"
+local ansi = require "ansi"
 local util = require "util"
 local epeg = require "peg/epeg"
 local dump_ast = util.dump_ast
@@ -11,6 +11,9 @@ local clear = ansi.clear()
 local epnf = require "peg/epnf"
 ast = require "peg/ast"
 local grammar = require "peg/grammars"
+rulesort = require "peg/rule-sort"
+
+a = dofile "peg/a.grammar"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
@@ -74,10 +77,10 @@ local V = lpeg.V -- create a variable within a grammar
 	 -V"lhs" * WS 
 	         *  ( V"compound"
 			 +    V"simple") 
-	compound =  V"factor" 
+	compound =  V"group" 
 			 +  V"enclosed"
 			 +  V"hidden_match" 
-	factor   =  WS * P"(" 
+	group   =  WS * P"(" 
 			 *  WS * V"elements" * WS 
 			 *  P")"
 	hidden_match =  WS * P"<"
@@ -131,5 +134,7 @@ assert(#grammar.symbol_s+1 == (match(symbol, grammar.symbol_s)))
 assert(#grammar.range_s+1 == (match(range_c,grammar.range_s)))
 assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
 assert(#grammar.string_s+1 == (match(string,grammar.string_s)))
+
+io.write(clear)
 
 return { peg = peg }
