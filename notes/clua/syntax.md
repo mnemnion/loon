@@ -51,7 +51,7 @@ must receive a right member of the set, in the order encountered by the reader, 
 
 `{ }` constitutes a table. 
 
-`< >` is reserved syntax, intended for type annotation.
+`< >` constitutes a metatable. 
 
 `\ /` destructures the enclosed element. Note that the backslash begins, and the slash ends, a pairing. `\o/`
 
