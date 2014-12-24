@@ -19,8 +19,8 @@ local function N ()
   meta["root"] = ast.root
   meta["range"] = ast.range
   meta["clone"] = ast.copy
-  meta["select"] = ast.__select_with_node
-  meta["with"] = ast.with
+  meta["select"] = ast.__select_node
+  meta["with"] = ast.__select_with_node
   return meta
 end
 

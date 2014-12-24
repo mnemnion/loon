@@ -153,10 +153,18 @@ local function select_with(ast,id)
 	return catch
 end
 
+local function pick_tostring(table)
+	local phrase = ""
+	for i,v in ipairs(table) do 
+		phrase = phrase..tostring(v)
+	end
+	return phrase 
+end
+
 function forest.pick(ast,id)
 -- similar to select, :pick returns a bare vector of Forests,
 -- rather than a flattened Forest. 
-	local catch = {}
+	local catch = setmetatable({},{["__tostring"] = pick_tostring})
 	for i = 1, #ast do
 		catch[#catch+1] = select_node(ast[i],id)
 	end
@@ -165,7 +173,7 @@ end
 
 Forest["select"] = select_rule
 Forest["with"]   = forest.select_with
-Forest["pick"]   = forest.pick
+--Forest["pick"]   = forest.pick
 
 local function parse(grammar, str)
 	local ast = lpeg.match(grammar,str)
@@ -175,7 +183,8 @@ end
 
 return {
 	select = select_rule ,
-	__select_with_node = select_with_node, 
+	__select_with_node = select_with_node,
+	__select_node = select_node, 
 	with = select_with ,
 	tostring = ast_tostring,
 	pr = ast_pr,
