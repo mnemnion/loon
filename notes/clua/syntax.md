@@ -20,7 +20,7 @@ Tabs are deprecated.
 
 ###Unary Tokens
 
-The characters ``. ` ~ ; : ' " # @ |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
+The characters ``.  @ ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
 `.` represents field access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
 
