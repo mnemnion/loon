@@ -128,13 +128,13 @@ The underlying representation of lists and vectors may be a table, and normally 
 
 ## Types
 
-`<` and `>` mark a type annotation. They apply to the following form, if one exists, comprising a single form as a pair for the purposes of single parsing. `{ key <type> value}` is valid syntax, `key` is the first form in the pair and `<type> value` comprises the second. 
+`<` and `>` mark a type annotation.  `<>` is the empty metatable.
 
-The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lte` and `gte`. `<=>` returns the type `<Operator>`.
+The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lte` and `gte`. `<=>` returns the type `Operator`, which is a metatable. 
 
 ## Destructuring
 
-Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first. `(/ foo bar)` performs division and is not a syntax error. `div` is a synonym, so `(let {a,b,c} \'(div 2 3)/)` won't create a parse error.   
+Lua provides multiple return values, Lisps canonically do not. `\ foo bar baz /` returns all of foo, bar, and baz. `\(function foo bar)/` returns all of the return values of `function` to the context, `(function foo bar)` returns only the first. `(/ foo bar)` performs division and is not a syntax error. `div` is a synonym, so `(let {a,b,c} \'(div 2 3)/)` won't create a parse error. The values will be `a <- div, b <-2, c <-3`.
 
 ##Reader-Modifying Tokens
 
