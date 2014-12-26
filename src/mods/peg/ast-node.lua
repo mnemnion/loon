@@ -33,18 +33,27 @@ local c = { id = magenta,
 
 local function node_pr(node, depth, str)
 	if node.isnode then
+		local phrase = ""
 		local prefix = ("  "):rep(depth-1)
-		local phrase = prefix..
+		if node.isrecursive then 
+			phrase = red.."*"..prefix:sub(1,-2)..clear
+
+		else 
+			phrase = prefix
+		end
+		phrase = phrase..
 			  -- blue,node.parent().id," ",
 				 c.id..node.id.." "..
 				 c.num..node.first..
 				 "-"..c.num..node.last..clear.."\n"
+		if node.val then
+			 phrase = phrase..prefix..'"'..c.val..node.val..clear..'"'.."\n"
+		end 
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
 				phrase = phrase..prefix.."  "..'"'..c.str..v..clear..'"'.."\n"
-			elseif type(v) == "table" and v.val then
-  			    phrase = phrase..prefix..'"'..c.val..v.val..clear..'"'.."\n"
-			elseif type(v) == "table" and v.span then
+			end
+			if type(v) == "table" and v.span and not node.val then
 				phrase = phrase..prefix..c.span..str:sub(v[1],v[2])..clear.."\n"
   			end
 		end
@@ -85,17 +94,6 @@ end
 local function ast_copy(ast)
 	local clone = deepcopy(ast)
 	return walker.walk_ast(clone)
-end
-
-local function lift(ast)
---lifts all spans as literal values under the tree.
---decorator: does not copy. Returns nothing.
-	local str = ast:root().str
-	for i,v in ipairs(ast) do
-		if type(v) == "table" and v.span then
-			ast[i].val = str:sub(v[1],v[2])
-		end
-	end
 end
 
 local forest = {}
@@ -202,7 +200,7 @@ return {
 	with = select_with ,
 	tostring = ast_tostring,
 	pr = ast_pr,
-	lift = lift,
+	lift = walker.lift,
 	root = root,
 	range= ast_range,
 	copy = ast_copy,
