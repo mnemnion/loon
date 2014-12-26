@@ -6,7 +6,7 @@ banana : "ba" "nana" / "b" fruit
 
 orange = "orange" / "tangerine"
 
-fruit : orange / banana
+fruit : orange / banana 
 
 fruits : fruit+ 
 

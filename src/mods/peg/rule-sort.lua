@@ -2,13 +2,17 @@
 
 local ansi = require "ansi"
 
+local red = tostring(ansi.red)
+local white = tostring(ansi.white)
+local clear = tostring(ansi.clear)
+
 local sort = {}
 
 local function rule_tables(node)
 -- returns two Forests with the LHS and RHS symbols indexed
 	local lhs = node:select"lhs"
 	for i,v in ipairs(lhs) do
-		lhs[v.val] = lhs[i] -- lookup Node, get string of rule.
+		lhs[v.val] = i -- lookup Node, get index.
 	end
 	local rhs = node:select"rhs":pick"atom" 
 	return lhs, rhs
@@ -19,15 +23,13 @@ local function detect_recursion(index, lhs, rhs)
 	local match = lhs[index]
 	local visit, visited = {},{}
 	local function find_match(match,visit,lhs, rhs)
-		print("Matching: ", match, "visiting: ", visit)
-		for i = 1, #lhs do
-			if lhs[i].val == visit then
-				for i,v in ipairs(rhs[i]) do
-					if match == v.val or lhs[v.val].isrecursive then
-						print("match inside loop:", v.val, "r? ", lhs[v.val].isrecursive )
-						return true 
-					end
-				end
+		print ("Matching ", white, match.val, clear)
+		print ("Visitor: ", red, lhs[lhs[visit]].val, clear)
+		for i,v in ipairs(rhs[lhs[visit]]) do
+			print ("     visiting: ", red, v.val, clear)
+			if match.val == v.val or lhs[lhs[v.val]].isrecursive then
+				print (red, "MATCHED", clear)
+				match.isrecursive = true
 			end
 		end
 	end
