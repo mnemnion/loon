@@ -28,7 +28,8 @@ end
 local c = { id = magenta,
 			num = grey,
 			str = red,
-			span = clear,}
+			span = clear,
+			val = green,}
 
 local function node_pr(node, depth, str)
 	if node.isnode then
@@ -41,9 +42,11 @@ local function node_pr(node, depth, str)
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
 				phrase = phrase..prefix.."  "..'"'..c.str..v..clear..'"'.."\n"
+			elseif type(v) == "table" and v.val then
+  			    phrase = phrase..prefix..'"'..c.val..v.val..clear..'"'.."\n"
 			elseif type(v) == "table" and v.span then
 				phrase = phrase..prefix..c.span..str:sub(v[1],v[2])..clear.."\n"
-			end
+  			end
 		end
 		return phrase
 	end
@@ -82,6 +85,17 @@ end
 local function ast_copy(ast)
 	local clone = deepcopy(ast)
 	return walker.walk_ast(clone)
+end
+
+local function lift(ast)
+--lifts all spans as literal values under the tree.
+--decorator: does not copy. Returns nothing.
+	local str = ast:root().str
+	for i,v in ipairs(ast) do
+		if type(v) == "table" and v.span then
+			ast[i].val = str:sub(v[1],v[2])
+		end
+	end
 end
 
 local forest = {}
@@ -173,7 +187,7 @@ end
 
 Forest["select"] = select_rule
 Forest["with"]   = forest.select_with
---Forest["pick"]   = forest.pick
+Forest["pick"]   = forest.pick
 
 local function parse(grammar, str)
 	local ast = lpeg.match(grammar,str)
@@ -188,6 +202,7 @@ return {
 	with = select_with ,
 	tostring = ast_tostring,
 	pr = ast_pr,
+	lift = lift,
 	root = root,
 	range= ast_range,
 	copy = ast_copy,

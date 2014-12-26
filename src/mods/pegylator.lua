@@ -11,9 +11,7 @@ local clear = ansi.clear()
 local epnf = require "peg/epnf"
 ast = require "peg/ast"
 local grammar = require "peg/grammars"
-rulesort = require "peg/rule-sort"
-
-a = dofile "peg/a.grammar"
+s = require "peg/rule-sort"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
@@ -126,6 +124,11 @@ end)
 
 tree = ast.parse(peg,grammar.peg_s)
 ast.pr(tree)
+
+
+a = dofile "peg/a.grammar"
+
+a = ast.parse(peg,a)
 
 assert(tree == tree.index(5):root())
 

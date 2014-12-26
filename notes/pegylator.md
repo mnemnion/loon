@@ -31,6 +31,10 @@ We start with an LHS, and count: tabulate the RHS, lookup each on the LHS, tabul
 
 Naturally, we refrain from visiting anything on the LHS more than once. We mark these rules as cyclic.
 
+The likely non-optimal algorithm: take an LHS token `original`. Get all RHS. For all RHS, look up on LHS, and scan for `original` in the RHS of that `LHS`. If found, mark `original` as a self-call. If not found, continue looking up all RHS on LHS and scanning, memoizing visited rules so we only walk the tree once per rule. 
+
+Rules visited more than once in such a scan may or may not be self-referential. It's often the case that they're just called from more than one place. This can be as bad as O(m*n) where m is the number of rules and n is the number of nodes in the tree. Optimizing a rule-generating engine is a waste of time, and this approach makes for clear code.
+
 All rules marked cyclic are transformed with a cyclic template, all other rules with a regular template. 
 
 ## Code generation
