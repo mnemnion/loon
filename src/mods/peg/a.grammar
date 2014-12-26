@@ -1,0 +1,13 @@
+return [[
+
+basket : "(" (fruits / basket / "") ")"
+
+banana : "ba" "nana"
+
+orange = "orange" / "tangerine"
+
+fruit : orange / banana
+
+fruits : fruit+ 
+
+]]
