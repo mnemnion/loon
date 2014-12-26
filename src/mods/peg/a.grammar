@@ -2,7 +2,7 @@ return [[
 
 basket : "(" (fruits / basket / "") ")"
 
-banana : "ba" "nana"
+banana : "ba" "nana" / "b" fruit
 
 orange = "orange" / "tangerine"
 

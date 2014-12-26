@@ -16,7 +16,7 @@ local function detect_recursion(index, lhs, rhs)
 	local match = lhs[index]
 	local visit, visited = {},{}
 	-- lookup match on rhs
-	print(rhs[index])
+	--print(rhs[index])
 	for i,v in ipairs(rhs[index]) do
 		if v.val == match.val then 
 			print ("match detected: ", v.id, " matches", match.val)
@@ -27,9 +27,7 @@ local function detect_recursion(index, lhs, rhs)
 		end
 	end
 	for i,v in ipairs(visit) do
-
 	end
-	print "no match"
 end
 
 
