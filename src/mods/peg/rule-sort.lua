@@ -2,7 +2,7 @@
 
 local ansi = require "ansi"
 
-Set = require "set" -- remove this dependency
+Set = require "set" -- todo: remove penlight dependency
 
 local red = tostring(ansi.red)
 local white = tostring(ansi.white)

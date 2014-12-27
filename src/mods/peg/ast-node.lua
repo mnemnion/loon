@@ -101,9 +101,17 @@ local forest = {}
 local function select_node (ast,id)
 	local catch = setmetatable({},Forest)
 	local ndx, first, last = ast:range()
-	for i = first, last do
-		if ndx[i].id == id then
-			catch[#catch+1] = ndx[i]
+	if type(id) == "string" then
+		for i = first, last do
+			if ndx[i].id == id then
+				catch[#catch+1] = ndx[i]
+			end
+		end
+	elseif type(id) == "function" then
+		for i = first, last do
+			if id(ndx[i]) then
+				catch[#catch+1] = ndx[i]
+			end
 		end
 	end
 	return catch
