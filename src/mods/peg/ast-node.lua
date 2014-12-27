@@ -98,18 +98,18 @@ end
 
 local forest = {}
 
-local function select_node (ast,id)
+local function select_node (ast,pred)
 	local catch = setmetatable({},Forest)
 	local ndx, first, last = ast:range()
-	if type(id) == "string" then
+	if type(pred) == "string" then
 		for i = first, last do
-			if ndx[i].id == id then
+			if ndx[i].id == pred then
 				catch[#catch+1] = ndx[i]
 			end
 		end
-	elseif type(id) == "function" then
+	elseif type(pred) == "function" then
 		for i = first, last do
-			if id(ndx[i]) then
+			if pred(ndx[i]) then
 				catch[#catch+1] = ndx[i]
 			end
 		end
@@ -138,13 +138,20 @@ local function select_rule(ast,id)
 	return catch
 end
 
-local function select_with_node(ast,id)
+local function select_with_node(ast,pred)
 	local catch = setmetatable({},Forest)
 	local ndx, first, last = ast:range()
-	for i = first, last do
-		if ndx[i].id == id then
-			catch[#catch+1] = ndx[first]
-			break
+	if type(pred) == "string" then
+		for i = first, last do
+			if ndx[i].id == pred then
+				catch[#catch+1] = ndx[first]
+			end
+		end
+	elseif type(pred) == "function" then
+		for i = first, last do
+			if pred(ndx[i]) then
+				catch[#catch+1] = ndx[first]
+			end
 		end
 	end
 	return catch
