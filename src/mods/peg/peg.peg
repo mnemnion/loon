@@ -5,24 +5,26 @@ return [[
                  rhs :  element elements
 	       <pattern> :  symbol / hidden-pattern
 	  hidden-pattern :  "<" symbol ">"
-	       <element> :  !lhs _(compound/simple/comment) ; with a comment
-	        elements :  choice 
+	       <element> :  !lhs _( compound
+	       	                  / simple
+	       	                  / comment ) ; with a comment
+	      <elements> :  choice 
 	      	          / cat 
 	      	          / ""
-	        compound :  group 
+	      <compound> :  group 
 	                  / enclosed 
 	                  / hidden-match 
-	  	      simple :  prefixed 
+	  	    <simple> :  prefixed 
 	                  / suffixed 
 	                  / atom 
 	          choice :  _"/" element elements
-	             cat :  WS element elements
-	         group   :  _"("_ rhs_ ")" 
-       	    enclosed :  literal
+	             cat :  _ element elements
+	           group :  _"("_ rhs_ ")" 
+       	  <enclosed> :  literal
        	              / set
        	              / range
 	    hidden_match :  _"<"_ rhs_ ">"
-	         comment : "" ; make real
+	         comment : ";" comment_c ; make real
 	        prefixed :  if-not-this 
 	                  / not-this 
 	                  / if-and-this
@@ -47,11 +49,30 @@ return [[
 					  / atom
 	            atom :  symbol / ws 
                   ws : "_"
-	literal =  '"' (string / "") '"'  
-    set     =  "{" set-c+ "}"   
-    range   =  "[" range-c "]"   
+	literal :  '"' (string / "") '"'  
+    set     :  "{" set-c+ "}"   
+    range   :  "[" range-c "]"   
+    comment-m : -"\n" ANY
+    comment-c : ";" comment-m* 
+   	local comment_m  = -P"\n" * P(1)
+	local comment_c = P";" * comment_m^0 * P"\n"
+	local letter = R"AZ" + R"az" 
+	local valid_sym = letter + P"-"  
+	local digit = R"09"
+	local sym = valid_sym + digit
+	local WS = P' ' + P'\n' + P',' + P'\09'
+	local symbol = letter * ( -(P"-" * WS) * sym )^0  -- incorrect: allows -symbol-name- 
+	local string_match = -P"\"" * -P"\\" * P(1)
+	local string = (string_match + P"\\\"" + P"\\")^1
+	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
+	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
+	local range_c  = range_capture^1 * P"-" * range_capture^1
+	local set_match = -P"}" * -P"\\" * P(1)
+	local set_c    = (set_match + P"\\}" + P"\\")^1
+	local some_num_c =   digit^1 * P".." * digit^1
+					 +   (P"+" + P"-")^0 * digit^1
 
-  
+
 
     
 ]]

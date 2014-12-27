@@ -86,6 +86,8 @@ function sort.sort (node)
 		end
 	end
 	print("final cursors: ", cursors)
+	ndx.cursors = cursors
+	return ndx
 end
 
 return sort

@@ -24,7 +24,7 @@ local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 
 	local comment_m  = -P"\n" * P(1)
-	local comment_c = P";" * comment_m^0 + P"\n"
+	local comment_c = P";" * comment_m^0 * #P"\n"
 	local letter = R"AZ" + R"az" 
 	local valid_sym = letter + P"-"  
 	local digit = R"09"
