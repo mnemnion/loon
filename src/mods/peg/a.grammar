@@ -12,4 +12,6 @@ fruit : orange / banana
 
 fruits : fruit+ / basket
 
+ginger : fruits
+
 ]]
