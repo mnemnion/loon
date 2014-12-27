@@ -9,9 +9,10 @@ local epeg = require "peg/epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
-ast = require "peg/ast"
+local ast = require "peg/ast"
 local grammar = require "peg/grammars"
-s = require "peg/rule-sort"
+local s = require "peg/rule-sort"
+t = require "peg/transform"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
@@ -122,14 +123,13 @@ end)
 --dump_ast(match(grammar.peg,deco_s))
 
 tree = ast.parse(peg,grammar.peg_s)
-ast.pr(tree)
-
 
 a = dofile "peg/a.peg"
-
 a = ast.parse(peg,a)
 
 s.sort(a)
+s.sort(tree)
+ast.pr(tree)
 
 assert(tree == tree.index(5):root())
 
