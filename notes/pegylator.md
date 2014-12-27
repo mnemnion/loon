@@ -35,6 +35,14 @@ The likely non-optimal algorithm: take an LHS token `original`. Get all RHS. For
 
 Rules visited more than once in such a scan may or may not be self-referential. It's often the case that they're just called from more than one place. This can be as bad as O(m*n) where m is the number of rules and n is the number of nodes in the tree. Optimizing a rule-generating engine is a waste of time, and this approach makes for clear code.
 
+Here's another try at this algorithm, which turns out to be surprisingly difficult to get right with a head cold.
+
+We start with the top rule, which is always the first rule. We index it in a new vector, and add all the RHS rules to a set that is the value of the index. We index by rule name, which must be unique; we will build that check in later. 
+
+We then go to the next rule, and add all the RHS to its visited category. 
+
+We proceed down. We visit each rule once, and compare/add the RHS buckets to the LHS set. We then sweep through: sets which are self-referential, are self-referential. 
+
 All rules marked cyclic are transformed with a cyclic template, all other rules with a regular template. 
 
 ## Code generation

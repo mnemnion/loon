@@ -2,6 +2,8 @@
 
 local ansi = require "ansi"
 
+Set = require "pl.Set" -- remove this dependency
+
 local red = tostring(ansi.red)
 local white = tostring(ansi.white)
 local clear = tostring(ansi.clear)
@@ -18,12 +20,11 @@ local function rule_tables(node)
 		if v.val then
 			ndx[i].val = v.val  -- lookup Node, get index.
 		elseif v[1].id == "hidden_pattern" then
-				print ("Hidden Pattern",v[1].val)
 				ndx[i].val = v[1].val
 		end
-		local rights = {}
+		local rights = Set{}
 		for j,v in ipairs(rhs[i]) do
-			rights[j] = v.val
+			rights  = rights + Set{v.val}
 		end
 		ndx[i].rhs = rights
 	end
@@ -33,7 +34,20 @@ end
 
 
 local function detect_recursion(ndx, i)
-		
+	local match = ndx[i].val
+	print ("for rule ", match)
+	for j = 1,#ndx do
+		if ndx[i].rhs[ndx[j].val] then
+			print ("in set:", ndx[j].val, " = ", ndx[j].rhs)
+		--	print ("looking for", match)
+			if ndx[j].rhs[match] then
+				print ("caught ", match," in ", ndx[j].val)
+				ndx[i].rhs = ndx[i].rhs + ndx[j].rhs
+--				print (ndx[i].rhs)
+			end
+		end
+	end
+	print ""
 end
 
 
@@ -42,12 +56,13 @@ function sort.sort (node)
 	local ndx = rule_tables(node)
 	for i,v in ipairs(ndx) do 
 		detect_recursion(ndx,i)
-		print("LHS: ", ndx[i].val)
-		io.write("RHS: ")
-		for j,v in ipairs(ndx[i].rhs) do
-			io.write(ndx[i].rhs[j]," ")
+	end
+	for i,v in ipairs(ndx) do
+		print(ndx[i].val, "=", ndx[i].rhs)
+		if ndx[i].rhs[ndx[i].val] then
+			print "is RECURSIVE!"
+			ndx[i].lhs.isrecursive = true
 		end
-		io.write "\n"
 	end
 end
 

@@ -2,12 +2,14 @@ return [[
 
 basket : "(" (fruits / basket / "") ")"
 
-banana : "ba" "nana" / "b" fruit
+banana : "ba" "nana" / Bee
 
-orange = "orange" / "tangerine"
+Bee: "Beez" / {abcd} 
+
+<citrus>  = "orange" / "tangerine"
 
 fruit : orange / banana 
 
-fruits : fruit+ 
+fruits : fruit+ / basket
 
 ]]
