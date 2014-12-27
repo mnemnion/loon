@@ -53,7 +53,7 @@ return [[
     set     :  "{" set-c+ "}"   
     range   :  "[" range-c "]"   
     comment-m : -"\n" ANY
-    comment-c : ";" comment-m* 
+    comment-c : ";" comment-m* "\n"
    	local comment_m  = -P"\n" * P(1)
 	local comment_c = P";" * comment_m^0 * P"\n"
 	local letter = R"AZ" + R"az" 
