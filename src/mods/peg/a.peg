@@ -1,12 +1,12 @@
 return [[
 
-basket : "(" (fruits / basket / "") ")"
+basket : "(" (fruits / basket / "") ")" ; commentary
 
 banana : "ba" "nana" / Bee
 
-Bee: "Beez" / {abcd} 
+Bee : "Beez" / {abcd} 
 
-<citrus>  = "orange" / "tangerine"
+<citrus> = <"orange"> / "tangerine" 
 
 fruit : orange / banana 
 

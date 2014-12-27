@@ -19,38 +19,7 @@ local g = {}
 			  D : E F G
 ]]
 
- g.peg_s = [[
-	rules : rule +
-	rule : lhs rhs
-	lhs       =  _pattern_ ":"
-    rhs       =  element more-elements
-	<pattern> =  symbol / hidden-pattern
-	hidden-pattern =  "<" symbol ">"
-	<element>  =  match / factor
-	more-elements  =  choice  /  cat / ""
-	choice =  _"/" element more-elements
-	cat =  WS element more-elements
-	match    =  -lhs_ (compound / simple) 
-	compound =  factor / hidden-match 
-	factor   =  _"("_ rhs_ ")" 
-	hidden_match =  _"<"_ rhs_ ">"
-	simple   =  prefixed / suffixed / enclosed / atom 
-	prefixed =  if-not-this / not-this / if-and-this
-	if-not-this =  "!" symbol
-	not-this    =  "-" symbol
-	if-and-this =  "&" symbol
-	suffixed =  optional / more-than-one / maybe
-	enclosed =  literal / set / range
-	literal =  "\"" (string / "") "\""  
-    set     =  "{" set-c+ "}"   
-    range   =  "[" range-c "]"   
-	optional      =  symbol "*"
-	more-than-one =  symbol "+"
-	maybe         =  symbol "?"
-    atom =  symbol / ws 
-    ws = "_"
-]]
-
+ g.peg_s = dofile "peg/peg.peg"
  g.clu_s = [[
 
      clu :  form* / EOF

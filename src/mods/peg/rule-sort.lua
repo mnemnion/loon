@@ -48,7 +48,6 @@ local function detect_recursion(ndx, i)
 			end
 		end
 	end
-	print ""
 end
 
 
@@ -61,9 +60,9 @@ function sort.sort (node)
 	end
 	local cursors = Set{}
 	for i,v in ipairs(ndx) do
-		print(ndx[i].val, "=", ndx[i].rhs)
+	--	print(ndx[i].val, "=", ndx[i].rhs)
 		if ndx[i].rhs[ndx[i].val] then
-			print "is RECURSIVE!"
+			print (ndx[i].val," is RECURSIVE!")
 			ndx[i].lhs.parent().isrecursive = true
 			cursors = cursors + Set{ndx[i].val}
 		end

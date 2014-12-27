@@ -56,61 +56,60 @@ local V = lpeg.V -- create a variable within a grammar
 
 
 	rules   =  V"rule"^1
-	rule    =  V"lhs"  * V"rhs"
-	lhs     =  WS * V"pattern" * WS * ( P":" + P"=")
+	rule    =  V"lhs" * V"rhs"
+	lhs     =  WS * V"pattern" * WS * ( P":" + P"=" + ":=")
     rhs     =  V"element" * V"elements"
 	pattern =  symbol
 			+  V"hidden_pattern"
 	hidden_pattern =  P"<" * symbol * P">"
 	element  =  -V"lhs" * WS 
 	         *  ( V"compound"
-			 +    V"simple")
-			 +  V"comment"
-	comment = cmnt
+			 +    V"simple"
+			 +    V"comment")
+
 	elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
 	choice =  WS * P"/" * V"element" * V"elements"
 	cat =  WS * V"element" * V"elements" 
-	 -V"lhs" * WS 
-	         *  ( V"compound"
-			 +    V"simple") 
 	compound =  V"group" 
 			 +  V"enclosed"
 			 +  V"hidden_match" 
 	group   =  WS * P"(" 
 			 *  WS * V"elements" * WS 
 			 *  P")"
+    enclosed =  V"literal"
+             +  V"set"
+       	     +  V"range"
 	hidden_match =  WS * P"<"
 				 *  WS * V"elements" * WS
 				 *  P">"
 	simple   =  V"suffixed"
 			 +  V"prefixed"
 			 +  V"atom" 
+		comment = cmnt
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
 			 +  V"if_and_this"
-	if_not_this = P"!" * V"allowed_prefixed"
-	not_this    = P"-" * V"allowed_prefixed"
-	if_and_this = P"&" * V"allowed_prefixed"
-	allowed_prefixed = (V"compound" + V"suffixed" + V"atom")
-	        suffixed =  V"optional"
-			         +  V"more_than_one"
-			         +  V"maybe"
-			         +  V"with_suffix"
-		        	 +  V"some_number"
-	        enclosed =  V"literal"
-		             +  V"set"
-	        	     +  V"range"
-             literal =  P'"' * (string + P"") * P'"'
-             set     =  P"{" * set_c^1 * P"}"  
-             range   =  P"[" * range_c * P"]" 
-    allowed_suffixed = (V"compound" + V"prefixed" + V"atom") 
-	optional      =  V"allowed_suffixed" * WS * P"*"
-	more_than_one =  V"allowed_suffixed" * WS * P"+"
-	maybe         =  V"allowed_suffixed" * WS * P"?"
-	some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
-	with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
+    suffixed =  V"optional"
+	         +  V"more_than_one"
+	         +  V"maybe"
+	         +  V"with_suffix"
+	    	 +  V"some_number"
+	if_not_this = P"!" * WS * V"allowed_prefixed"
+	not_this    = P"-" * WS * V"allowed_prefixed"
+	if_and_this = P"&" * WS * V"allowed_prefixed"
+               literal =  P'"' * (string + P"") * P'"'
+               set     =  P"{" * set_c^1 * P"}"  
+               range   =  P"[" * range_c * P"]" 
+	     optional      =  V"allowed_suffixed" * WS * P"*"
+	     more_than_one =  V"allowed_suffixed" * WS * P"+"
+	     maybe         =  V"allowed_suffixed" * WS * P"?"
+   	     some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
+	     with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
+	     some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
+	  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
+	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
     atom =  V"ws" + symbol 
     ws = Csp(P"_")
 end)
@@ -126,7 +125,7 @@ tree = ast.parse(peg,grammar.peg_s)
 ast.pr(tree)
 
 
-a = dofile "peg/a.grammar"
+a = dofile "peg/a.peg"
 
 a = ast.parse(peg,a)
 
