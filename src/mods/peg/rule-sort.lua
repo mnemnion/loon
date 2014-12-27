@@ -62,22 +62,22 @@ function sort.sort (node)
 	for i,v in ipairs(ndx) do
 	--	print(ndx[i].val, "=", ndx[i].rhs)
 		if ndx[i].rhs[ndx[i].val] then
-			print (ndx[i].val," is RECURSIVE!")
+--			print (ndx[i].val," is RECURSIVE!")
 			ndx[i].lhs.parent().isrecursive = true
 			cursors = cursors + Set{ndx[i].val}
 		end
 	end
-	print ("CURSORS: ", cursors)
+--	print ("CURSORS: ", cursors)
 	local old_cursors = 0
 	while (old_cursors < Set.len(cursors)) do
-		print "IN WHILE"
+--		print "IN WHILE"
 		old_cursors = Set.len(cursors)
 		for i,v in ipairs(ndx) do
 			for val, _ in pairs(ndx[i].rhs) do
 		--		print("for ",val)
 				if cursors[val] then
 					if not (cursors[ndx[i].val]) then
-						print(ndx[i].val, "IS ALSO RECURSIVE!")
+--						print(ndx[i].val, "IS ALSO RECURSIVE!")
 						ndx[i].lhs.parent().isrecursive = true
 						cursors = cursors + Set{ndx[i].val}
 					end
@@ -85,7 +85,7 @@ function sort.sort (node)
 			end
 		end
 	end
-	print("final cursors: ", cursors)
+--	print("final cursors: ", cursors)
 	ndx.cursors = cursors
 	return ndx
 end
