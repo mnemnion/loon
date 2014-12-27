@@ -33,51 +33,37 @@ local function rule_tables(node)
 	return ndx
 end
 
-
 local function detect_recursion(ndx, i)
 	local match = ndx[i].val
---	print ("for rule ", match)
 	for j = 1,#ndx do
 		if ndx[i].rhs[ndx[j].val] then
---			print ("in set:", ndx[j].val, " = ", ndx[j].rhs)
-		--	print ("looking for", match)
 			if ndx[j].rhs[match] then
---				print ("caught ", match," in ", ndx[j].val)
 				ndx[i].rhs = ndx[i].rhs + ndx[j].rhs
---				print (ndx[i].rhs)
 			end
 		end
 	end
 end
 
-
 function sort.sort (node)
 -- Divides rules into Regular and Recursive, decorating accordingly on LHS.
-
 	local ndx = rule_tables(node)
 	for i,v in ipairs(ndx) do 
 		detect_recursion(ndx,i)
 	end
 	local cursors = Set{}
 	for i,v in ipairs(ndx) do
-	--	print(ndx[i].val, "=", ndx[i].rhs)
 		if ndx[i].rhs[ndx[i].val] then
---			print (ndx[i].val," is RECURSIVE!")
 			ndx[i].lhs.parent().isrecursive = true
 			cursors = cursors + Set{ndx[i].val}
 		end
 	end
---	print ("CURSORS: ", cursors)
 	local old_cursors = 0
 	while (old_cursors < Set.len(cursors)) do
---		print "IN WHILE"
 		old_cursors = Set.len(cursors)
 		for i,v in ipairs(ndx) do
 			for val, _ in pairs(ndx[i].rhs) do
-		--		print("for ",val)
 				if cursors[val] then
 					if not (cursors[ndx[i].val]) then
---						print(ndx[i].val, "IS ALSO RECURSIVE!")
 						ndx[i].lhs.parent().isrecursive = true
 						cursors = cursors + Set{ndx[i].val}
 					end
@@ -85,7 +71,6 @@ function sort.sort (node)
 			end
 		end
 	end
---	print("final cursors: ", cursors)
 	ndx.cursors = cursors
 	return ndx
 end
