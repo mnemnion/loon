@@ -22,8 +22,8 @@ function t.transform(ast)
 		end
 	end
 	local cursive, regular = ast:select(isrecursive), ast:select(notrecursive)
-	print (cursive)
-	print (regular)
+	transform_cursives(cursive)
+	transform_regulars(regular)
 	return ast
 end
 

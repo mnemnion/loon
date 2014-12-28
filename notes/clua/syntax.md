@@ -1,16 +1,16 @@
 #Syntax
 
-Clua is defined in UTF-8 format.
+Clu is defined in UTF-8 format.
 
 #Reading
 
-The following describes the behavior of the Clua reader with respect to various characters. 
+The following describes the behavior of the Clu reader with respect to various characters. 
 
 The outer context is assumed, unless otherwise stated. 
 
 ###Whitespace
 
-The characters space, newline, comma, and tab, denoted `\s \n , \t` are whitespace in Clua. 
+The characters space, newline, comma, and tab, denoted `\s \n , \t` are whitespace in Clu. 
 
 Any member or quantity of the set is allowed where indicated, and will not affect semantics.
 
@@ -20,7 +20,7 @@ Tabs are deprecated.
 
 ###Unary Tokens
 
-The characters ``.  @ ` ~ ; : ' " # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
+The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
 `.` represents field access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
 
@@ -34,7 +34,9 @@ The characters ``.  @ ` ~ ; : ' " # |`` are not valid in symbols. If encountered
 
 `'` quotes the following form.
 
-`"` begins and ends strings, with `\` as an escape character for `"` in this context.
+`"` begins and ends strings, with `\` as an escape character for `"` in this context. They may not contain a newline.
+
+`« »` demarcate raw strings. Escaping is avoided by multiples, eg `««« »»»`.
 
 `#` is a signal to the reader, which has various effects on the following form. 
 
@@ -42,7 +44,7 @@ The characters ``.  @ ` ~ ; : ' " # |`` are not valid in symbols. If encountered
 
 ### Paired Tokens
 
-The characters `( ) [ ] { } < > \ /` are not valid in symbols. They must be balanced: Any left member of the set
+The characters `( ) [ ] { } < > \ / ` are not valid in symbols. They must be balanced: Any left member of the set
 must receive a right member of the set, in the order encountered by the reader, across all pairs. To illustrate, `({})` is valid, `({}` is invalid, and `({)}` is invalid also. 
 
 `( )` constitute a list. 
@@ -124,7 +126,7 @@ It is a semantic error to treat a vector as having other characteristics, though
 
 The token `{` begins a table, which may an even number of forms and is delimited by a closing `{`. The odd forms are interpreted as keys and the even forms as values, in keeping with Lua's vexing yet familiar convention of denoting the first element with `1`. 
 
-The underlying representation of lists and vectors may be a table, and normally is, given Lua. The semantics of Clua will not normally subvert this. 
+The underlying representation of lists and vectors may be a table, and normally is, given Lua. The semantics of Clu will not normally subvert this. 
 
 ## Types
 
@@ -161,7 +163,7 @@ The `#` character, in general, modifies the following form.
 
 `#!#{}` creates an immutable set. `#_#!#{}` parses and discards an immutable set without creating it. `#!#_#{}` is a parse error, because there is a hash-modifier context and that statement doesn't make sense. 
 
-The Clua reader may not currently be extended by the runtime to use the `#` modifier. At least not legally. But that doesn't matter because of
+The Clu reader may not currently be extended by the runtime to use the `#` modifier. At least not legally. But that doesn't matter because of
 
 ###The Syntax Boundary Marker
 
@@ -177,6 +179,6 @@ One doesn't want to hand control back over at a place where the enclosing langua
 
 Comments begin with `;`, continuing to the end of the line. 
 
-Comments containing more than one `;`, with only whitespace between the `;` and the preceding newline, should be formatted in Markdown and otherwise conform to Clua documentation conventions. 
+Comments containing more than one `;`, with only whitespace between the `;` and the preceding newline, should be formatted in Markdown and otherwise conform to Clu documentation conventions. 
 
-The Clua runtime discards comments, which hold no place in the resulting syntax tree. 
+The Clu runtime discards comments, which hold no place in the resulting syntax tree. 
