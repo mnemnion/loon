@@ -24,7 +24,7 @@ return [[
        	              / set
        	              / range
 	    hidden_match :  _"<"_ rhs_ ">"
-	         comment : ";" comment_c ; make real
+	         comment : ";" comment-c ; make real
 	        prefixed :  if-not-this 
 	                  / not-this 
 	                  / if-and-this

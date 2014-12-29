@@ -3,29 +3,6 @@
 
 local t = {}
 
-local function transform_atoms(ast)
--- Makes sensible lua symbols  
-	local function symbolize(str)
-		return str:gsub("-","_")
-	end
-	local function lhs_pred(ast)
-		if ast.id == "lhs" and ast[1].id ~= "hidden_pattern" then
-			return true
-		elseif ast.id == "hidden_pattern" then
-			return true
-		else
-			return false
-		end 
-	end
-	local rhs = ast:select"atom"
-	local lhs = ast:select(lhs_pred)
-	for i = 1, #rhs do
-		rhs[i].val = symbolize(rhs[i].val)
-	end
-	for i = 1, #lhs do
-		lhs[i].val = symbolize(lhs[i].val)
-	end
-end
 
 local function isrecursive(node)
 	if node.isrecursive then
@@ -44,8 +21,15 @@ local function notrecursive(node)
 end
 
 local function transform_cursives(forest)
-	local cursives = forest:select(isrecursive)
-	print (cursives)
+	local cursors = forest[1]:root().cursors
+	print (cursors)
+	local atoms = forest:select"atom"
+	for i = 1, #atoms do
+		if cursors[atoms[i].val] then 
+			print ("Transforming: ", atoms[i].val)
+			atoms[i].val = 'V"'..atoms[i].val..'"'
+		end
+	end
 end
 
 local function transform_regulars(forest)
@@ -55,10 +39,8 @@ end
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
-
-	transform_atoms(ast)
 	local cursive, regular = ast:select(isrecursive), ast:select(notrecursive)
-	transform_cursives(cursive)
+	transform_cursives(ast)
 	transform_regulars(regular)
 	return ast
 end
