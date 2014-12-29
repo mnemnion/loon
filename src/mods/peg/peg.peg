@@ -25,11 +25,8 @@ return [[
        	              / range
 	    hidden_match :  _"<"_ rhs_ ">"
 	         comment : ";" comment-c ; make real
-	        prefixed :  if-not-this 
-	                  / not-this 
-	                  / if-and-this
+	        prefixed :  if-not-this / if-and-this
 	     if-not-this :  "!" _allowed-prefixed
-	     not-this    :  "-" _allowed-prefixed
 	     if-and-this :  "&" _allowed-prefixed
             suffixed :  optional 
 	                  / more-than-one 

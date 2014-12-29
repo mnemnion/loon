@@ -36,3 +36,5 @@ Examples:
 ` !bar  ->  -bar `
 
 ` &bar  ->  #bar `  
+
+I believe that covers the atomic cases. 
