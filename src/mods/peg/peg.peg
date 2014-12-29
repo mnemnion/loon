@@ -3,24 +3,24 @@ return [[
 	            rule :  lhs rhs
 	             lhs :  _pattern_ (":" / "=" / ":=")
                  rhs :  element elements
-	       <pattern> :  symbol / hidden-pattern
+	       `pattern` :  symbol / hidden-pattern
 	  hidden-pattern :  "<" symbol ">"
-	       <element> :  !lhs _( compound
+	       `element` :  !lhs _( compound
 	       	                  / simple
 	       	                  / comment ) ; with a comment
-	      <elements> :  choice 
+	      `elements` :  choice 
 	      	          / cat 
 	      	          / ""
-	      <compound> :  group 
+	      `compound` :  group 
 	                  / enclosed 
 	                  / hidden-match 
-	  	    <simple> :  prefixed 
+	  	    `simple` :  prefixed 
 	                  / suffixed 
 	                  / atom 
 	          choice :  _"/" element elements
 	             cat :  _ element elements
 	           group :  _"("_ rhs_ ")" 
-       	  <enclosed> :  literal
+       	  `enclosed` :  literal
        	              / set
        	              / range
 	    hidden_match :  _"<"_ rhs_ ">"

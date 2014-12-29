@@ -62,7 +62,7 @@ local V = lpeg.V -- create a variable within a grammar
     rhs     =  V"element" * V"elements"
 	pattern =  symbol
 			+  V"hidden_pattern"
-	hidden_pattern =  P"<" * symbol * P">"
+	hidden_pattern =  P"`" * symbol * P"`"
 	element  =  -V"lhs" * WS 
 	         *  ( V"compound"
 			 +    V"simple"
@@ -82,9 +82,9 @@ local V = lpeg.V -- create a variable within a grammar
     enclosed =  V"literal"
              +  V"set"
        	     +  V"range"
-	hidden_match =  WS * P"<"
+	hidden_match =  WS * P"``"
 				 *  WS * V"elements" * WS
-				 *  P">"
+				 *  P"``"
 	simple   =  V"suffixed"
 			 +  V"prefixed"
 			 +  V"atom" 

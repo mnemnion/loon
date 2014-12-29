@@ -21,10 +21,18 @@ For each type of 'simple' rule, we rewrite it to have an LPEG equivalent.
 
 Examples:
 
-` foo = bar* ` -> ` foo = V"bar"^0 `
+` foo = bar*  ->   foo = V"bar"^0 `
 
-` foo = bar+ ` -> ` foo = bar^1 `
+` foo = bar+   ->   foo = bar^1 `
 
-` bar? `     ->  ` bar^-1 `
+` bar?  ->  bar^-1 `
 
-` bar$2 `   ->    ` (bar * bar) `
+` bar$2  ->  (bar * bar) `
+
+` bar$2..5 -> (bar * bar) * bar^-3 `
+
+` -------------`
+
+` !bar  ->  -bar `
+
+` &bar  ->  #bar `  
