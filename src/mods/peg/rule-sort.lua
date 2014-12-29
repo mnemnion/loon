@@ -10,6 +10,32 @@ local clear = tostring(ansi.clear)
 
 local sort = {}
 
+---This step is done first, so that the contents of the cursor
+-- set obtain the correct values.
+local function transform_atoms(ast)
+-- Makes sensible lua symbols  
+	local function symbolize(str)
+		return str:gsub("-","_")
+	end
+	local function lhs_pred(ast)
+		if ast.id == "lhs" and ast[1].id ~= "hidden_pattern" then
+			return true
+		elseif ast.id == "hidden_pattern" then
+			return true
+		else
+			return false
+		end 
+	end
+	local rhs = ast:select"atom"
+	local lhs = ast:select(lhs_pred)
+	for i = 1, #rhs do
+		rhs[i].val = symbolize(rhs[i].val)
+	end
+	for i = 1, #lhs do
+		lhs[i].val = symbolize(lhs[i].val)
+	end
+end
+
 local function rule_tables(node)
 	local lhs = node:select"lhs"
 	local rhs = node:select"rhs":pick"atom" 
@@ -46,6 +72,7 @@ end
 
 function sort.sort (node)
 -- Divides rules into Regular and Recursive, decorating accordingly on LHS.
+	transform_atoms(node)
 	local ndx = rule_tables(node)
 	for i,v in ipairs(ndx) do 
 		detect_recursion(ndx,i)
@@ -71,8 +98,8 @@ function sort.sort (node)
 			end
 		end
 	end
-	ndx.cursors = cursors
-	return ndx
+	node:root().cursors = cursors
+	--return ndx
 end
 
 return sort

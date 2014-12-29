@@ -3,31 +3,8 @@
 
 local t = {}
 
----Transforms rules into LPEG form. 
--- @param ast root Node of a PEGylated grammar. 
--- @return a collection containing the transfomrmed strings.
-function t.transform(ast)
-	local function isrecursive(node)
-		if node.isrecursive then
-			return true
-		else
-			return false
-		end
-	end
-	local function notrecursive(node)
-		if node.id == "rule" and not node.isrecursive then
-			return true
-		else
-			return false
-		end
-	end
-	local cursive, regular = ast:select(isrecursive), ast:select(notrecursive)
-	transform_cursives(cursive)
-	transform_regulars(regular)
-	return ast
-end
-
-function t.transform_atoms(ast)
+local function transform_atoms(ast)
+-- Makes sensible lua symbols  
 	local function symbolize(str)
 		return str:gsub("-","_")
 	end
@@ -49,4 +26,41 @@ function t.transform_atoms(ast)
 		lhs[i].val = symbolize(lhs[i].val)
 	end
 end
+
+local function isrecursive(node)
+	if node.isrecursive then
+		return true
+	else
+		return false
+	end
+end
+
+local function notrecursive(node)
+	if node.id == "rule" and not node.isrecursive then
+		return true
+	else
+		return false
+	end
+end
+
+local function transform_cursives(forest)
+	local cursives = forest:select(isrecursive)
+	print (cursives)
+end
+
+local function transform_regulars(forest)
+end
+
+---Transforms rules into LPEG form. 
+-- @param ast root Node of a PEGylated grammar. 
+-- @return a collection containing the transformed strings.
+function t.transform(ast)
+
+	transform_atoms(ast)
+	local cursive, regular = ast:select(isrecursive), ast:select(notrecursive)
+	transform_cursives(cursive)
+	transform_regulars(regular)
+	return ast
+end
+
 return t
