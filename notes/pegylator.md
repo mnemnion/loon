@@ -33,7 +33,7 @@ We then go to the next rule, and add all the RHS to its visited category.
 
 We proceed down. We visit each rule once, and compare/add the RHS buckets to the LHS set. We then sweep through: sets which are self-referential, are self-referential. Every time we add a recursive LHS in a sweep, we have to check every RHS to see if the LHS is called, if so, the LHS of that RHS is also recursive. 
 
-All rules marked cyclic are transformed with a cyclic template, all other rules with a regular template. 
+All rules marked recursive are transformed with a recursive template, all other rules with a regular template. 
 
 ## Code generation
 
@@ -48,5 +48,14 @@ The code templates are just a vector of engines, all of which are called and the
 Code gen can write to files, or just load the string, configurably. 
 
 ###Steps
+
+We want to proceed 'inside out'. The first step is to convert all atoms to Lua-standard format, by replacing all `-` with `_`. Then, the RHS atoms that correspond to recursive rules are replaced `modified_symbol -> V"modified_symbol"`. 
+
+Next, we perform all atomic conversions, turning `symbol?` into `symbol^-1` and so on. These compose over our already modified atoms. Where necessary we throw parentheses at the problem. 
+
+Next, we impose captures over the appropriate rules. This is moderately complex, and we do it differently for different engines. It may suffice to impose a single abstract "capture" function over all captures, assigning it differently when generating the different engines. It may not.
+
+The step after this is assembling the compounds by adding `*` for concatenation and `+` instead of `\`, while reimposing parentheses. We then glue our rule pieces into the necessary context, and place them into either the recursive or regular slot of the template. 
+
 
 All regular rules are defined outside the context, as lpeg.P patterns. They are redefined in the calling context as P pr C as appropriate to the engine.

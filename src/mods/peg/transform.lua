@@ -27,4 +27,26 @@ function t.transform(ast)
 	return ast
 end
 
+function t.transform_atoms(ast)
+	local function symbolize(str)
+		return str:gsub("-","_")
+	end
+	local function lhs_pred(ast)
+		if ast.id == "lhs" and ast[1].id ~= "hidden_pattern" then
+			return true
+		elseif ast.id == "hidden_pattern" then
+			return true
+		else
+			return false
+		end 
+	end
+	local rhs = ast:select"atom"
+	local lhs = ast:select(lhs_pred)
+	for i = 1, #rhs do
+		rhs[i].val = symbolize(rhs[i].val)
+	end
+	for i = 1, #lhs do
+		lhs[i].val = symbolize(lhs[i].val)
+	end
+end
 return t
