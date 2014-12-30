@@ -59,15 +59,42 @@ function t.maybe(ast)
 	end
 end
 
+function t.some_number(ast)
+	-- moderately complex, write later
+end
+
+function t.with_suffix(ast)
+
+end
+
 function t.suffix(ast)
 	t.optional(ast)
 	t.more_than_one(ast)
 	t.maybe(ast)
+	t.some_number(ast)
+	t.with_suffix(ast)
 end
 
-function t.some_number(ast)
-	-- moderately complex, write later
+function t.if_not_this(ast)
+	local atoms = ast:select"if_not_this":select"atom"
+	for i = 1, #atoms do
+		atoms[i].val = "-"..atoms[i].val
+	end
 end
+
+function t.if_and_this(ast)
+		local atoms = ast:select"if_and_this":select"atom"
+	for i = 1, #atoms do
+		atoms[i].val = "#"..atoms[i].val
+	end
+end 
+
+function t.prefix(ast)
+	t.if_not_this(ast)
+	t.if_and_this(ast)
+end
+
+
 
 ---Transforms rules into LPEG form. 
 -- @param ast root Node of a PEGylated grammar. 
@@ -75,6 +102,7 @@ end
 function t.transform(ast)
 	sort.sort(ast)
 	t.cursives(ast)
+	t.prefix(ast)
 	t.suffix(ast)
 	return ast
 end

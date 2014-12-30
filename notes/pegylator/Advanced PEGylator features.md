@@ -21,7 +21,7 @@ Since there's no recursion, this should work:
 
 ``` 
  
-long-string = open !close close
+long-string = open !close ANY* close
 
 open = '[' '='*^n '['
 
