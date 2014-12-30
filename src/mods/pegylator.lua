@@ -124,6 +124,7 @@ end)
 
 tree = ast.parse(peg,grammar.peg_s)
 
+g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/a.peg"
 a = ast.parse(peg,a)
 

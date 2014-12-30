@@ -2,23 +2,21 @@ return [[
 	           rules :  rule +
 	            rule :  lhs rhs
 	             lhs :  _pattern_ (":" / "=" / ":=")
-                 rhs :  element elements
+                 rhs :  element elements *
 	       `pattern` :  symbol / hidden-pattern
 	  hidden-pattern :  "<" symbol ">"
 	       `element` :  !lhs _( compound
 	       	                  / simple
 	       	                  / comment ) ; with a comment
-	      `elements` :  choice 
-	      	          / cat 
-	      	          / ""
+	      `elements` :  choice / cat 
 	      `compound` :  group 
 	                  / enclosed 
 	                  / hidden-match 
 	  	    `simple` :  prefixed 
 	                  / suffixed 
 	                  / atom 
-	          choice :  _"/" element elements
-	             cat :  _ element elements
+	          choice :  _"/" element elements *
+	             cat :  _ element elements *
 	           group :  _"("_ rhs_ ")" 
        	  `enclosed` :  literal
        	              / set
