@@ -1,6 +1,9 @@
 --- Transform Module
 -- @module transform
 
+local sort = require "peg/rule-sort"
+
+
 local t = {}
 
 
@@ -20,7 +23,7 @@ local function notrecursive(node)
 	end
 end
 
-local function transform_cursives(forest)
+function t.cursives(forest)
 	local cursors = forest[1]:root().cursors
 	print (cursors)
 	local atoms = forest:select"atom"
@@ -34,7 +37,7 @@ local function transform_cursives(forest)
 	end
 end
 
-local function transform_optional(ast)
+function t.optional(ast)
 	local optionals = ast:select"optional":select"atom"
 	for i = 1, #optionals do
 		--print(optionals[i].val)
@@ -42,12 +45,37 @@ local function transform_optional(ast)
 	end
 end
 
+function t.more_than_one(ast)
+	local mto = ast:select"more_than_one":select"atom"
+	for i = 1, #mto do
+		mto[i].val = mto[i].val.."^1"
+	end
+end
+
+function t.maybe(ast)
+	local maybe = ast:select"maybe":select"atom"
+	for i = 1, #maybe do
+		maybe[i].val = maybe[i].val.."^-1"
+	end
+end
+
+function t.suffix(ast)
+	t.optional(ast)
+	t.more_than_one(ast)
+	t.maybe(ast)
+end
+
+function t.some_number(ast)
+	-- moderately complex, write later
+end
+
 ---Transforms rules into LPEG form. 
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
-	transform_cursives(ast)
-	transform_optional(ast)
+	sort.sort(ast)
+	t.cursives(ast)
+	t.suffix(ast)
 	return ast
 end
 

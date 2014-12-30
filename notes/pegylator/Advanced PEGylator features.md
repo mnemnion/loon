@@ -32,3 +32,5 @@ close = ']' '='^n ']'
 certainly this is the level of clarity we strive for. As regular rules are never reentrant by definition, length tags should function correctly in any combination. 
 
 Should be allow `n` to be a mathematical function of n? Hmm. Constraints are lovely things in a declarative context, if you want to say ` absurd-rule = silly-case*^n ha-ha^m algebra^(n-14/(128 % m)) ` well. It's a meaningful statement, is it not? I do believe we'll want to capture a value rather than set up a system of equations to satisfy. Although....
+
+Of course this exact problem is solved in [Roberto's LPEG paper](http://www.inf.puc-rio.br/~roberto/lpeg/) under "Lua's Long Strings". This is a reasonable template for providing this function declaratively. 

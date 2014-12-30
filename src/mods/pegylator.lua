@@ -128,9 +128,13 @@ g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/a.peg"
 a = ast.parse(peg,a)
 
-s.sort(a)
-s.sort(tree)
-ast.pr(tree)
+--s.sort(a)
+--s.sort(tree)
+--ast.pr(tree)
+
+t.transform(a)
+t.transform(tree)
+t.transform(g)
 
 assert(tree == tree.index(5):root())
 
