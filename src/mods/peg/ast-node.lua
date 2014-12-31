@@ -183,9 +183,20 @@ end
 local function pick_tostring(table)
 	local phrase = ""
 	for i,v in ipairs(table) do 
-		phrase = phrase..tostring(v)
+		phrase = phrase..tostring(v).." "
 	end
 	return phrase 
+end
+
+local function tokenize(ast)
+	local ndx, first, last = ast:range()
+	local tokens = setmetatable({},{__tostring = pick_tostring})
+	for i = first, last do 	
+		if ndx[i].val then
+			tokens[#tokens+1] = ndx[i].val
+		end
+	end
+	return tokens
 end
 
 function forest.pick(ast,id)
@@ -217,6 +228,7 @@ return {
 	pr = ast_pr,
 	lift = walker.lift,
 	root = root,
+	tokenize = tokenize,
 	range= ast_range,
 	copy = ast_copy,
 	walk = walker.walk_ast,

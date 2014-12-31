@@ -105,8 +105,24 @@ function t.literal(ast)
 	end
 end 
 
+function t.range(ast)
+	local ranges = ast:select"range"
+	for i = 1, #ranges do
+		ranges[i].val = "R("..ranges[i].val:gsub("-","")..")"
+	end
+end
+
+function t.set(ast)
+	local sets = ast:select"set"
+	for i = 1, #sets do
+		sets[i].val = "S("..sets[i].val..")"
+	end
+end
+
 function t.enclosed(ast)
 	t.literal(ast)
+	t.range(ast)
+	t.set(ast)
 end
 
 ---Transforms rules into LPEG form. 

@@ -20,6 +20,7 @@ local function N ()
   meta["range"] = ast.range
   meta["clone"] = ast.copy
   meta["lift"]  = ast.lift
+  meta["tokens"] = ast.tokenize
   meta["select"] = ast.__select_node
   meta["with"] = ast.__select_with_node
   return meta

@@ -3,13 +3,13 @@
 -- A parser generator for LPEG.
 
 local lpeg = require "lpeg"
-ansi = require "ansi"
+local ansi = require "ansi"
 local util = require "util"
 local epeg = require "peg/epeg"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
-local ast = require "peg/ast"
+ast = require "peg/ast"
 local grammar = require "peg/grammars"
 local s = require "peg/rule-sort"
 t = require "peg/transform"
