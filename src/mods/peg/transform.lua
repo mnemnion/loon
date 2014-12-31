@@ -94,7 +94,20 @@ function t.prefix(ast)
 	t.if_and_this(ast)
 end
 
+function t.literal(ast)
+	local lits = ast:select"literal"
+	if lits then
+		for i = 1, #lits do
+			if lits[i].val then 
+				lits[i].val = '"'..lits[i].val..'"'
+			end
+		end
+	end
+end 
 
+function t.enclosed(ast)
+	t.literal(ast)
+end
 
 ---Transforms rules into LPEG form. 
 -- @param ast root Node of a PEGylated grammar. 
@@ -104,6 +117,7 @@ function t.transform(ast)
 	t.cursives(ast)
 	t.prefix(ast)
 	t.suffix(ast)
+	t.enclosed(ast)
 	return ast
 end
 

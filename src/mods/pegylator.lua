@@ -97,9 +97,9 @@ local V = lpeg.V -- create a variable within a grammar
 	         +  V"maybe"
 	         +  V"with_suffix"
 	    	 +  V"some_number"
-	if_not_this = P"!" * WS * V"allowed_prefixed"
-	not_this    = P"-" * WS * V"allowed_prefixed"
-	if_and_this = P"&" * WS * V"allowed_prefixed"
+		   if_not_this = P"!" * WS * V"allowed_prefixed"
+	   	   not_this    = P"-" * WS * V"allowed_prefixed"
+		   if_and_this = P"&" * WS * V"allowed_prefixed"
                literal =  P'"' * (string + P"") * P'"'
                set     =  P"{" * set_c^1 * P"}"  
                range   =  P"[" * range_c * P"]" 
