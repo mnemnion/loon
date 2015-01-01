@@ -191,11 +191,16 @@ end
 local function tokenize(ast)
 	local ndx, first, last = ast:range()
 	local tokens = setmetatable({},{__tostring = pick_tostring})
-	for i = first, last do 	
+	for i = first, last do 	-- reap leaves
 		if ndx[i].val then
 			tokens[#tokens+1] = ndx[i].val
 		end
 	end
+	for i,v in ipairs(ast) do -- destroy children
+		print (ast[i])
+		ast[i] = nil 
+	end
+	ast.tok = tokens
 	return tokens
 end
 
