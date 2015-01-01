@@ -66,6 +66,7 @@ or
 
 ```clojure
 (let '(a b c) \(foo bar)/ (...))
+```
 
 because the first is a runtime error unless `(a b c)` returns a symbol, and the latter would try to assign to a compound quote, which is also illegal, as quotes are values. This makes no more sense than `(let 1 "one")`, since 1 is a number, not a symbol, or `(let "one" 1)` for that matter. 
 
