@@ -108,14 +108,14 @@ end
 function t.range(ast)
 	local ranges = ast:select"range"
 	for i = 1, #ranges do
-		ranges[i].val = "R("..ranges[i].val:gsub("-","")..")"
+		ranges[i].val = 'R("'..ranges[i].val:gsub("-","")..'")'
 	end
 end
 
 function t.set(ast)
 	local sets = ast:select"set"
 	for i = 1, #sets do
-		sets[i].val = "S("..sets[i].val..")"
+		sets[i].val = 'S("'..sets[i].val..'")'
 	end
 end
 
