@@ -49,6 +49,9 @@ local function node_pr(node, depth, str)
 		if node.val then
 			 phrase = phrase..prefix..'"'..c.val..node.val..clear..'"'.."\n"
 		end 
+		if node.tok then
+			phrase = phrase..prefix..tostring(node.tok)
+		end
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
 				phrase = phrase..prefix.."  "..'"'..c.str..v..clear..'"'.."\n"
@@ -183,14 +186,24 @@ end
 local function pick_tostring(table)
 	local phrase = ""
 	for i,v in ipairs(table) do 
-		phrase = phrase..tostring(v).." "
+		phrase = phrase..tostring(v)
 	end
 	return phrase 
 end
 
+local function toks_tostring(table)
+	local phrase = "["
+	for i,v in ipairs(table) do
+		phrase = phrase..
+	             grey.."'"..clear..tostring(v)..
+	             grey.."'"..red..","..clear
+	end
+	return phrase.."]"
+end
+
 local function tokenize(ast)
 	local ndx, first, last = ast:range()
-	local tokens = setmetatable({},{__tostring = pick_tostring})
+	local tokens = setmetatable({},{__tostring = toks_tostring})
 	for i = first, last do 	-- reap leaves
 		if ndx[i].val then
 			tokens[#tokens+1] = ndx[i].val
