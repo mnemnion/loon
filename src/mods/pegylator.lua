@@ -43,10 +43,11 @@ local V = lpeg.V -- create a variable within a grammar
 					 +   (P"+" + P"-")^0 * digit^1
  peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS", "cat", "enclosed", "ws",
+	SUPPRESS ("WS",  "enclosed", "ws", "catch",
 		      "element" ,"elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
+	local catspace   =  WS^1
 	local WS         =  WS^0
 	local symbol     =  Csp(symbol)
 	local string     =  Csp(string) 
@@ -59,7 +60,8 @@ local V = lpeg.V -- create a variable within a grammar
 	rules   =  V"rule"^1
 	rule    =  V"lhs" * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=" + ":=")
-    rhs     =  V"element" * V"elements"
+    rhs     =  V"catch"
+    catch   =  V"element" * V"elements"
 	pattern =  symbol
 			+  V"hidden_pattern"
 	hidden_pattern =  P"`" * symbol * P"`"
@@ -71,19 +73,19 @@ local V = lpeg.V -- create a variable within a grammar
 	elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
-	choice =  WS * P"/" * V"element" * V"elements"
-	cat =  WS * V"element" * V"elements" 
+	choice =  WS * P"/" * V"catch"
+	cat =  WS * V"catch"
 	compound =  V"group" 
 			 +  V"enclosed"
 			 +  V"hidden_match" 
 	group   =  WS * P"(" 
-			 *  WS * V"elements" * WS 
+			 *  WS * V"catch" * WS 
 			 *  P")"
     enclosed =  V"literal"
              +  V"set"
        	     +  V"range"
 	hidden_match =  WS * P"``"
-				 *  WS * V"elements" * WS
+				 *  WS * V"catch" * WS
 				 *  P"``"
 	simple   =  V"suffixed"
 			 +  V"prefixed"

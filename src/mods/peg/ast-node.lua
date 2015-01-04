@@ -26,7 +26,7 @@ local function ast_range(node)
 end
 
 local c = { id = magenta,
-			num = grey,
+			range = grey,
 			str = red,
 			span = clear,
 			val = green,}
@@ -44,8 +44,8 @@ local function node_pr(node, depth, str)
 		phrase = phrase..
 			  -- blue,node.parent().id," ",
 				 c.id..node.id.." "..
-				 c.num..node.first..
-				 "-"..c.num..node.last..clear.."\n"
+				 c.range..node.first..
+				 "-"..c.range..node.last..clear.."\n"
 		if node.val then
 			 phrase = phrase..prefix..'"'..c.val..node.val..clear..'"'.."\n"
 		end 

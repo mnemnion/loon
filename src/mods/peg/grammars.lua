@@ -9,7 +9,7 @@ local g = {}
 			  I : "J" 
 			  K : L* M+ N?
 			  O : !P &Q !R*
-			  `S` : ``T (U V)``
+			  `S` : ``T`` (U V)
 			  W : {XY} [a-z] 
 			  A : B$2 C$-3 D$4..5 E$+4]]
 

@@ -4,7 +4,7 @@ return [[
 	             lhs :  _pattern_ (":" / "=" / ":=")
                  rhs :  element elements *
 	       `pattern` :  symbol / hidden-pattern
-	  hidden-pattern :  "<" symbol ">"
+	  hidden-pattern :  "`" symbol "`"
 	       `element` :  !lhs _( compound
 	       	                  / simple
 	       	                  / comment ) ; with a comment
@@ -21,7 +21,7 @@ return [[
        	  `enclosed` :  literal
        	              / set
        	              / range
-	    hidden_match :  _"<"_ rhs_ ">"
+	    hidden_match :  _"``"_ rhs_ "``"
 	         comment : ";" comment-c ; make real
 	        prefixed :  if-not-this / if-and-this
 	     if-not-this :  "!" _allowed-prefixed
