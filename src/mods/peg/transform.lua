@@ -6,6 +6,18 @@ local sort = require "peg/rule-sort"
 
 local t = {}
 
+function t.lift(ast, str)
+--lifts all spans as literal values under the tree.
+--decorator: does not copy. Returns nothing.
+	if not str then str = ast:root().str end 
+	for i,v in ipairs(ast) do
+		if type(v) == "table" and v.span then
+			ast.val = str:sub(v[1],v[2])
+		elseif type(v) == "table" and v.isnode then
+			t.lift(v,str)
+		end
+	end
+end
 
 local function isrecursive(node)
 	if node.isrecursive then
@@ -23,14 +35,14 @@ local function notrecursive(node)
 	end
 end
 
-function t.cursives(forest)
-	local cursors = forest[1]:root().cursors
-	print (cursors)
-	local atoms = forest:select"atom"
+function t.cursives(ast)
+	local cursors = ast:root().cursors
+--	print (cursors)
+	local atoms = ast:select"atom"
 	if cursors then
 		for i = 1, #atoms do
 			if cursors[atoms[i].val] then 
-				print ("Transforming: ", atoms[i].val)
+--				print ("Transforming: ", atoms[i].val)
 				atoms[i].val = 'V"'..atoms[i].val..'"'
 			end
 		end
@@ -155,10 +167,12 @@ function t.rhs(ast)
 end
 
 
+
 ---Transforms rules into LPEG form. 
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
+	t.lift(ast)
 	sort.sort(ast)
 	t.cursives(ast)
 	t.prefix(ast)

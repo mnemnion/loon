@@ -199,7 +199,7 @@ local function toks_tostring(table)
 	             tostring(v):gsub("\n",blue.."\\n"..clear)..
 	             grey.."'"..red..","..clear
 	end
-	return phrase.."]"
+	return phrase.."]".."\n"
 end
 
 local function tokenize(ast)

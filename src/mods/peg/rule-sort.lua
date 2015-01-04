@@ -7,6 +7,8 @@ Set = require "set" -- todo: remove penlight dependency
 local red = tostring(ansi.red)
 local white = tostring(ansi.white)
 local clear = tostring(ansi.clear)
+local magenta = tostring(ansi.magenta)
+local blue = tostring(ansi.blue)
 
 local sort = {}
 
@@ -28,6 +30,7 @@ local function transform_atoms(ast)
 	end
 	local rhs = ast:select"atom"
 	local lhs = ast:select(lhs_pred)
+
 	for i = 1, #rhs do
 		rhs[i].val = symbolize(rhs[i].val)
 	end
