@@ -126,16 +126,31 @@ function t.enclosed(ast)
 end
 
 function t.cat(ast)
-	local gatos = ast:select("cat")
+	local gatos = ast:select"cat"
 	for i = 1, #gatos do
 		gatos[i].val = " * "
 	end
 end
 
 function t.choice(ast)
-	local choices = ast:select("choice")
+	local choices = ast:select"choice"
 	for i= 1, #choices do
 		choices[i].val = " + "
+	end
+end
+
+function t.lhs(ast)
+	local lhs = ast:select"lhs"
+	for i = 1, #lhs do
+		lhs[i].val = lhs[i].val.." = "
+	end
+end
+
+function t.rhs(ast)
+	local rhs = ast:select"rhs"
+	for i = 1, #rhs do
+		rhs[i]:tokens()
+		rhs[i].tok[#rhs[i].tok+1] = "\n"
 	end
 end
 
@@ -151,6 +166,8 @@ function t.transform(ast)
 	t.enclosed(ast)
 	t.cat(ast)
 	t.choice(ast)
+--	t.lhs(ast)
+	t.rhs(ast)
 	return ast
 end
 

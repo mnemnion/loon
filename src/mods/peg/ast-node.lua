@@ -195,7 +195,8 @@ local function toks_tostring(table)
 	local phrase = "["
 	for i,v in ipairs(table) do
 		phrase = phrase..
-	             grey.."'"..clear..tostring(v)..
+	             grey.."'"..clear..
+	             tostring(v):gsub("\n",blue.."\\n"..clear)..
 	             grey.."'"..red..","..clear
 	end
 	return phrase.."]"
