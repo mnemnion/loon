@@ -125,6 +125,21 @@ function t.enclosed(ast)
 	t.set(ast)
 end
 
+function t.cat(ast)
+	local gatos = ast:select("cat")
+	for i = 1, #gatos do
+		gatos[i].val = " * "
+	end
+end
+
+function t.choice(ast)
+	local choices = ast:select("choice")
+	for i= 1, #choices do
+		choices[i].val = " + "
+	end
+end
+
+
 ---Transforms rules into LPEG form. 
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
@@ -134,6 +149,8 @@ function t.transform(ast)
 	t.prefix(ast)
 	t.suffix(ast)
 	t.enclosed(ast)
+	t.cat(ast)
+	t.choice(ast)
 	return ast
 end
 

@@ -201,6 +201,7 @@ local function tokenize(ast)
 		ast[i] = nil 
 	end
 	ast.tok = tokens
+	walker.walk_ast(ast:root())
 	return tokens
 end
 
