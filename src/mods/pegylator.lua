@@ -78,9 +78,11 @@ local V = lpeg.V -- create a variable within a grammar
 	compound =  V"group" 
 			 +  V"enclosed"
 			 +  V"hidden_match" 
-	group   =  WS * P"(" 
+	group   =  WS * V"PEL" 
 			 *  WS * V"catch" * WS 
-			 *  P")"
+			 *  V"PER"
+	PEL        = Csp "("
+    PER        = Csp ")"
     enclosed =  V"literal"
              +  V"set"
        	     +  V"range"
