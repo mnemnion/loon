@@ -208,15 +208,35 @@ local function tokenize(ast)
 	for i = first, last do 	-- reap leaves
 		if ndx[i].val then
 			tokens[#tokens+1] = ndx[i].val
+			ndx[i].val = nil
+		elseif ndx[i].tok then
+			for j = 1, #ndx[i].tok do
+				tokens[#tokens+1] = ndx[i].tok[j]
+			end
+			ndx[i].tok = nil
 		end
 	end
 	for i,v in ipairs(ast) do -- destroy children
-		print (ast[i])
 		ast[i] = nil 
 	end
 	ast.tok = tokens
 	walker.walk_ast(ast:root())
 	return tokens
+end
+
+local function flatten(ast)
+	local phrase = ""
+	if ast.val then 
+		tokenize(ast)
+	end
+	if ast.tok then
+		for i = 1, #ast.tok do
+			phrase = phrase..ast.tok[i]
+		end
+	else error "Node has neither value nor tokens"
+	end
+	ast.flat = phrase
+	return phrase
 end
 
 function forest.pick(ast,id)
@@ -249,6 +269,7 @@ return {
 	lift = walker.lift,
 	root = root,
 	tokenize = tokenize,
+	flatten = flatten,
 	range= ast_range,
 	copy = ast_copy,
 	walk = walker.walk_ast,

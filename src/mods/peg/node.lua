@@ -21,6 +21,7 @@ local function N ()
   meta["copy"] = ast.copy
   meta["lift"]  = ast.lift
   meta["tokens"] = ast.tokenize
+  meta["flatten"] = ast.flatten
   meta["select"] = ast.__select_node
   meta["with"] = ast.__select_with_node
   return meta
