@@ -57,3 +57,11 @@ We also provide all of the `+=` style shorthands for operators, and include `!=`
 
 This is a maybe, but I find it tedious to have to check that `type == "table"` before doing lookups on possibly-table values. I would prefer that a table lookup on a symbol that doesn't resolve to a table return two values: nil, and the type of the value bound to the symbol. So if I call `if (foo.field)` on a string, it returns `nil, "string"`. The first is falsy, so the predicate matches, the second could be useful information. 
 
+
+## Djikstra Day
+
+This is more of a Loon matter than something Lun specific. I believe this simply must happen, sooner or later: we must begin our indexes from zero, or wallow forever in sin.
+
+Edsger W. Djikstra made a [persuasive argument](https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html) for the sort of indexing that is prevalent in every sensible, modern language. That isn't Lua. Wirth was simply not correct here, Djikstra was. 
+
+Therefore, some day in the future, a May 11th, we shall switch to zero for all core functions in Loon. Everything gets patched, no exceptions, and you're using a legacy syntax (of course this is possible) or you're using zero as God intended. 2017 sounds about right. 
