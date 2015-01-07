@@ -39,7 +39,13 @@ print(foo) -- changed our def
 
 ##Keywords and Method Calls
 
-Clu will make extensive use of keywords, as any language does which provides them. Lun can call and use keywords natively, employing the same `:keyword` syntax as is familiar. This is of course a collision with method calls, and we resolve this in the same fashion as in Clu: `class@method()` calls a method and is equivalent to `class:method` in Lua. 
+Clu will make extensive use of keywords, as any language does which provides them. Lun can call and use keywords natively, employing the same `:keyword` syntax as is familiar. This is of course a collision with method calls, and we resolve this in the same fashion as in Clu: `class@method()` calls a method and is equivalent to `class:method()` in Lua.
+
+This is chunky. The reason is that typographically `:` is punctuation while `@` is not, we are practically forced to pronounce it. To apologize for this, `@` can be used as equivalent to `self` and `@method` to `self.method(self)` within method definitions. 
+
+This is similar to usage in Moonscript also. Moonscript provides an object system, which Lun intends not to do, at least not initially. There's a strange tension between prototyping and inheritance, where neither one is powerful enough. If stuck with prototyping, the temptation is to build inheritance. We should resist this, and build a properly flexible object system instead. 
+
+Perhaps our CLOS should be Cluster: The Clu System for Table Extension and Representation.  
 
 ##Equality and Assignment
 
