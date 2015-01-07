@@ -46,7 +46,7 @@ local V = lpeg.V -- create a variable within a grammar
 					 +   (P"+" + P"-")^0 * digit^1
  peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS",  "enclosed", "ws", "catch",
+	SUPPRESS ("WS",  "enclosed", "ws", "form",
 		      "element" ,"elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
@@ -64,8 +64,8 @@ local V = lpeg.V -- create a variable within a grammar
 	rules   =  V"rule"^1
 	rule    =  V"lhs" * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=" + ":=")
-    rhs     =  V"catch"
-    catch   =  V"element" * V"elements"
+    rhs     =  V"form"
+    form   =  V"element" * V"elements"
 	pattern =  symbol
 			+  V"hidden_pattern"
 	hidden_pattern =  P"`" * symbol * P"`"
@@ -77,13 +77,13 @@ local V = lpeg.V -- create a variable within a grammar
 	elements  =  V"choice"  
 			       +  V"cat"
 			       +  P""
-	choice =  WS * P"/" * V"catch"
-	cat =  WS * V"catch"
+	choice =  WS * P"/" * V"form"
+	cat =  WS * V"form"
 	compound =  V"group" 
 			 +  V"enclosed"
 			 +  V"hidden_match" 
 	group   =  WS * V"PEL" 
-			 *  WS * V"catch" * WS 
+			 *  WS * V"form" * WS 
 			 *  V"PER"
 	PEL        = Csp "("
     PER        = Csp ")"
@@ -92,7 +92,7 @@ local V = lpeg.V -- create a variable within a grammar
              +  V"set"
        	     +  V"range"
 	hidden_match =  WS * P"``"
-				 *  WS * V"catch" * WS
+				 *  WS * V"form" * WS
 				 *  P"``"
 	simple   =  V"suffixed"
 			 +  V"prefixed"
@@ -112,6 +112,8 @@ local V = lpeg.V -- create a variable within a grammar
                literal =  P'"' * (string + P"") * P'"'
         hidden_literal = P"`" * hidden_string * P"`"
                set     =  P"{" * set_c^1 * P"}"  
+-- Change range to not use '-' separator instead require even # of bytes.
+-- Ru catches edge cases involving multi-byte chars. 
                range   =  P"[" * range_c * P"]" 
 	     optional      =  V"allowed_suffixed" * WS * P"*"
 	     more_than_one =  V"allowed_suffixed" * WS * P"+"

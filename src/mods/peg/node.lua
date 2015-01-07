@@ -4,8 +4,6 @@
 
 local ast = require "peg/ast-node"
 
-
-
 local function N () 
   -- <Node> metatable
   local meta = {}

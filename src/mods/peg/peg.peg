@@ -31,11 +31,11 @@ return [[
 	                  / maybe 
 	                  / with-suffix 
 	                  / some-number
-	        optional :  allowed-suffixed_ "*"
-	   more-than-one :  allowed-suffixed_ "+"
-	           maybe :  allowed-suffixed_ "?"
+	        optional :  allowed-suffixed_ `*`
+	   more-than-one :  allowed-suffixed_ `+`
+	           maybe :  allowed-suffixed_ `?`
 	     some-number :  allowed-suffixed_ "$" some-num-c
-	     with-suffix :  some-number ("*"/"+"/"?")
+	     with-suffix :  some-number (`*`/`+`/`?`)
 	allowed-prefixed :  compound 
 	                  / suffixed 
 	                  / atom
@@ -44,16 +44,15 @@ return [[
 					  / atom
 	            atom :  symbol / ws 
                   ws : "_"
-	literal :  '"' (string / "") '"'  
-    set     :  "{" set-c+ "}"   
-    range   :  "[" range-c "]"   
+	literal :  `"` (string / "") `"`  
+    set     :  `{` set-c+ `}`   
+    range   :  `[` range-c `]`   
     comment-m : -"\n" ANY
-    comment-c : ";" comment-m* "\n"
-   	local comment_m  = -P"\n" * P(1)
-	local comment_c = P";" * comment_m^0 * P"\n"
-	local letter = R"AZ" + R"az" 
-	local valid_sym = letter + P"-"  
-	local digit = R"09"
+    comment-c : `;` comment-m* `\n`
+	
+	letter : [A-Z] + [a-z] 
+	valid-sym = letter + "-"  
+	local digit = [0-9]
 	local sym = valid_sym + digit
 	local WS = P' ' + P'\n' + P',' + P'\09'
 	local symbol = letter * ( -(P"-" * WS) * sym )^0  -- incorrect: allows -symbol-name- 
