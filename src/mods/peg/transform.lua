@@ -181,7 +181,7 @@ function t.transform(ast)
 	t.cat(ast)
 	t.choice(ast)
 --	t.lhs(ast)
-	t.rhs(ast)
+--	t.rhs(ast)
 	return ast
 end
 

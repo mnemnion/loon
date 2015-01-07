@@ -1,6 +1,7 @@
 -- PEGylator
 
 -- A parser generator for LPEG.
+require 'pl.strict'
 
 local lpeg = require "lpeg"
 local ansi = require "ansi"
@@ -31,8 +32,10 @@ local V = lpeg.V -- create a variable within a grammar
 	local digit = R"09"
 	local sym = valid_sym + digit
 	local WS = P' ' + P'\n' + P',' + P'\09'
-	local symbol = letter * ( -(P"-" * WS) * sym )^0  -- incorrect: allows -symbol-name- 
+	local symbol = letter * ( -(P"-" * WS) * sym )^0  
 	local string_match = -P"\"" * -P"\\" * P(1)
+	local h_string_match = -P"`" * -P"\\" * P(1)
+	local h_string    = (h_string_match + P"\\`" + P"\\")^1
 	local string = (string_match + P"\\\"" + P"\\")^1 
 	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
 	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
@@ -51,6 +54,7 @@ local V = lpeg.V -- create a variable within a grammar
 	local WS         =  WS^0
 	local symbol     =  Csp(symbol)
 	local string     =  Csp(string) 
+	local hidden_string = Csp(h_string)
 	local range_c    =  Csp(range_c)  
 	local set_c      =  Csp(set_c)
 	local some_num_c =  Csp(some_num_c)
@@ -84,6 +88,7 @@ local V = lpeg.V -- create a variable within a grammar
 	PEL        = Csp "("
     PER        = Csp ")"
     enclosed =  V"literal"
+    		 +  V"hidden_literal"
              +  V"set"
        	     +  V"range"
 	hidden_match =  WS * P"``"
@@ -105,6 +110,7 @@ local V = lpeg.V -- create a variable within a grammar
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
 		   if_and_this = P"&" * WS * V"allowed_prefixed"
                literal =  P'"' * (string + P"") * P'"'
+        hidden_literal = P"`" * hidden_string * P"`"
                set     =  P"{" * set_c^1 * P"}"  
                range   =  P"[" * range_c * P"]" 
 	     optional      =  V"allowed_suffixed" * WS * P"*"

@@ -203,6 +203,7 @@ local function toks_tostring(table)
 end
 
 local function tokenize(ast)
+	if ast.tok then return ast.tok end
 	local ndx, first, last = ast:range()
 	local tokens = setmetatable({},{__tostring = toks_tostring})
 	for i = first, last do 	-- reap leaves
@@ -220,20 +221,19 @@ local function tokenize(ast)
 		ast[i] = nil 
 	end
 	ast.tok = tokens
-	walker.walk_ast(ast:root())
+	walker.walk_ast(ast:root()) -- this should be triggered by 
+								-- next index operation
 	return tokens
 end
 
 local function flatten(ast)
 	local phrase = ""
-	if ast.val then 
-		tokenize(ast)
-	end
+	ast:tokens()
 	if ast.tok then
 		for i = 1, #ast.tok do
 			phrase = phrase..ast.tok[i]
 		end
-	else error "Node has neither value nor tokens"
+	else error "auto-tokenizing has failed"
 	end
 	ast.flat = phrase
 	return phrase

@@ -15,7 +15,6 @@ local function N ()
   meta["__index"] = meta
   meta["__tostring"] = ast.tostring
   meta["isnode"] = true
-  meta["index"] = index
   meta["root"] = ast.root
   meta["range"] = ast.range
   meta["copy"] = ast.copy
