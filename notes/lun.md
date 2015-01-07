@@ -37,3 +37,17 @@ print(foo) -- changed our def
 
 `defn` being the obvious `def function`. Note that `outer` is a compiler directive that can be found to the left of most symbols, the exception that comes to mind being inside the arguments of a function definition, where it would be meaningless, since we're binding local references by definition. 
 
+##Keywords and Method Calls
+
+Clu will make extensive use of keywords, as any language does which provides them. Lun can call and use keywords natively, employing the same `:keyword` syntax as is familiar. This is of course a collision with method calls, and we resolve this in the same fashion as in Clu: `class@method()` calls a method and is equivalent to `class:method` in Lua. 
+
+##Equality and Assignment
+
+Lun will allow you to say `if (foo = 23)`. It will issue a warning, which cannot be suppressed, but it will treat this like `if (foo == 23)`, because assigngment is a statement, not an expression, and this is illegal. The author always means `==`, so we choose to DWIM. The intention is that one corrects the offending code in the next pass, while in this pass, the code compiles. 
+
+We also provide all of the `+=` style shorthands for operators, and include `!=` as the preferred nonequality. 
+
+##Nil-returning Field Lookups
+
+This is a maybe, but I find it tedious to have to check that `type == "table"` before doing lookups on possibly-table values. I would prefer that a table lookup on a symbol that doesn't resolve to a table return two values: nil, and the type of the value bound to the symbol. So if I call `if (foo.field)` on a string, it returns `nil, "string"`. The first is falsy, so the predicate matches, the second could be useful information. 
+
