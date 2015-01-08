@@ -60,7 +60,7 @@ local function spanner(first, last)
 end
 
 local function Csp (patt)
-	return lpeg.Cp() * patt * lpeg.Cp() / spanner
+	return lpeg.Cp() * lpeg.Cmt(patt,function() return true end) * lpeg.Cp() / spanner
 end
 
 local Ru = makerange

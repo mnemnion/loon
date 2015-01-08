@@ -26,17 +26,19 @@ local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 
 	local comment_m  = -P"\n" * P(1)
-	local comment_c = P";" * comment_m^0 * #P"\n"
+	local comment_c =  comment_m^0 * #P"\n"
 	local letter = R"AZ" + R"az" 
 	local valid_sym = letter + P"-"  
 	local digit = R"09"
 	local sym = valid_sym + digit
 	local WS = P' ' + P'\n' + P',' + P'\09'
 	local symbol = letter * ( -(P"-" * WS) * sym )^0  
-	local string_match = -P"\"" * -P"\\" * P(1)
+	local d_string_match = -P'"' * -P"\\" * P(1)
+	local s_string_match = -P"'" * -P"\\" * P(1)
 	local h_string_match = -P"`" * -P"\\" * P(1)
 	local h_string    = (h_string_match + P"\\`" + P"\\")^1
-	local string = (string_match + P"\\\"" + P"\\")^1 
+	local d_string = (d_string_match + P"\\\"" + P"\\")^1
+	local s_string = (s_string_match + P"\\'" + P"\\")^1 
 	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
 	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
 	local range_c  = range_capture^1 * P"-" * range_capture^1
@@ -53,12 +55,13 @@ local V = lpeg.V -- create a variable within a grammar
 	local catspace   =  WS^1
 	local WS         =  WS^0
 	local symbol     =  Csp(symbol)
-	local string     =  Csp(string) 
+	local d_string     =  Csp(d_string) 
+	local s_string   =  Csp(s_string)
 	local hidden_string = Csp(h_string)
 	local range_c    =  Csp(range_c)  
 	local set_c      =  Csp(set_c)
 	local some_num_c =  Csp(some_num_c)
-	local cmnt       =  Csp(comment_c) 
+	local cmnt       =  P";" * Csp(comment_c) 
 
 
 	rules   =  V"rule"^1
@@ -79,9 +82,11 @@ local V = lpeg.V -- create a variable within a grammar
 			       +  P""
 	choice =  WS * P"/" * V"form"
 	cat =  WS * V"form"
-	compound =  V"group" 
+	compound =  V"group"
+			 +  V"capture_group"
 			 +  V"enclosed"
-			 +  V"hidden_match" 
+			 +  V"hidden_match"
+	capture_group = P"~" * V"group" 
 	group   =  WS * V"PEL" 
 			 *  WS * V"form" * WS 
 			 *  V"PER"
@@ -109,7 +114,8 @@ local V = lpeg.V -- create a variable within a grammar
 		   if_not_this = P"!" * WS * V"allowed_prefixed"
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
 		   if_and_this = P"&" * WS * V"allowed_prefixed"
-               literal =  P'"' * (string + P"") * P'"'
+               literal =  P'"' * d_string^0 * P'"'
+                       +  P"'" * s_string^0 * P"'"
         hidden_literal = P"`" * hidden_string * P"`"
                set     =  P"{" * set_c^1 * P"}"  
 -- Change range to not use '-' separator instead require even # of bytes.
@@ -145,7 +151,7 @@ a = ast.parse(peg,a)
 --ast.pr(tree)
 
 t.transform(a)
-t.transform(tree)
+--t.transform(tree)
 t.transform(g)
 
 assert(tree == tree.index(5):root())
@@ -154,7 +160,7 @@ assert(tree == tree.index(5):root())
 assert(#grammar.symbol_s+1 == (match(symbol, grammar.symbol_s)))
 assert(#grammar.range_s+1 == (match(range_c,grammar.range_s)))
 assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
-assert(#grammar.string_s+1 == (match(string,grammar.string_s)))
+assert(#grammar.string_s+1 == (match(d_string,grammar.string_s)))
 
 io.write(clear)
 

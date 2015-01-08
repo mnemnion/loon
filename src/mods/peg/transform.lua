@@ -111,11 +111,18 @@ function t.literal(ast)
 	if lits then
 		for i = 1, #lits do
 			if lits[i].val then 
-				lits[i].val = '"'..lits[i].val..'"'
+				lits[i].val = 'Csp"'..lits[i].val..'"'
 			end
 		end
 	end
 end 
+
+function t.hidden_literal(ast)
+	local lits = ast:select"hidden_literal"
+	for i = 1, #lits do
+		lits[i].val = 'P"'..lits[i].val:gsub('"','\\"')..'"'
+	end 
+end  
 
 function t.range(ast)
 	local ranges = ast:select"range"
@@ -133,6 +140,7 @@ end
 
 function t.enclosed(ast)
 	t.literal(ast)
+	t.hidden_literal(ast)
 	t.range(ast)
 	t.set(ast)
 end
@@ -151,22 +159,25 @@ function t.choice(ast)
 	end
 end
 
+local function lhs_pred(node)
+	if node.id == "lhs" and node.val then
+		return true
+	elseif node.id == "hidden_pattern" then
+		return true
+	else 
+		return false
+	end 	
+end 
+
+
 function t.lhs(ast)
-	local lhs = ast:select"lhs"
+	local lhs = ast:select(lhs_pred)
 	for i = 1, #lhs do
-		if lhs[i].val then
-			lhs[i].val = lhs[i].val.." = "
-		elseif lhs[i][1].id == "hidden_pattern" then
-			lhs[i][1].val = lhs[i][1].val.." = "
-		end
+		lhs[i].val = lhs[i].val.." =  "
 	end
-	local nocurse = ast:select(notrecursive):select"lhs"
+	local nocurse = ast:select(notrecursive):select(lhs_pred)
 	for i = 1, #nocurse do
-		if nocurse[i].val then
-			nocurse[i].val = "local "..nocurse[i].val
-		elseif nocurse[i][1].id == "hidden_pattern" then
-			nocurse[i][1].val = "local "..nocurse[i][1].val
-		end 
+		nocurse[i].val = "local "..nocurse[i].val
 	end 
 end
 
@@ -178,6 +189,23 @@ function t.rhs(ast)
 	end
 end
 
+function t.comment(ast)
+	local commentary = ast:select"comment"
+	for i = 1, #commentary do
+		-- remove superfluous cat
+		commentary[i].parent().id = "comment"
+		commentary[i].parent().val = "  -- "..commentary[i].val
+		commentary[i].parent()[1] = nil 
+	end 
+end
+
+function t.capture_group(ast)
+	local pels = ast:select"capture_group":select"PEL"
+	for i = 1, #pels do
+		pels[i].val = "Csp("
+	end 
+end
+
 
 
 ---Transforms rules into LPEG form. 
@@ -187,9 +215,11 @@ function t.transform(ast)
 	t.lift(ast)
 	sort.sort(ast)
 	t.cursives(ast)
+	t.comment(ast)
 	t.prefix(ast)
 	t.suffix(ast)
 	t.enclosed(ast)
+	t.capture_group(ast)
 	t.cat(ast)
 	t.choice(ast)
 	t.lhs(ast)

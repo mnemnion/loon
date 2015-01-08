@@ -47,6 +47,11 @@ The code templates are just a vector of engines, all of which are called and the
 
 Code gen can write to files, or just load the string, configurably. 
 
+### Capture Syntax
+
+This turns out to be fairly subtle stuff. I'm adding the form ` ~(patt1 patt2) ` to physically group the two patterns as one 'token'. The alternative is to come up with implicit rules for grouping and that strikes me as inevitably frustrating of someone's ambitions. 
+
+
 ###Steps
 
 We want to proceed 'inside out'. The first step is to convert all atoms to Lua-standard format, by replacing all `-` with `_`. Then, the RHS atoms that correspond to recursive rules are replaced `modified_symbol -> V"modified_symbol"`. 
