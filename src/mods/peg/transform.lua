@@ -154,8 +154,20 @@ end
 function t.lhs(ast)
 	local lhs = ast:select"lhs"
 	for i = 1, #lhs do
-		lhs[i].val = lhs[i].val.." = "
+		if lhs[i].val then
+			lhs[i].val = lhs[i].val.." = "
+		elseif lhs[i][1].id == "hidden_pattern" then
+			lhs[i][1].val = lhs[i][1].val.." = "
+		end
 	end
+	local nocurse = ast:select(notrecursive):select"lhs"
+	for i = 1, #nocurse do
+		if nocurse[i].val then
+			nocurse[i].val = "local "..nocurse[i].val
+		elseif nocurse[i][1].id == "hidden_pattern" then
+			nocurse[i][1].val = "local "..nocurse[i][1].val
+		end 
+	end 
 end
 
 function t.rhs(ast)
@@ -180,7 +192,7 @@ function t.transform(ast)
 	t.enclosed(ast)
 	t.cat(ast)
 	t.choice(ast)
---	t.lhs(ast)
+	t.lhs(ast)
 	t.rhs(ast)
 	return ast
 end
