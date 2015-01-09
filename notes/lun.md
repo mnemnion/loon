@@ -46,7 +46,7 @@ This is chunky. The reason is that typographically `:` is punctuation while `@` 
 This is similar to usage in Moonscript also. Moonscript provides an object system, which Lun intends not to do, at least not initially. There's a strange tension between prototyping and inheritance, where neither one is powerful enough. If stuck with prototyping, the temptation is to build inheritance. We should resist this, and build a properly flexible object system instead. 
 
 Perhaps our CLOS should be Cluster: The Clu System for Table Extension and Representation.  
-
+<!---
 ##Equality and Assignment
 
 Lun will allow you to say `if (foo = 23)`. It will issue a warning, which cannot be suppressed, but it will treat this like `if (foo == 23)`, because assigngment is a statement, not an expression, and this is illegal. The author always means `==`, so we choose to DWIM. The intention is that one corrects the offending code in the next pass, while in this pass, the code compiles. 
@@ -56,9 +56,9 @@ We also provide all of the `+=` style shorthands for operators, and include `!=`
 ##Nil-returning Field Lookups
 
 This is a maybe, but I find it tedious to have to check that `type == "table"` before doing lookups on possibly-table values. I would prefer that a table lookup on a symbol that doesn't resolve to a table return two values: nil, and the type of the value bound to the symbol. So if I call `if (foo.field)` on a string, it returns `nil, "string"`. The first is falsy, so the predicate matches, the second could be useful information. 
+-->
 
-
-## Djikstra Day
+### Djikstra Day
 
 This is more of a Loon matter than something Lun specific. I believe this simply must happen, sooner or later: we must begin our indexes from zero, or wallow forever in sin.
 

@@ -52,7 +52,6 @@ local V = lpeg.V -- create a variable within a grammar
 		      "element" ,"elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
-	local catspace   =  WS^1
 	local WS         =  WS^0
 	local symbol     =  Csp(symbol)
 	local d_string     =  Csp(d_string) 

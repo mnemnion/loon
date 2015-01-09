@@ -8,11 +8,11 @@
 
 - Modify epng into epeg:
 
-	- metatables for nodes
+	- √ metatables for nodes
 
-	- proper index, back references
+	- √ proper index, back references
 
-	- add code regions (start, end : <Position>)
+	- √ add code regions (start, end : <Position>)
 
 	- Add line-column reporting (regioned => <Position> := start: <LinePosition, end: <LinePosition> )
 
@@ -22,7 +22,7 @@
 
 - Left-right balancing 
 
-- Match conversion
+- √ Match conversion
 
 ###0.0.3
 
