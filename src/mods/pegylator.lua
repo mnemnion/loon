@@ -162,5 +162,6 @@ assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
 assert(#grammar.string_s+1 == (match(d_string,grammar.string_s)))
 
 io.write(clear)
+print(...)
 
 return { peg = peg }
