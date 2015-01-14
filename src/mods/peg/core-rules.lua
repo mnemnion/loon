@@ -43,7 +43,6 @@ return {
 	string_single = string_single,
 	string_double = string_double,
 	string_back = string_back
-
 }
 
 
