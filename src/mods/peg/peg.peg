@@ -49,7 +49,7 @@ return [[
     range   :  `[` range-c `]`   
     comment-m : -"\n" ANY
     comment-c : `;` ~(comment-m*) `\n`
-	`string` : (string-match / P'\\"' / P:"\\")+ 
+	`string` : (string-match / '\\"' / "\\")+
     `string-match` : !`"` !`\\` ANY 
 	letter : [A-Z] + [a-z] 
 	valid-sym = letter + "-"  

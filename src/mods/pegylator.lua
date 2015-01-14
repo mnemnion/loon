@@ -36,9 +36,9 @@ local V = lpeg.V -- create a variable within a grammar
 	local d_string_match = -P'"' * -P"\\" * P(1)
 	local s_string_match = -P"'" * -P"\\" * P(1)
 	local h_string_match = -P"`" * -P"\\" * P(1)
-	local h_string    = (h_string_match + P"\\`" + P"\\")^1
-	local d_string = (d_string_match + P"\\\"" + P"\\")^1
-	local s_string = (s_string_match + P"\\'" + P"\\")^1 
+	local h_string    = (h_string_match + P"\\`" + P"\\\\" + (P"\\" * P(1)))^1
+	local d_string = (d_string_match + P"\\\"" + P"\\\\" + (P"\\" * P(1)))^1
+	local s_string = (s_string_match + P"\\'" + P"\\\\" + (P"\\" * P(1)))^1 
 	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
 	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
 	local range_c  = range_capture^1 * P"-" * range_capture^1
@@ -72,8 +72,8 @@ local V = lpeg.V -- create a variable within a grammar
 			+  V"hidden_pattern"
 	hidden_pattern =  P"`" * symbol * P"`"
 	element  =  -V"lhs" * WS 
-	         *  ( V"compound"
-			 +    V"simple"
+	         *  ( V"simple"
+			 + 	  V"compound"
 			 +    V"comment")
 
 	elements  =  V"choice"  
