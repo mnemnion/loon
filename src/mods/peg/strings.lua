@@ -10,5 +10,8 @@ strings.esc_h = "` an \\ esc\\\'d backtick \\\" string`"
 string.end_d = '"challenge double string\\\\"'
 string.end_s = "'challenge single string\\\\'"
 string.end_h = "`challenge backtick string\\\\`"
+string.trivial_s = "''"
+string.trivial_d = '""'
+string.trivial_h = "``"
 
 return strings

@@ -16,9 +16,9 @@ local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 local Cmt = lpeg.Cmt
 
-local core = {}
-
 local digit = R"09"
+
+local letter = R"AZ" + R"az"
 
 local int   = digit^1
 
@@ -26,7 +26,7 @@ local float = digit^1
 			* P"." * digit^1 
 		    * ((P"e" + P"E") * digit^1)^0
 
- escape =  -P"\\" * P(1) + P"\\" * P(1)
+local escape =  -P"\\" * P(1) + P"\\" * P(1)
 
 local string_single = P"'" * (-P"'" * escape)^0 * P"'"
 local string_double = P'"' * (-P'"' * escape)^0 * P'"'
@@ -34,16 +34,16 @@ local string_back   = P"`" * (-P"`" * escape)^0 * P"`"
 
 local strings = string_single + string_double + string_back
 
-local strtest = require "peg/strings"
+return {
+	digit = digit,
+	letter = letter,
+	int = int,
+	float = float,
+	strings = strings,
+	string_single = string_single,
+	string_double = string_double,
+	string_back = string_back
 
-function assertions(strs)
-	for k, v in pairs(strs) do 
-		print ("testing", k)
-		assert(#v+1 == (match(strings,v)))
-		print ("\n",v, " is good")
-	end
-end
-
-assertions(strtest)
+}
 
 
