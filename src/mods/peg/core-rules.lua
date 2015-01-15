@@ -2,10 +2,10 @@
 
 -- A collection of useful regular patterns
 
- lpeg = require "lpeg"
+local lpeg = require "lpeg"
 local epeg = require "peg/epeg"
 
- match = lpeg.match -- match a pattern against a string
+local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally
 local S = lpeg.S  -- match anything in a set
 local R = epeg.R  -- match anything in a range

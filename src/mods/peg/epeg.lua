@@ -1,5 +1,5 @@
 -- extended PEG module
-require "lpeg"
+local lpeg = require "lpeg"
 
 local function makerange(first, second)
 	local patts = {}
@@ -67,4 +67,5 @@ local Ru = makerange
 
 
 return { R = Ru,
-		Csp = Csp, }
+		Csp = Csp,
+		match = lpeg.match }
