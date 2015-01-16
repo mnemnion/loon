@@ -54,9 +54,11 @@ local function node_pr(node, depth, str)
 			phrase = phrase..prefix..tostring(node.tok)
 		end
 		for i,v in ipairs(node) do
+	--[[ fixing this is off the critical path.
 			if type(v) == "string" then
 				phrase = phrase..prefix..c.num..i..clear.." "..'"'..c.str..v..clear..'"'.."\n"
 			end
+				--]]
 			if type(v) == "table" and v.span and not node.val then
 				phrase = phrase..prefix..c.span..str:sub(v[1],v[2])..clear.."\n"
   			end

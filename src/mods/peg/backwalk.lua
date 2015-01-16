@@ -65,8 +65,8 @@ function backwalk.walk_ast (ast)
 			for i, v in ipairs(ast) do
 				if type(v) == "table" and v.isnode then
 					 walker(v,ast, deep)
-				elseif type(v) == "string" then
-					ast.val = v
+--				elseif type(v) == "string" then
+--					ast.val = v
 --					table.remove(ast,i)
 				end
 			end

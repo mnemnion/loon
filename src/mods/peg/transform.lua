@@ -15,6 +15,9 @@ function t.lift(ast, str)
 			ast.val = str:sub(v[1],v[2])
 		elseif type(v) == "table" and v.isnode then
 			t.lift(v,str)
+		elseif type(v) == "string" then
+			ast.val = v
+			ast[i] = ""
 		end
 	end
 end
@@ -212,7 +215,7 @@ end
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
-	--t.lift(ast)
+	t.lift(ast)
 	sort.sort(ast)
 	t.cursives(ast)
 	t.comment(ast)
