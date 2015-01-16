@@ -1,5 +1,6 @@
 -- extended PEG module
 local lpeg = require "lpeg"
+local N = require "peg/node"
 
 local function makerange(first, second)
 	local patts = {}
@@ -60,12 +61,18 @@ local function spanner(first, last)
 end
 
 local function Csp (patt)
+-- rewrite: should group all captured tokens together.
+-- currently, it does this 'span' business, which just didn't turn out 
+-- useful, and has to be factored out.
 	return lpeg.Cp() * lpeg.Cmt(patt,function() return true end) * lpeg.Cp() / spanner
 end
+
+
 
 local Ru = makerange
 
 
 return { R = Ru,
-		Csp = Csp,
+--		Csp = Csp,
+		Csp = lpeg.C,
 		match = lpeg.match }

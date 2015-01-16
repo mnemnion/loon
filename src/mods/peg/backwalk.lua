@@ -62,9 +62,12 @@ function backwalk.walk_ast (ast)
 		deep = deep + 1
 		if ast.isnode then
 			index.add(ast,deep)
-			for _, v in ipairs(ast) do
+			for i, v in ipairs(ast) do
 				if type(v) == "table" and v.isnode then
 					 walker(v,ast, deep)
+				elseif type(v) == "string" then
+					ast.val = v
+					ast[i] = ""
 				end
 			end
 			ast.parent = make_backref(parent)

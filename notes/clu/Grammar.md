@@ -6,15 +6,15 @@ This is the grammar of [clu](clu.md), expressed in the form in which it will, ev
 
      clu :  form* / EOF
 
-      form :  [unary]* (_atom_ / _compound_) / _<comment>
+      form :  [unary]* (_compound_/_atom_) / _<comment>
 
      unary :  ","
               /  "~"
            /  "`"
            /  reader-macro
 
-      atom :  symbol 
-           /  number 
+      atom :  number 
+           /  symbol
            /  keyword
            /  string
 
@@ -30,7 +30,7 @@ This is the grammar of [clu](clu.md), expressed in the form in which it will, ev
     list   :  "(" form* ")"
     hash   :  "{" form:2* "}"
     vector :  "[" form* "]"
-    type   :  "<" form* ">" 
+    type   :  ":[" form* "]:" 
     multi  :  "\" form* "/"
     syntax :  "|" dispatch* "|"
 

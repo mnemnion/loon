@@ -1,6 +1,7 @@
 -- A modified epnf.
 
 local L = require( "lpeg" )
+local pretty = require "pl.pretty"
 
 local assert = assert
 local _VERSION = assert( _VERSION )
@@ -85,10 +86,14 @@ local function make_ast_node( id, first, t, last )
 end
 
 local function anon_node (t) 
+  local tok = ""
   for i,v in ipairs(t) do 
-    if type (v) == "table" and 
-       (v.span == nil) then  
+    if type (v) == "table" then  
       setmetatable(v,epnf.Node)
+ --[[   elseif type(v) == "string" then
+      print ("Table: "..pretty.write(t).."Token["..i.."] ", v)
+      t.val = tok..v
+      --]]
     end
   end
   return unpack(t)
@@ -146,7 +151,7 @@ function epnf.define( func, g )
           g[ name ] = v
       else
         local v = (L.Cc( name ) * L_Cp * L.Ct( val ) * L_Cp) / make_ast_node
-        g[ name ] = v
+          g[name] = v
       end
     end
   } )

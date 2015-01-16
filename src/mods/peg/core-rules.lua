@@ -30,9 +30,9 @@ local escape =  -P"\\" * P(1) + P"\\" * P(1)
 
 local string_single = P"'" * (-P"'" * escape)^0 * P"'"
 local string_double = P'"' * (-P'"' * escape)^0 * P'"'
-local string_back   = P"`" * (-P"`" * escape)^0 * P"`"
+local string_backtick   = P"`" * (-P"`" * escape)^0 * P"`"
 
-local strings = string_single + string_double + string_back
+local strings = string_single + string_double + string_backtick
 
 return {
 	digit = digit,
@@ -40,9 +40,9 @@ return {
 	int = int,
 	float = float,
 	strings = strings,
+	escape = escape,
 	string_single = string_single,
 	string_double = string_double,
-	string_back = string_back
-}
+	string_back = string_backtick }
 
 

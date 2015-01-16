@@ -22,9 +22,9 @@ Tabs are deprecated.
 
 The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encountered, the parsing of the symbol will end. 
 
-`.` represents field access in a symbol, or the decimal in a numeric context. It is invalid in the outer context.
+`.` represents field access within a symbol, or the decimal in a numeric context. 
 
-`@` represents method access within a symbol, or as a prefix, method access to the first argument of a function. 
+`@` represents method access within a symbol, or as a prefix, field access to the first argument of a function. 
 
 `` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
@@ -36,7 +36,7 @@ The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encou
 
 `"` begins and ends strings, with `\` as an escape character for `"` in this context. They may not contain a newline.
 
-`« »` demarcate raw strings. Escaping is avoided by multiples, eg `««« »»»`.
+`« »` demarcate the preferred syntax for strings. 
 
 `#` is a signal to the reader, which has various effects on the following form. 
 
@@ -53,7 +53,7 @@ must receive a right member of the set, in the order encountered by the reader, 
 
 `{ }` constitutes a table. 
 
-`< >` constitutes a metatable. 
+`< >` is a form relating to type. 
 
 `\ /` destructures the enclosed element. Note that the backslash begins, and the slash ends, a pairing. `\o/`
 
@@ -82,7 +82,7 @@ The reader will attempt to make a number if it fails to make a symbol by encount
 
 If the character is `-`, the reader will attempt a decimal negative number.
 
-If the character is a `0`, the reader will first look for a radix, which is any valid Unicode alphabetic code point. `b, d, and x` have predefined meanings, providing binary, decimal, and hexadecimal decodings respectively. `i I e E` are not interpreted as radices. All other lowercase Latin characters are reserved and may not be redefined by a valid runtime.
+If the character is a `0`, the reader will first look for a radix, which is any valid Unicode alphabetic code point. `b, d,` and `x` have predefined meanings, providing binary, decimal, and hexadecimal decodings respectively. `i I e E` are not interpreted as radices. All other lowercase Latin characters are reserved and may not be redefined by a valid runtime.
 
 An unrecognized radix will provoke the reader to look for a decoder matching the radix value. If this fails it defaults to decimal behavior. The absence of a radix is decimal by default. 
 
@@ -94,7 +94,7 @@ Any numeric decoder will stop immediately upon encountering whitespace, or any u
 
 ### Strings
 
-The reader, upon encountering a `"`, will construct a string. It does so by accepting all input, including the digraph `\"`, or any odd number of `\` followed by `"`, until encountering the paired `"`. This pattern is expected to be familiar.
+The reader, upon encountering a `"`, will construct a string. It does so by accepting all input, including the digraph `\"`, until encountering the paired `"`. This pattern is expected to be familiar.
 
 The reader specification does not provide an internal format for strings, other than to indicate that they should be valid UTF-8. The implementation expects the internal format to follow that of Lua. 
 
@@ -124,7 +124,7 @@ It is a semantic error to treat a vector as having other characteristics, though
 
 ### Tables
 
-The token `{` begins a table, which may an even number of forms and is delimited by a closing `{`. The odd forms are interpreted as keys and the even forms as values, in keeping with Lua's vexing yet familiar convention of denoting the first element with `1`. 
+The token `{` begins a table, which must contain an even number of forms and is delimited by a closing `{`. The odd forms are interpreted as keys and the even forms as values, in keeping with Lua's vexing yet familiar convention of denoting the first element with `1`. 
 
 The underlying representation of lists and vectors may be a table, and normally is, given Lua. The semantics of Clu will not normally subvert this. 
 
@@ -132,7 +132,7 @@ The underlying representation of lists and vectors may be a table, and normally 
 
 `<` and `>` mark a type annotation.  `<>` is the empty metatable.
 
-The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lte` and `gte`. `<=>` returns the type `Operator`, which is a metatable. 
+The mathematical `<` and `>` are `lt` and `gt` respectively. `<=` and `=>` are `lt=` and `gt=`. `<=>` returns the type `Operator`, which is a metatable. 
 
 ## Destructuring
 
@@ -157,7 +157,7 @@ The `#` character, in general, modifies the following form.
 
 `#[]` produces a ring. A ring is a vector, with a zero element, which may be indexed modulo its length. 
 
-`#!` is reserve, causing the following form to be immutable. 
+`#!` is reserved, causing the following form to be immutable. 
 
 `#_` causes the following form to be parsed and immediately discarded. 
 
@@ -169,7 +169,7 @@ The Clu reader may not currently be extended by the runtime to use the `#` modif
 
 Of which I'm proud. Or will be when I write it.
 
-`|` in the outer context immediately surrenders the reader to another reader, called dispatch. Dispatch is a little language that decides what to do with the rest of the input stream. This will fall through to a very close cousin of Lua, initially, Lua itself. 
+`|` in the outer context immediately surrenders the reader to another reader, called dispatch. Dispatch is a little language that decides what to do with the rest of the input stream. This will fall through to a very close cousin of Lua, called Lun, but may use any syntax, which may be defined as a grammar. 
 
 The resulting program can do anything at all, but should be programmed to parse conservatively. As soon as it's done doing something reasonable, it should hand back over to the reader, which will look for another `|`. If it doesn't find one, it just hands control back over to the new syntax handler. 
 

@@ -28,6 +28,7 @@ end
 local c = { id = magenta,
 			range = grey,
 			str = red,
+			num = blue,
 			span = clear,
 			val = green,}
 
@@ -54,7 +55,7 @@ local function node_pr(node, depth, str)
 		end
 		for i,v in ipairs(node) do
 			if type(v) == "string" then
-				phrase = phrase..prefix.."  "..'"'..c.str..v..clear..'"'.."\n"
+				phrase = phrase..prefix..c.num..i..clear.." "..'"'..c.str..v..clear..'"'.."\n"
 			end
 			if type(v) == "table" and v.span and not node.val then
 				phrase = phrase..prefix..c.span..str:sub(v[1],v[2])..clear.."\n"

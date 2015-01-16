@@ -104,6 +104,8 @@ Taking `first` on tables won't do what you expect, until you learn to expect it.
 
 `next` will try to exhaust the index before falling back on pairs. We probably want to meta-tag `:has-index` on tables that do. 
 
+We provide various sugars, ssyntaxes in Arcish, because of our heavy use of tables. `(slot.table arg1 arg2 ...)` translates to `table["slot"](arg1,arg2)`, while `(method@table arg1, arg2)` becomes `table["slot"](table,arg1,arg2)`. We don't use the equivalent forms `table.slot(arg1,arg2)` because our slot could be called `within-boundary?`, and `table["within-boundary?"]()` is legal Lua while `table.within-boundary?()` is not. `(baz.bar.foo)` gives you `foo.bar.baz`, and you can't chain, though you can use the threading macro, though it's less pretty in Clu: `(-^ open.file update@log close.file)` is readable enough, presumably. cases like `(red.color.ansi)` vs. `(ansi.color.red)` obscure the fact that an object is typically a noun and a method a verb. Either way red is what you want, or read, ansi or file is just where you find it. 
+
 ## Macros
 
 Templates, being evaluators attached to readers (which are core functions applied to a syntax), are dirty by definition. They create an environment, and evaluate inside that environment. `|foo|` will be the same as whatever `foo` happens to be laying around within that environment when evaluation happens. 

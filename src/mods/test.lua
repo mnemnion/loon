@@ -5,19 +5,27 @@ local failstrings = require "peg/failstrings"
 local core = require "peg/core-rules"
 local say = require "say"
 local ansi = require "ansi"
+local Node = require "peg/node"
+local pretty = require "pl.pretty"
 
 local function whole_match(state, args)
 	local matched, hmm = match(args[2],args[1])
 	if matched == nil then 
-		matched = 0 end -- this is derpy
-	if (#args[1]+1 == matched) then
-		return true
-	elseif (#args[1]+1 > matched) then
-		args[2] = ansi.magenta..args[1]:sub(1,matched-1)..ansi.clear
-		return false
-	else
-		args[2] = "something is badly broken"
+		matched = 0 
 	end
+	if type(matched) == "table" and matched.span == true then
+		print(pretty.write(matched))
+	end
+	if type(matched) == "number" then 
+		if (#args[1]+1 == matched) then
+			return true
+		elseif (#args[1]+1 > matched) then
+			args[2] = ansi.red..args[1]:sub(1,matched-1)..ansi.clear
+			return false
+		else
+			args[2] = "something is badly broken"
+		end
+	end 
 end
 
 say:set("assertion.whole_match.positive", "Expected match on whole string:\n%s Got:\n%s")

@@ -7,12 +7,12 @@ local lpeg = require "lpeg"
 local ansi = require "ansi"
 local util = require "util"
 local epeg = require "peg/epeg"
+local core = require "peg/core-rules"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
 ast = require "peg/ast"
 local grammar = require "peg/grammars"
-local s = require "peg/rule-sort"
 t = require "peg/transform"
 
 local match = lpeg.match -- match a pattern against a string
@@ -33,12 +33,9 @@ local V = lpeg.V -- create a variable within a grammar
 	local sym = valid_sym + digit
 	local WS = P' ' + P'\n' + P',' + P'\09'
 	local symbol = letter * ( -(P"-" * WS) * sym )^0  
-	local d_string_match = -P'"' * -P"\\" * P(1)
-	local s_string_match = -P"'" * -P"\\" * P(1)
-	local h_string_match = -P"`" * -P"\\" * P(1)
-	local h_string    = (h_string_match + P"\\`" + P"\\\\" + (P"\\" * P(1)))^1
-	local d_string = (d_string_match + P"\\\"" + P"\\\\" + (P"\\" * P(1)))^1
-	local s_string = (s_string_match + P"\\'" + P"\\\\" + (P"\\" * P(1)))^1 
+	local h_string    = (-P"`" * core.escape)^0
+	local d_string = (-P'"' * core.escape)^0
+	local s_string = (-P"'" * core.escape)^0
 	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
 	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
 	local range_c  = range_capture^1 * P"-" * range_capture^1
@@ -48,7 +45,7 @@ local V = lpeg.V -- create a variable within a grammar
 					 +   (P"+" + P"-")^0 * digit^1
  peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS",  "enclosed", "ws", "form",
+	SUPPRESS ("WS",  "enclosed", "ws", "form", 
 		      "element" ,"elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
@@ -113,8 +110,8 @@ local V = lpeg.V -- create a variable within a grammar
 		   if_not_this = P"!" * WS * V"allowed_prefixed"
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
 		   if_and_this = P"&" * WS * V"allowed_prefixed"
-               literal =  P'"' * d_string^0 * P'"'
-                       +  P"'" * s_string^0 * P"'"
+               literal =  P'"' * Csp(d_string) * P'"'
+                       +  P"'" * Csp(s_string) * P"'"
         hidden_literal = P"`" * hidden_string * P"`"
                set     =  P"{" * set_c^1 * P"}"  
 -- Change range to not use '-' separator instead require even # of bytes.
@@ -149,9 +146,9 @@ a = ast.parse(peg,a)
 --s.sort(tree)
 --ast.pr(tree)
 
-t.transform(a)
+--t.transform(a)
 --t.transform(tree)
-t.transform(g)
+--t.transform(g)
 
 assert(tree == tree.index(5):root())
 
