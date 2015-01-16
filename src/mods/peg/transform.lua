@@ -17,7 +17,7 @@ function t.lift(ast, str)
 			t.lift(v,str)
 		elseif type(v) == "string" then
 			ast.val = v
-			ast[i] = ""
+	--		ast[i] = ""
 		end
 	end
 end
@@ -215,7 +215,7 @@ end
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
-	t.lift(ast)
+--	t.lift(ast)
 	sort.sort(ast)
 	t.cursives(ast)
 	t.comment(ast)

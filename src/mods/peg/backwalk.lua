@@ -53,6 +53,25 @@ local function index_gen ()
 	return closed
 end
 
+local function lift(ast, str)
+--lifts all spans as literal values under the tree.
+--decorator: does not copy. Returns nothing.
+-- should not exist.
+	local function lifter(ast,str)
+		if not str then str = ast:root().str end 
+		for i,v in ipairs(ast) do
+			if type(v) == "table" and v.span then
+				ast.val = str:sub(v[1],v[2])
+			elseif type(v) == "table" and v.isnode then
+				t.lift(v,str)
+			elseif type(v) == "string" then
+				ast.val = v
+		--		ast[i] = ""
+			end
+		end
+	end
+	if not ast.lifted then lifter(ast,str) end
+end
 
 
 function backwalk.walk_ast (ast)
@@ -76,6 +95,8 @@ function backwalk.walk_ast (ast)
 	end
 	walker(ast,ast,0)
 	ast.index = index
+	lift(ast)
+	ast.lifted = true -- I hate myself right now
 --	print("index length is now: ", #index)
 	return ast 
 end
