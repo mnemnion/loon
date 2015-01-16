@@ -67,7 +67,7 @@ function backwalk.walk_ast (ast)
 					 walker(v,ast, deep)
 				elseif type(v) == "string" then
 					ast.val = v
-					ast[i] = ""
+--					table.remove(ast,i)
 				end
 			end
 			ast.parent = make_backref(parent)
