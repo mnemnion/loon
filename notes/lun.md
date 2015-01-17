@@ -57,6 +57,24 @@ We also provide all of the `+=` style shorthands for operators, and include `!=`
 
 This is a maybe, but I find it tedious to have to check that `type == "table"` before doing lookups on possibly-table values. I would prefer that a table lookup on a symbol that doesn't resolve to a table return two values: nil, and the type of the value bound to the symbol. So if I call `if (foo.field)` on a string, it returns `nil, "string"`. The first is falsy, so the predicate matches, the second could be useful information. 
 
+##Expressions and statements
+
+I hope to make Lun more expression oriented, so things like
+
+```lua
+
+function foo(bar, baz)
+	local bux = foo + bar
+	foo * bar * bux -- illegal in Lua
+end
+```
+will a) implicitly return the evaluation and b) be valid. That way a Clu statement like
+
+```clojure
+( let foo | foo^2 - foo/13*(math.sin(12)) | )
+```
+
+will work correctly, the bare statement in Lun will be an expression that returns its value. 
 
 ### Djikstra Day
 

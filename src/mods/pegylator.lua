@@ -146,9 +146,9 @@ a = ast.parse(peg,a)
 --s.sort(tree)
 --ast.pr(tree)
 
---t.transform(a)
---t.transform(tree)
---t.transform(g)
+t.transform(a)
+t.transform(tree)
+t.transform(g)
 
 assert(tree == tree.index(5):root())
 

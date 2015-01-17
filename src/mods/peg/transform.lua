@@ -6,22 +6,6 @@ local sort = require "peg/rule-sort"
 
 local t = {}
 
-function t.lift(ast, str)
---lifts all spans as literal values under the tree.
---decorator: does not copy. Returns nothing.
-	if not str then str = ast:root().str end 
-	for i,v in ipairs(ast) do
-		if type(v) == "table" and v.span then
-			ast.val = str:sub(v[1],v[2])
-		elseif type(v) == "table" and v.isnode then
-			t.lift(v,str)
-		elseif type(v) == "string" then
-			ast.val = v
-	--		ast[i] = ""
-		end
-	end
-end
-
 local function isrecursive(node)
 	if node.isrecursive then
 		return true
@@ -114,7 +98,7 @@ function t.literal(ast)
 	if lits then
 		for i = 1, #lits do
 			if lits[i].val then 
-				lits[i].val = 'Csp"'..lits[i].val..'"'
+				lits[i].val = 'C"'..lits[i].val..'"'
 			end
 		end
 	end
@@ -205,7 +189,7 @@ end
 function t.capture_group(ast)
 	local pels = ast:select"capture_group":select"PEL"
 	for i = 1, #pels do
-		pels[i].val = "Csp("
+		pels[i].val = "C("
 	end 
 end
 
@@ -215,7 +199,6 @@ end
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
---	t.lift(ast)
 	sort.sort(ast)
 	t.cursives(ast)
 	t.comment(ast)

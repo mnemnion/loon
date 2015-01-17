@@ -63,7 +63,7 @@ local function lift(ast, str)
 			if type(v) == "table" and v.span then
 				ast.val = str:sub(v[1],v[2])
 			elseif type(v) == "table" and v.isnode then
-				t.lift(v,str)
+				lifter(v,str)
 			elseif type(v) == "string" then
 				ast.val = v
 		--		ast[i] = ""
