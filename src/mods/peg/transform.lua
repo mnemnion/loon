@@ -6,7 +6,6 @@
 
 local sort = require "peg/rule-sort"
 
-
 local t = {}
 
 function t.whitespace(ast)

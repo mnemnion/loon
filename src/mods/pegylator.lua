@@ -11,7 +11,7 @@ local core = require "peg/core-rules"
 local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
-ast = require "peg/ast"
+local ast = require "peg/ast"
 local grammar = require "peg/grammars"
 t = require "peg/transform"
 
