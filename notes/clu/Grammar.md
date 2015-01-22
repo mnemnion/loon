@@ -18,7 +18,7 @@ This is the grammar of [clu](clu.md), expressed in the form in which it will, ev
            /  keyword
            /  string
 
-  compound :  list
+  compound :  list(expression?)
            /  hash
            /  vector
            /  type 
@@ -27,7 +27,7 @@ This is the grammar of [clu](clu.md), expressed in the form in which it will, ev
    symbol  :  latin !(forbidden) ANYTHING
    keyword :  ":" symbol
 
-    list   :  "(" form* ")"
+    list(expression?)   :  "(" form* ")"
     hash   :  "{" form:2* "}"
     vector :  "[" form* "]"
     type   :  ":[" form* "]:" 

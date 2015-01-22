@@ -1,10 +1,21 @@
 --- Transform Module
 -- @module transform
+--
+-- this module is begging for a nice tight macro.
+
 
 local sort = require "peg/rule-sort"
 
 
 local t = {}
+
+function t.whitespace(ast)
+	local whites = ast:select"atom":with"ws"
+	for i = 1, #whites do
+		whites[i].val = "WS"
+		whites[i][1] = nil
+	end
+end
 
 local function isrecursive(node)
 	if node.isrecursive then
@@ -33,14 +44,6 @@ function t.cursives(ast)
 				atoms[i].val = 'V"'..atoms[i].val..'"'
 			end
 		end
-	end
-end
-
-function t.whitespace(ast)
-	local whites = ast:select"atom":with"ws"
-	for i = 1, #whites do
-		whites[i].val = "WS"
-		whites[i][1] = nil
 	end
 end
 
