@@ -36,6 +36,14 @@ function t.cursives(ast)
 	end
 end
 
+function t.whitespace(ast)
+	local whites = ast:select"atom":with"ws"
+	for i = 1, #whites do
+		whites[i].val = "WS"
+		whites[i][1] = nil
+	end
+end
+
 function t.optional(ast)
 	local optionals = ast:select"optional":select"atom"
 	for i = 1, #optionals do
@@ -199,6 +207,7 @@ end
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
+	t.whitespace(ast)
 	sort.sort(ast)
 	t.cursives(ast)
 	t.comment(ast)

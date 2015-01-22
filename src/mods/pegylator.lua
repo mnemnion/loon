@@ -45,7 +45,7 @@ local V = lpeg.V -- create a variable within a grammar
 					 +   (P"+" + P"-")^0 * digit^1
  peg = epnf.define(function(_ENV)
 	START "rules"
-	SUPPRESS ("WS",  "enclosed", "ws", "form", 
+	SUPPRESS ("WS",  "enclosed", "form", 
 		      "element" ,"elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed" )
@@ -145,11 +145,11 @@ a = ast.parse(peg,a)
 --s.sort(a)
 --s.sort(tree)
 --ast.pr(tree)
-
+---[[
 t.transform(a)
 t.transform(tree)
 t.transform(g)
-
+--]]
 assert(tree == tree.index(5):root())
 
 --print (match(grammar.symbol, symbol_s))
@@ -159,6 +159,6 @@ assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
 assert(#grammar.string_s+1 == (match(d_string,grammar.string_s)))
 
 io.write(clear)
-print(...)
+print(tree)
 
 return { peg = peg }

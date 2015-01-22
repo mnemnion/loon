@@ -44,7 +44,7 @@ The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encou
 
 ### Paired Tokens
 
-The characters `( ) [ ] { } < > \ / ` are not valid in symbols. They must be balanced: Any left member of the set
+The characters `( ) [ ] { } \ / ` are not valid in symbols. They must be balanced: Any left member of the set
 must receive a right member of the set, in the order encountered by the reader, across all pairs. To illustrate, `({})` is valid, `({}` is invalid, and `({)}` is invalid also. 
 
 `( )` constitute a list. 
@@ -52,8 +52,6 @@ must receive a right member of the set, in the order encountered by the reader, 
 `[ ]` constitutes a vector. 
 
 `{ }` constitutes a table. 
-
-`< >` is a form relating to type. 
 
 `\ /` destructures the enclosed element. Note that the backslash begins, and the slash ends, a pairing. `\o/`
 

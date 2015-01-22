@@ -35,12 +35,13 @@
 
 local Set = require "set"
 
+local bug = print
+
 local roshambo = {}
 
 function roshambo.beats(rock, scissors)
 	-- if scissors does not already beat rock,
 	-- set rock to beat scissors. 
-	-- returns the victor and the defeated. 
 	if not(roshambo.victor[scissors])
 	roshambo.victor[rock] = roshambo.victor[rock] + scissors
 
@@ -48,8 +49,10 @@ end
 
 function roshambo.__call(rock, scissors)
 	if (roshambo.beats(rock,scissors) == rock) then
+		bug(rock.." beats "..scissors)
 		return rock, scissors
 	elseif (roshambo.beats(rock,scissors) == scissors) then
+		bug(scissors.." beats "..rock)
 		return scissors, rock
 	else 
 		return roshambo.fight(rock,scissors)
