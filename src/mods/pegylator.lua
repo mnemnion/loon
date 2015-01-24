@@ -13,7 +13,7 @@ local epnf = require "peg/epnf"
 local ast = require "peg/ast"
 local grammar = require "peg/grammars"
 t = require "peg/transform"
-codegen = require "peg/codegen"
+codegen, foo = util.require "peg/codegen"
 
 local match = lpeg.match -- match a pattern against a string
 local P = lpeg.P -- match a string literally

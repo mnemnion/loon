@@ -46,8 +46,12 @@ function util.dive(tree)
   return nil, "contains no cyclic references"
 end
 
-function util.require(...)
+function util.require(mod, ...)
   -- a multiply-returning require.
+  for i,v in pairs(arg) do
+    print(i,v)
+  end
+  return require(mod), arg
 end
 
 return util

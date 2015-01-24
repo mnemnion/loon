@@ -61,7 +61,7 @@ local function cursive_rules(ast)
 end
 
 return { local_rules = local_rules,
-		 cursive_rules = cursive_rules }, "foo"
+		 cursive_rules = cursive_rules }, "fooco"
 
 
 
