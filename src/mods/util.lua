@@ -46,5 +46,27 @@ function util.dive(tree)
   return nil, "contains no cyclic references"
 end
 
+function util.require(...)
+  -- a multiply-returning require.
+end
 
 return util
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

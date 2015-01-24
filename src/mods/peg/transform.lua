@@ -16,7 +16,7 @@ function t.whitespace(ast)
 	end
 end
 
-local function isrecursive(node)
+function t.isrecursive(node)
 	if node.isrecursive then
 		return true
 	else
@@ -24,7 +24,7 @@ local function isrecursive(node)
 	end
 end
 
-local function notrecursive(node)
+function t.notrecursive(node)
 	if node.id == "rule" and not node.isrecursive then
 		return true
 	else
@@ -172,7 +172,7 @@ function t.lhs(ast)
 	for i = 1, #lhs do
 		lhs[i].val = lhs[i].val.." =  "
 	end
-	local nocurse = ast:select(notrecursive):select(lhs_pred)
+	local nocurse = ast:select(t.notrecursive):select(lhs_pred)
 	for i = 1, #nocurse do
 		nocurse[i].val = "local "..nocurse[i].val
 	end 

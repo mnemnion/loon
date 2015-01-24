@@ -2,6 +2,11 @@
 
 -- Parsing Engine
 
+local transform = require "peg/transform"
+
+local isrecursive = transform.isrecursive
+local notrecursive = transform.notrecursive
+
 --We start with pegylator.lua
 -- Eventually all the imports are replaced with
 -- require "pegylator"
@@ -36,3 +41,40 @@ local V = lpeg.V -- create a variable within a grammar
 local definer = "peg = epnf.define(function(_ENV)\n"
 
 local end_definer = "end)\n"
+
+local function local_rules(ast)
+	local locals = ast:select(notrecursive)
+	local phrase = ""
+	for i = 1, #locals do
+		phrase = phrase..locals[i]:flatten()
+	end
+	return phrase
+end
+
+local function cursive_rules(ast)
+	local cursives = ast:select(isrecursive)
+	local phrase  = ""
+	for i = 1, #cursives do
+		phrase = phrase..cursives[i]:flatten()
+	end
+	return phrase
+end
+
+return { local_rules = local_rules,
+		 cursive_rules = cursive_rules }, "foo"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
