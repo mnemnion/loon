@@ -48,12 +48,16 @@ function roshambo.fight(champ, challenge)
 	if roshambo.beat_set[champ] then
 		if roshambo.beat_set[champ][challenge] then
 			print "winner"
-		else
-			print "loser?" --call challenge.duel(champ)
+		elseif roshambo.beat_set[challenge] then
+			if roshambo.beat_set[challenge][champ] then
+				print "loser"
+			end
+		else --duel here
+			print "loser by default"
 		end
-	else 
+	else --duel here as well
 		print "no-shambo" 
-	end
+	end 
 end
 
 function R.__call(self,rock, scissors)
