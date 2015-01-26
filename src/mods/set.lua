@@ -16,7 +16,7 @@
 --     > = fruit*colours
 --     [orange]
 --
--- Depdencies: `pl.utils`, `pl.tablex`, `pl.class`, (`pl.List` if __tostring is used)
+-- Dependencies: `pl.utils`, `pl.tablex`, `pl.class`, (`pl.List` if __tostring is used)
 -- @classmod pl.Set
 
 local tablex = require 'pl.tablex'

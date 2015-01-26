@@ -110,8 +110,8 @@ local V = lpeg.V -- create a variable within a grammar
 		   if_not_this = P"!" * WS * V"allowed_prefixed"
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
 		   if_and_this = P"&" * WS * V"allowed_prefixed"
-               literal =  Csp(P'"' * d_string * P'"')
-                       +  Csp(P"'" * s_string * P"'")
+               literal =  Csp(C'"' * d_string * C'"')
+                       +  Csp(C"'" * s_string * C"'")
         hidden_literal = P"`" * hidden_string * P"`"
                set     =  P"{" * set_c^1 * P"}"  
 -- Change range to not use '-' separator instead require even # of bytes.

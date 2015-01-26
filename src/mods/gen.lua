@@ -25,22 +25,22 @@ local V = lpeg.V -- create a variable within a grammar
 
 local WS = P' ' + P'\n' + P',' + P'\09'
 
-local lhs =  WS * pattern * WS * (: + = + :=)
+local lhs =  WS * pattern * WS * (":" + "=" + ":=")
 local pattern =  symbol + hidden_pattern
-local hidden_pattern =  ` * symbol * `
+local hidden_pattern =  "`" * symbol * "`"
 local enclosed =  literal + set + range * hidden * WS
 local comment =  P";" * comment_c  --  make real
 local atom =  symbol + ws
-local ws =  _
-local literal =  P"`\"" * C(string^0) * P"\""
+local ws =  "_"
+local literal =  P"\"" * C(string^0) * P"\""
 local set =  P"{" * set_c^1 * P"}"
 local range =  P"[" * range_c * P"]"
-local comment_m =  \n * ANY
+local comment_m =  "\n" * ANY
 local comment_c =  P";" * C(comment_m^0) * P"\n"
-local string =  (string_match^1 + \\" + \\)
+local string =  (string_match^1 + '\\"' + "\\")
 local string_match =  P"\"" * P"\\" * ANY
 local letter =  R"AZ" * R"az"
-local valid_sym =  letter^1 * -
+local valid_sym =  letter^1 * "-"
 local digit =  R"09"
 
 
@@ -52,10 +52,10 @@ element =  -lhs * WS * (V"compound" + V"simple" + comment)  --  with a comment
 elements =  V"choice" + V"cat"
 compound =  V"group" + enclosed + hidden_match
 simple =  V"prefixed" + V"suffixed" + atom
-choice =  WS * / * V"element" * V"elements"^0
+choice =  WS * "/" * V"element" * V"elements"^0
 cat =  WS * V"element" * V"elements"^0
-group =  WS * ( * WS * V"rhs" * WS * )
-match =  WS * `` * WS * V"rhs" * WS * ``
+group =  WS * "(" * WS * V"rhs" * WS * ")"
+match =  WS * "``" * WS * V"rhs" * WS * "``"
 prefixed =  V"if_not_this" + V"if_and_this"
 if_not_this =  P"!" * WS * V"allowed_prefixed"
 if_and_this =  P"&" * WS * V"allowed_prefixed"
@@ -63,7 +63,7 @@ suffixed =  V"optional" + V"more_than_one" + V"maybe" + V"with_suffix" + V"some_
 optional =  V"allowed_suffixed" * WS * P"*"
 more_than_one =  V"allowed_suffixed" * WS * P"+"
 maybe =  V"allowed_suffixed" * WS * P"?"
-some_number =  V"allowed_suffixed" * WS * $ * some_num_c
+some_number =  V"allowed_suffixed" * WS * "$" * some_num_c
 with_suffix =  V"some_number" * (P"*" + P"+" + P"?")
 allowed_prefixed =  V"compound" + V"suffixed" + atom
 allowed_suffixed =  V"compound" + V"prefixed" + atom

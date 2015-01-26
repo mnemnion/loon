@@ -73,6 +73,5 @@ local Ru = makerange
 
 
 return { R = Ru,
---		Csp = Csp,
-		Csp = lpeg.C,
+		Csp = Csp,
 		match = lpeg.match }

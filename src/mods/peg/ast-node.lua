@@ -1,7 +1,7 @@
 --AST tools
 local lpeg = require "lpeg"
 local ansi = require "ansi"
-local walker = require "peg/backwalk"
+local walker = require "peg/walker"
 local Forest = require "peg/forest"
 local cyan = tostring(ansi.cyan)
 local blue = tostring(ansi.blue)
