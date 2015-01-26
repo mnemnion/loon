@@ -110,8 +110,8 @@ local V = lpeg.V -- create a variable within a grammar
 		   if_not_this = P"!" * WS * V"allowed_prefixed"
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
 		   if_and_this = P"&" * WS * V"allowed_prefixed"
-               literal =  P'"' * Csp(d_string) * P'"'
-                       +  P"'" * Csp(s_string) * P"'"
+               literal =  Csp(P'"' * d_string * P'"')
+                       +  Csp(P"'" * s_string * P"'")
         hidden_literal = P"`" * hidden_string * P"`"
                set     =  P"{" * set_c^1 * P"}"  
 -- Change range to not use '-' separator instead require even # of bytes.
@@ -150,6 +150,9 @@ t.transform(a)
 t.transform(tree)
 t.transform(g)
 --]]
+
+codegen.build(tree)
+
 assert(tree == tree.index(5):root())
 
 --print (match(grammar.symbol, symbol_s))

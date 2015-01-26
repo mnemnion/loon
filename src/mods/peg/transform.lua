@@ -103,21 +103,11 @@ function t.prefix(ast)
 	t.if_and_this(ast)
 end
 
-function t.literal(ast)
-	local lits = ast:select"literal"
-	if lits then
-		for i = 1, #lits do
-			if lits[i].val then 
-				lits[i].val = 'C[['..lits[i].val..']]'
-			end
-		end
-	end
-end 
 
 function t.hidden_literal(ast)
 	local lits = ast:select"hidden_literal"
 	for i = 1, #lits do
-		lits[i].val = 'P"'..lits[i].val:gsub('"','\\"')..'"'
+		lits[i].val = 'P"'..lits[i].val:gsub('"','\\"'):gsub("\\`","`")..'"'
 	end 
 end  
 
@@ -136,7 +126,6 @@ function t.set(ast)
 end
 
 function t.enclosed(ast)
-	t.literal(ast)
 	t.hidden_literal(ast)
 	t.range(ast)
 	t.set(ast)
