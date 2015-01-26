@@ -44,6 +44,8 @@ roshambo.beat_set = { rock = Set{"scissors"},
 				 paper = Set{"rock"},
 				 scissors = Set{"paper"} }
 
+function roshambo.add()
+end
 function roshambo.fight(champ, challenge)
 	if roshambo.beat_set[champ] then
 		if roshambo.beat_set[champ][challenge] then
