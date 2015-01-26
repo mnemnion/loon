@@ -103,6 +103,12 @@ function t.prefix(ast)
 	t.if_and_this(ast)
 end
 
+function t.literal(ast)
+	local lits = ast:select"literal"
+	for i = 1, #lits do
+		lits[i].val = 'Csp'..lits[i].val
+	end 
+end 
 
 function t.hidden_literal(ast)
 	local lits = ast:select"hidden_literal"
@@ -126,6 +132,7 @@ function t.set(ast)
 end
 
 function t.enclosed(ast)
+	t.literal(ast)
 	t.hidden_literal(ast)
 	t.range(ast)
 	t.set(ast)
@@ -158,13 +165,23 @@ end
 
 function t.lhs(ast)
 	local lhs = ast:select(lhs_pred)
+	local imports = ""
+	local forwards = "-- This is a dirty hack that probably doesn't work \n"
+	local nocurse = ast:select(t.notrecursive):select(lhs_pred)
+	for i = 1, #nocurse do
+		-- for import into defined structure
+		-- includes dirty hack to avoid sorting rules.
+		forwards = forwards.."local "..nocurse[i].val..
+				   " = ".."P''".."\n"
+		imports = imports.."local "..nocurse[i].val..
+		          " = "..nocurse[i].val.."\n"
+		nocurse[i].val = "local "..nocurse[i].val
+	end 
 	for i = 1, #lhs do
 		lhs[i].val = lhs[i].val.." =  "
 	end
-	local nocurse = ast:select(t.notrecursive):select(lhs_pred)
-	for i = 1, #nocurse do
-		nocurse[i].val = "local "..nocurse[i].val
-	end 
+	lhs[1]:root().forwards = forwards.."\n"
+	lhs[1]:root().imports = imports.."\n"
 end
 
 function t.rhs(ast)

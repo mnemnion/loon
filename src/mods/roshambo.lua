@@ -37,24 +37,29 @@ local Set = require "set"
 
 local bug = print
 
-local roshambo = {}
+local R = {}
+roshambo = {}
 
-function roshambo.beats(rock, scissors)
-	-- if scissors does not already beat rock,
-	-- set rock to beat scissors. 
-	if not(roshambo.victor[scissors])
-	roshambo.victor[rock] = roshambo.victor[rock] + scissors
+roshambo.beat_set = { rock = Set{"scissors"},
+				 paper = Set{"rock"},
+				 scissors = Set{"paper"} }
 
-end
-
-function roshambo.__call(rock, scissors)
-	if (roshambo.beats(rock,scissors) == rock) then
-		bug(rock.." beats "..scissors)
-		return rock, scissors
-	elseif (roshambo.beats(rock,scissors) == scissors) then
-		bug(scissors.." beats "..rock)
-		return scissors, rock
+function roshambo.fight(champ, challenge)
+	if roshambo.beat_set[champ] then
+		if roshambo.beat_set[champ][challenge] then
+			print "winner"
+		else
+			print "loser?" --call challenge.duel(champ)
+		end
 	else 
-		return roshambo.fight(rock,scissors)
+		print "no-shambo" 
 	end
 end
+
+function R.__call(self,rock, scissors)
+	self.fight(rock,scissors)
+end
+
+setmetatable(roshambo,R)
+
+return roshambo 
