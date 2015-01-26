@@ -53,20 +53,5 @@ return [[
     `string-match` : !`"` !`\\` ANY 
 	letter : [A-Z] + [a-z] 
 	valid-sym = letter + "-"  
-	local digit = [0-9]
-	local sym = valid_sym + digit
-	local WS = P' ' + P'\n' + P',' + P'\09'
-	local symbol = letter * ( -(P"-" * WS) * sym )^0  -- incorrect: allows -symbol-name- 
-	
-	local range_match =  -P"-" * -P"\\" * -P"]" * P(1)
-	local range_capture = (range_match + P"\\-" + P"\\]" + P"\\")
-	local range_c  = range_capture^1 * P"-" * range_capture^1
-	local set_match = -P"}" * -P"\\" * P(1)
-	local set_c    = (set_match + P"\\}" + P"\\")^1
-	local some_num_c =   digit^1 * P".." * digit^1
-					 +   (P"+" + P"-")^0 * digit^1
-
-
-
-    
+	digit = [0-9]   
 ]]

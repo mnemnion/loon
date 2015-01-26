@@ -108,7 +108,7 @@ function t.literal(ast)
 	if lits then
 		for i = 1, #lits do
 			if lits[i].val then 
-				lits[i].val = 'C"'..lits[i].val..'"'
+				lits[i].val = 'C[['..lits[i].val..']]'
 			end
 		end
 	end

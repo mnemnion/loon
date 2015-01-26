@@ -2,7 +2,10 @@
 
 -- Parsing Engine
 
+local file = require 'pl.file'
+
 local transform = require "peg/transform"
+
 
 local isrecursive = transform.isrecursive
 local notrecursive = transform.notrecursive
@@ -36,6 +39,8 @@ local Csp = epeg.Csp -- captures start and end position of match
 local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 
+local WS = P' ' + P'\n' + P',' + P'\09'
+
 ]]
 
 local definer = "peg = epnf.define(function(_ENV)\n"
@@ -60,8 +65,21 @@ local function cursive_rules(ast)
 	return phrase
 end
 
+local function write(str)
+	return file.write("gen.lua",str)
+end
+
+local function build(ast)
+	local phrase = prefix..local_rules(ast).."\n\n"
+				 ..definer..cursive_rules(ast)
+				 ..end_definer
+	write(phrase)
+	return phrase
+end
+
 return { local_rules = local_rules,
-		 cursive_rules = cursive_rules }, "fooco"
+		 cursive_rules = cursive_rules,
+		 build = build }
 
 
 
