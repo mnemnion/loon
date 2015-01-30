@@ -7,6 +7,7 @@ local say = require "say"
 local ansi = require "ansi"
 local Node = require "peg/node"
 local pretty = require "pl.pretty"
+local roshambo = require "roshambo"
 
 local function whole_match(state, args)
 	local matched, hmm = match(args[2],args[1])
@@ -53,3 +54,12 @@ describe("tests over PEGylator", function()
 		pending "Add letter tests"
 	end)
 end)
+
+describe("tests over roshambo", function()
+	it("Roshambo on strings", function()
+		pending "Add Roshambo over strings"
+		end)
+	it("Roshambo on functions", function()
+		pending "Roshambo on functions"
+		end)
+	end)

@@ -34,39 +34,62 @@
 -- Roshambo is always decisive. 
 
 local Set = require "set"
-local R = {}
+
+--[[
 roshambo = {}
 
-roshambo.beat_set = { rock = Set{"scissors"},
-				 paper = Set{"rock"},
-				 scissors = Set{"paper"} }
-
-function roshambo.add(rsh, champ, loser)
-	champion = rsh.beat_set[champ]
-	champion = champion + Set{loser}
-	print(champion)
+roshambo._beats = { rock = Set{"scissors"},
+				 paper = Set{"rock"},		
+  	   		 scissors = Set{"paper"} }
+--]]
+local function beats(roshambo, champ, loser)
+	--needs check for opposite condition,
+	--which is nilled out.
+	champion = roshambo._beats[champ]
+	if champion then 
+		champion = champion + Set{loser}
+	else 
+		champion = Set{loser}
+	end
+	roshambo._beats[champ] = champion
+	print(roshambo._beats[champ])
 end
 
-function roshambo.fight(champ, challenge)
-	if roshambo.beat_set[champ] then
-		if roshambo.beat_set[champ][challenge] then
-			print "winner"
-		elseif roshambo.beat_set[challenge] then
-			if roshambo.beat_set[challenge][champ] then
+local function fight(roshambo, champ, challenge)
+	if roshambo._beats[champ] then
+		if roshambo._beats[champ][challenge] then
+		    print "winner"
+		elseif roshambo._beats[challenge] then
+			if roshambo._beats[challenge][champ] then
 				print "loser"
 			end
 		else --duel here
-			print "loser by default"
+			print "winner by default"
 		end
 	else --duel here as well
 		print "no-shambo" 
 	end 
 end
 
-function R.__call(self,rock, scissors)
-	self.fight(rock,scissors)
+function _roshambo(self,rock, scissors)
+	self:fight(rock,scissors)
 end
 
-setmetatable(roshambo,R)
+local R = {}
+R.fight = fight
+R.beats = beats
+R["__call"] = _roshambo
+R["__index"] = R
+R.isverbose = true
 
-return roshambo 
+local function Roshambo(init)
+
+	local rosh = {}
+	rosh._beats = {}
+	--use init to set the Beat table
+	setmetatable(rosh,R)
+	rosh.foo = "bar"
+	return rosh
+end
+
+return Roshambo

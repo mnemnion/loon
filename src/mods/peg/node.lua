@@ -2,6 +2,8 @@
 
 -- Note that this should be a singleton: called exactly once by a given program. 
 
+-- This can probably just be a table. 
+
 local ast = require "peg/ast-node"
 
 local function N () 
