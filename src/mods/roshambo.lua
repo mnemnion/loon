@@ -87,10 +87,17 @@ R["__index"] = R
 setmetatable(R,clu.Meta)
 
 local function Roshambo(init)
-
 	local rosh = {}
 	rosh._beats = {}
-	--use init to set the Beat table
+	if init then
+		if type(init) == "table" then
+			for i,v in pairs(init) do
+				rosh._beats[i] = Set{v} 
+			end
+		else
+			error("Roshambo must be initialized with a table")
+		end
+	end
 	setmetatable(rosh,R)
 	rosh.foo = "bar"
 	return rosh
