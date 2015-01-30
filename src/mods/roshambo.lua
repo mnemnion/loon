@@ -61,9 +61,11 @@ local function fight(roshambo, champ, challenge)
 	if roshambo._beats[champ] then
 		if roshambo._beats[champ][challenge] then
 		    roshambo:pr("winner")
+		    return champ, challenge
 		elseif roshambo._beats[challenge] then
 			if roshambo._beats[challenge][champ] then
 				roshambo:pr("loser")
+				return challenge, champ
 			end
 		else --duel here
 			roshambo:pr("winner by default")
@@ -74,7 +76,7 @@ local function fight(roshambo, champ, challenge)
 end
 
 function _roshambo(self,rock, scissors)
-	self:fight(rock,scissors)
+	return self:fight(rock,scissors)
 end
 
 local R = {}
