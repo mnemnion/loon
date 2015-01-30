@@ -34,9 +34,6 @@
 -- Roshambo is always decisive. 
 
 local Set = require "set"
-
-local bug = print
-
 local R = {}
 roshambo = {}
 
@@ -44,8 +41,12 @@ roshambo.beat_set = { rock = Set{"scissors"},
 				 paper = Set{"rock"},
 				 scissors = Set{"paper"} }
 
-function roshambo.add()
+function roshambo.add(rsh, champ, loser)
+	champion = rsh.beat_set[champ]
+	champion = champion + Set{loser}
+	print(champion)
 end
+
 function roshambo.fight(champ, challenge)
 	if roshambo.beat_set[champ] then
 		if roshambo.beat_set[champ][challenge] then
