@@ -35,6 +35,8 @@
 
 local Set = require "set"
 
+ clu = require "clu/prelude"
+
 --[[
 roshambo = {}
 
@@ -58,16 +60,16 @@ end
 local function fight(roshambo, champ, challenge)
 	if roshambo._beats[champ] then
 		if roshambo._beats[champ][challenge] then
-		    print "winner"
+		    roshambo:pr("winner")
 		elseif roshambo._beats[challenge] then
 			if roshambo._beats[challenge][champ] then
-				print "loser"
+				roshambo:pr("loser")
 			end
 		else --duel here
-			print "winner by default"
+			roshambo:pr("winner by default")
 		end
 	else --duel here as well
-		print "no-shambo" 
+		roshambo:pr("no-shambo") 
 	end 
 end
 
@@ -80,7 +82,7 @@ R.fight = fight
 R.beats = beats
 R["__call"] = _roshambo
 R["__index"] = R
-R.isverbose = true
+setmetatable(R,clu.Meta)
 
 local function Roshambo(init)
 
