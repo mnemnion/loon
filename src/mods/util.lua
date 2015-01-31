@@ -46,6 +46,22 @@ function util.dive(tree)
   return nil, "contains no cyclic references"
 end
 
+function util.tableand(tablep, pred)
+  if type(tablep) == "table" and pred then
+    return true
+  else
+    return false
+  end
+end  
+
+function util.flip()
+  local coin = math.random(0,1)
+  if coin == 0 then 
+    return false
+  else
+    return true
+  end
+end
 
 return util
 

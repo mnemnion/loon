@@ -36,6 +36,8 @@
 local Set = require "set"
 
  clu = require "clu/prelude"
+local util = require "util"
+local tableand = util.tableand
 
 --[[
 roshambo = {}
@@ -47,6 +49,12 @@ roshambo._beats = { rock = Set{"scissors"},
 local function beats(roshambo, champ, loser)
 	--needs check for opposite condition,
 	--which is nilled out.
+	if roshambo._beats[loser] and
+	   roshambo._beats[loser][champ] then
+		roshambo:pr "reversal of fortune"
+		roshambo._beats[loser] = roshambo._beats[loser] - champ
+		roshambo:pr(roshambo._beats[loser])
+	end
 	champion = roshambo._beats[champ]
 	if champion then 
 		champion = champion + Set{loser}
@@ -54,35 +62,46 @@ local function beats(roshambo, champ, loser)
 		champion = Set{loser}
 	end
 	roshambo._beats[champ] = champion
-	print(roshambo._beats[champ])
+	roshambo:pr(champ.." beats "..tostring(roshambo._beats[champ]))
 end
+
+local function duel(roshambo,champ,challenge)
+	if tableand(challenge,challenge.duel) then
+		roshambo:pr "it's a duel!"
+	else 
+		roshambo:pr "victory by fiat"
+		roshambo:beats(champ,challenge)
+		return champ, challenge
+	end
+end 	
 
 local function fight(roshambo, champ, challenge)
 	if roshambo._beats[champ] then
 		if roshambo._beats[champ][challenge] then
-		    roshambo:pr("winner")
+		    roshambo:pr "winner" 
 		    return champ, challenge
 		elseif roshambo._beats[challenge] then
 			if roshambo._beats[challenge][champ] then
-				roshambo:pr("loser")
+				roshambo:pr "loser" 
 				return challenge, champ
 			end
 		else --duel here
-			roshambo:pr("winner by default")
+			roshambo:pr "challenger not found"
+			return roshambo:duel(champ,challenge)
 		end
 	else --duel here as well
 		roshambo:pr("no-shambo") 
+		return roshambo:duel(challenge,champ)
 	end 
 end
 
-function _roshambo(self,rock, scissors)
-	return self:fight(rock,scissors)
-end
+
 
 local R = {}
 R.fight = fight
 R.beats = beats
-R["__call"] = _roshambo
+R.duel  = duel
+R["__call"] = fight
 R["__index"] = R
 setmetatable(R,clu.Meta)
 

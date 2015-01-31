@@ -56,10 +56,17 @@ describe("tests over PEGylator", function()
 end)
 
 describe("tests over roshambo", function()
+	local rosh = roshambo { rock = "scissors",
+						    scissors = "paper",
+						    paper = "rock"}
+
 	it("Roshambo on strings", function()
-		pending "Add Roshambo over strings"
+		assert.is.equal("rock",(rosh("rock","scissors")))
+		assert.is.equal("paper",(rosh("rock","paper")))
+		assert.is.equal("rock",(rosh("rock","vulcan")))
+		assert.is.equal("bingo",(rosh("disco","bingo")))
 		end)
-	it("Roshambo on functions", function()
-		pending "Roshambo on functions"
+	it("Roshambo dual-able", function()
+		pending "Roshambo dual-able"
 		end)
 	end)
