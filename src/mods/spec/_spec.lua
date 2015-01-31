@@ -61,6 +61,7 @@ describe("tests over roshambo", function()
 						    paper = "rock"}
 
 	it("Roshambo on strings", function()
+		rosh.isverbose = true
 		assert.is.equal("rock",(rosh("rock","scissors")))
 		assert.is.equal("paper",(rosh("rock","paper")))
 		assert.is.equal("rock",(rosh("rock","vulcan")))
