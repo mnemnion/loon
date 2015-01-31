@@ -1,10 +1,16 @@
---     Ro-Sham-Bo
+--- <center>
+-- Ro-Sham-Bo
+-- 
 -- A library by Combat
---        being
---   a Mnemnion joint
---    of MIT license
---  copyright 2015 e.v. 
 --
+-- being
+--
+-- a Mnemnion joint
+--
+-- of MIT license
+--
+-- copyright 2015 e.v. 
+-- </center>
 
 -- Use
 --
@@ -46,6 +52,8 @@ roshambo._beats = { rock = Set{"scissors"},
 				 paper = Set{"rock"},		
   	   		 scissors = Set{"paper"} }
 --]]
+
+--- declare a victor
 local function beats(roshambo, champ, loser)
 	--needs check for opposite condition,
 	--which is nilled out.
