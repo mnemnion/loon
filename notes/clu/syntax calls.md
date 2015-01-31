@@ -15,4 +15,13 @@
 ; eval-with
 (eval-with lua "global.value = false")
 
+; these combine like so
+
+(with-syntax lua 
+  (do 
+    (stuff to things) 
+    (eval «(set str "this is Clu»))
+    (| local this = lua
+       return this |)))
+
 ```
