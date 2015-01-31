@@ -10,9 +10,7 @@ local Node = require "peg/node"
 local pretty = require "pl.pretty"
 local roshambo = require "roshambo"
 
-clu.Meta.isverbose = true
-
-local verbose = clu.Meta.isverbose -- set from .busted
+if verbose then clu.Meta.isverbose = true end
 
 local function whole_match(state, args)
 	local matched, hmm = match(args[2],args[1])
@@ -20,7 +18,7 @@ local function whole_match(state, args)
 		matched = 0 
 	end
 	if type(matched) == "table" and matched.span == true then
-		print(pretty.write(matched))
+		if verbose then print(pretty.write(matched)) end
 	end
 	if type(matched) == "number" then 
 		if (#args[1]+1 == matched) then
@@ -75,9 +73,9 @@ describe("tests over roshambo", function()
 	it("Roshambo on tables", function()
 		if verbose then io.write "\n" end
 		local rock, paper, scissors = {}, {}, {}
-		local rosh = roshambo{[rock] = scissors,
-							  [scissors] = paper,
-							  [paper] = rock}
+		local rosh = roshambo { [rock] = scissors,
+							    [scissors] = paper,
+							    [paper] = rock }
 		assert.is.equal(rock,(rosh(rock,scissors)))
 		assert.is_not.equal(paper,rosh(paper,scissors))
 	end)
@@ -88,3 +86,4 @@ describe("tests over roshambo", function()
 		assert.has.error(function () roshambo(true) end,"Roshambo must be initialized with a table")
 		end)
 	end)
+
