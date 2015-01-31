@@ -20,7 +20,7 @@
 (with-syntax lua 
   (do 
     (stuff to things) 
-    (eval «(set str "this is Clu"»))
+    (eval «(set str "this is Clu")»)
     (| local this = lua
        return this |)))
 
