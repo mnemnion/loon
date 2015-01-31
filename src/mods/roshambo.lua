@@ -11,24 +11,24 @@
 --
 -- copyright 2015 e.v. 
 -- </center>
-
--- Use
 --
+-- Use 
+-- ===
 -- At the simplest level, Roshambo decides between any two values.
--- This is done by fiat: roshambo.beats(rock, scissors) means that
--- roshambo(scissors, rock) will return rock, scissors. 
+-- This is done by fiat: `roshambo.beats(rock, scissors)` means that
+-- `roshambo(scissors, rock)` will return `rock, scissors`. 
 -- 
 -- This is done by looking up the value of "rock" against the victor
--- table, which returns a set of all values which rock defeats. This is done
--- with scissors also. Roshambo takes care that all fiat victory 
--- conditions are partially-ordered: rock and scissors cannot be entered as 
--- victors viz a viz one another. 
+-- table, which returns a set of all values which rock defeats. Roshambo takes 
+-- care that all fiat victory conditions are partially-ordered: rock and 
+-- scissors cannot be entered as victors viz a viz one another. 
 -- 
 -- Should there be no fiat condition, the values are inspected to see if 
 -- either contains a 'duel' method. Presuming they both do, duel is called,
 -- each against the other: a random number is generated, and the two values
 -- are compared. If equal, the leftmost is declared victor, if one is greater,
--- the greater is victorious.
+-- the greater is victorious. Should only one combatant contain a duel method,
+-- that combatant is the victor.
 -- 
 -- Duels are decisive, with the results memoized. 
 -- The user may override the result of a duel by fiat, or force further combat.
@@ -53,7 +53,11 @@ roshambo._beats = { rock = Set{"scissors"},
   	   		 scissors = Set{"paper"} }
 --]]
 
---- declare a victor
+--- declares a victor by fiat.
+-- @function roshambo:beats
+-- @within methods
+-- @param champ the value which wins
+-- @param loser the value which loses
 local function beats(roshambo, champ, loser)
 	--needs check for opposite condition,
 	--which is nilled out.
@@ -73,6 +77,7 @@ local function beats(roshambo, champ, loser)
 	roshambo:pr(champ.." beats "..tostring(roshambo._beats[champ]))
 end
 
+
 local function duel(roshambo,champ,challenge)
 	if tableand(challenge,challenge.duel) then
 		roshambo:pr "it's a duel!"
@@ -83,6 +88,13 @@ local function duel(roshambo,champ,challenge)
 	end
 end 	
 
+--- conducts combat between values
+-- @function fight
+-- @within methods
+-- @param champ will win by fiat
+-- @param challenge will lose by fiat
+-- @return the victor
+-- @return the loser
 local function fight(roshambo, champ, challenge)
 	if roshambo._beats[champ] then
 		if roshambo._beats[champ][challenge] then
@@ -109,10 +121,19 @@ local R = {}
 R.fight = fight
 R.beats = beats
 R.duel  = duel
+--- an alias for fight
+-- @function __call
+-- @param champ
+-- @param challenge
+-- @within metamethods
 R["__call"] = fight
 R["__index"] = R
 setmetatable(R,clu.Meta)
 
+--- instantiates a roshambo
+-- @function Roshambo(init)
+-- @param init a optional table of champ/loser key/value pairs.
+-- @return an instance of roshambo
 local function Roshambo(init)
 	local rosh = {}
 	rosh._beats = {}
