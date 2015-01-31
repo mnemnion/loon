@@ -28,9 +28,9 @@
 -- The user may override the result of a duel by fiat, or force further combat.
 -- 
 -- If there is no decisive victor, because both options lack
--- the ability to duel, roshambo will return a table of
--- type Roshambo, the values of which may be set with roshambo.judge.
--- It will also set a victor at random, as a last resort. 
+-- the ability to duel, roshambo will declare victory by fiat. If the first 
+-- argument (the champion) exists, it wins, otherwise, the challenger wins.
+-- This operation is idempotent, duels are fought once per pair. 
 -- Roshambo is always decisive. 
 
 local Set = require "set"
@@ -78,19 +78,19 @@ end
 local function fight(roshambo, champ, challenge)
 	if roshambo._beats[champ] then
 		if roshambo._beats[champ][challenge] then
-		    roshambo:pr "winner" 
+		    roshambo:pr(tostring(champ).." wins") 
 		    return champ, challenge
 		elseif roshambo._beats[challenge] then
 			if roshambo._beats[challenge][champ] then
-				roshambo:pr "loser" 
+				roshambo:pr(tostring(challenge).." wins")
 				return challenge, champ
 			end
 		else --duel here
-			roshambo:pr "challenger not found"
+			roshambo:pr (tostring(challenge).." not found")
 			return roshambo:duel(champ,challenge)
 		end
 	else --duel here as well
-		roshambo:pr("no-shambo") 
+		roshambo:pr(tostring(champ).." not found") 
 		return roshambo:duel(challenge,champ)
 	end 
 end

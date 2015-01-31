@@ -1,5 +1,6 @@
 local epeg = require "peg/epeg"
 local match = epeg.match
+local clu = require "clu/prelude"
 local strings = require "peg/strings"
 local failstrings = require "peg/failstrings"
 local core = require "peg/core-rules"
@@ -8,6 +9,10 @@ local ansi = require "ansi"
 local Node = require "peg/node"
 local pretty = require "pl.pretty"
 local roshambo = require "roshambo"
+
+clu.Meta.isverbose = true
+
+local verbose = clu.Meta.isverbose -- set from .busted
 
 local function whole_match(state, args)
 	local matched, hmm = match(args[2],args[1])
@@ -61,13 +66,25 @@ describe("tests over roshambo", function()
 						    paper = "rock"}
 
 	it("Roshambo on strings", function()
-		rosh.isverbose = true
+		if verbose then io.write("\n") end
 		assert.is.equal("rock",(rosh("rock","scissors")))
 		assert.is.equal("paper",(rosh("rock","paper")))
 		assert.is.equal("rock",(rosh("rock","vulcan")))
 		assert.is.equal("bingo",(rosh("disco","bingo")))
-		end)
+	end)
+	it("Roshambo on tables", function()
+		if verbose then io.write "\n" end
+		local rock, paper, scissors = {}, {}, {}
+		local rosh = roshambo{[rock] = scissors,
+							  [scissors] = paper,
+							  [paper] = rock}
+		assert.is.equal(rock,(rosh(rock,scissors)))
+		assert.is_not.equal(paper,rosh(paper,scissors))
+	end)
 	it("Roshambo dual-able", function()
 		pending "Roshambo dual-able"
+	end)
+	it("Roshambo errors", function()
+		assert.has.error(function () roshambo(true) end,"Roshambo must be initialized with a table")
 		end)
 	end)
