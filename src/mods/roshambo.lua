@@ -29,9 +29,10 @@
 -- Duels are decisive, with the results memoized. 
 -- The user may override the result of a duel by fiat, or force further combat.
 -- 
--- If there is no decisive victor, because both options lack
--- the ability to duel, roshambo will declare victory by precedence: the
--- first variable is the victor.
+-- If there is no decisive victor, because a dueling function is not provided,
+-- roshambo will declare victory by precedence: the first variable is the 
+-- victor.
+--
 -- This operation is idempotent, duels are fought once per pair. 
 -- Roshambo is always decisive. 
 
@@ -67,7 +68,6 @@ local function beats(roshambo, champ, loser)
 	if champion then 
 		champion = champion + Set{loser}
 	else 
-		--@todo foo all teh barz
 		champion = Set{loser}
 	end
 	roshambo._beats[champ] = champion
@@ -88,6 +88,11 @@ local function duel(roshambo,champ,challenge)
 	end
 end 
 
+--- sets a function for dueling
+-- @function duel_with
+-- @within methods
+-- @param fn `λ(roshambo, champ, challenge)
+-- -> winner, loser`
 local function duel_with(roshambo, fn)
 	roshambo._duel_with = fn
 end
@@ -121,11 +126,10 @@ local function fight(roshambo, champ, challenge)
 end
 
 --- provides a sorting function using Roshambo
--- @use roshambo(rock,scissors) => true
 -- @function sort
 -- @within methods
--- @param champ true if victor
--- @param challenge false if victor
+-- @param champ returns true if victor
+-- @param challenge returns false if victor
 -- @return boolean
 function roshambo_sort(roshambo, champ, challenge)
 	local victor = fight(roshambo,champ,challenge)
