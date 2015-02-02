@@ -23,12 +23,8 @@
 -- care that all fiat victory conditions are partially-ordered: rock and 
 -- scissors cannot be entered as victors viz a viz one another. 
 -- 
--- Should there be no fiat condition, the values are inspected to see if 
--- either contains a 'duel' method. Presuming they both do, duel is called,
--- each against the other: a random number is generated, and the two values
--- are compared. If equal, the leftmost is declared victor, if one is greater,
--- the greater is victorious. Should only one combatant contain a duel method,
--- that combatant is the victor.
+-- Should there be no victory, Roshambo falls back on its duel method, if the
+-- instance provides one. 
 -- 
 -- Duels are decisive, with the results memoized. 
 -- The user may override the result of a duel by fiat, or force further combat.
@@ -80,7 +76,7 @@ end
 
 
 local function duel(roshambo,champ,challenge)
-	if tableand(challenge,challenge.duel) then
+	if roshambo.duel_with then
 		roshambo:pr "it's a duel!"
 	else 
 		roshambo:pr "victory by fiat"
@@ -107,7 +103,7 @@ local function fight(roshambo, champ, challenge)
 				return challenge, champ
 			end
 		else --duel here
-			roshambo:pr (tostring(challenge).." not found")
+			roshambo:pr(tostring(challenge).." not found")
 			return roshambo:duel(champ,challenge)
 		end
 	else --duel here as well
@@ -137,7 +133,7 @@ R.sort  = roshambo_sort
 -- @function __call
 -- @param champ
 -- @param challenge
--- @within metamethods
+-- @within metamethods 
 R["__call"] = fight
 R["__index"] = R
 setmetatable(R,clu.Meta)

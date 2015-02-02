@@ -12,7 +12,7 @@ We don't disguise the fact that we have tables upon tables, and the ability to r
 
 Clu handily meets all nine points on [Paul Graham's](http://www.paulgraham.com/diff.html) list of what makes Lisp different. Any programmer who glances at it will call it a Lisp. Anyone who argues with the idea that it's a Lisp, knows what `funcall` does. 
 
-Look I feel you. I'm in favor of Lisp-2 myself, but Lua provides neither linked lists nor a separate namespace for functions, so we're stuck with it. Most people prefer Lisp-1, until they get a chance to try otherwise. For my taste, in English you can list a list, in fact that's very common, so `(list list)` is a fine idiom to my taste. 
+Look I feel you. I'm in favor of Lisp-2 myself, but Lua provides neither linked lists nor a separate namespace for functions, so we're stuck with it. Most people prefer Lisp-1, until they get a chance to try otherwise. For my taste, in English you can list a list, in fact that's very common, so `(list list)` is a fine idiom. 
 
 Similarly, I feel at least moderately bad about taking away all your lovingly crafted algorithms and tricks using cons cells, improper cells, A-lists, P-lists, and so on. YAGNI, holmes, this is all simpler than that, so you can focus on the part of Lisp where you do crazy things on account of having access to linguistic sillyputty. 
 
@@ -124,7 +124,7 @@ I'll be including quote, unquote, and quasiquote (which I don't even understand 
 
 This is a possible use for the `\/` pair. A form such as `\form/` would destructure. In the case of `\(function call)/` we return all values, which we might sugar as simply `\function call/`. To specify multiple return values at the end of a function we can use `\[foo bar baz]/`, which semantically creates a vector then returns the values of it. `\'(foo bar baz)/` would have the same function, but the compiler will create a quoted list, then actually destructure it, which is quite expensive in comparison. Our parser is smart enough to check for the former case, but not the latter, due to macros. 
 
-This is used as the splicer in our macro system, so `` `(foo ~bar \baz/) `` will write foo literally, substitute the value of bar, and substitute all values of baz. 
+This is used as the splicer in our macro system, so `` `(foo ~bar ~\baz/) `` will write foo literally, substitute the value of bar, and substitute all values of baz. 
 
 As is typical with such an operator, it is effective to a single level of nesting. On a vector it returns `ipairs`, on a table `pairs`, on a string, an array of the **utf-8** characters, as single-character strings. 
 
