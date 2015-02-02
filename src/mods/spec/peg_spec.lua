@@ -6,6 +6,7 @@ local core = require "peg/core-rules"
 local say = require "say"
 local ansi = require "ansi"
 local pretty = require "pl.pretty"
+local clu = require "clu/prelude"
 
 if verbose then clu.Meta.isverbose = true end
 

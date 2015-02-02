@@ -30,14 +30,14 @@
 -- The user may override the result of a duel by fiat, or force further combat.
 -- 
 -- If there is no decisive victor, because both options lack
--- the ability to duel, roshambo will declare victory by fiat. If the first 
--- argument (the champion) exists, it wins, otherwise, the challenger wins.
+-- the ability to duel, roshambo will declare victory by precedence: the
+-- first variable is the victor.
 -- This operation is idempotent, duels are fought once per pair. 
 -- Roshambo is always decisive. 
 
 local Set = require "set"
 
- clu = require "clu/prelude"
+clu = require "clu/prelude"
 local util = require "util"
 local tableand = util.tableand
 
@@ -76,14 +76,22 @@ end
 
 
 local function duel(roshambo,champ,challenge)
-	if roshambo.duel_with then
+	if roshambo._duel_with then
 		roshambo:pr "it's a duel!"
+		local winner, loser = roshambo:_duel_with(champ,challenge)
+		roshambo:beats(winner,loser)
+		return winner, loser
 	else 
 		roshambo:pr "victory by fiat"
 		roshambo:beats(champ,challenge)
 		return champ, challenge
 	end
-end 	
+end 
+
+local function duel_with(roshambo, fn)
+	roshambo._duel_with = fn
+end
+
 
 --- conducts combat between values
 -- @function fight
@@ -104,11 +112,11 @@ local function fight(roshambo, champ, challenge)
 			end
 		else --duel here
 			roshambo:pr(tostring(challenge).." not found")
-			return roshambo:duel(champ,challenge)
+			return duel(roshambo,champ,challenge)
 		end
 	else --duel here as well
 		roshambo:pr(tostring(champ).." not found") 
-		return roshambo:duel(challenge,champ)
+		return duel(roshambo, champ, challenge)
 	end 
 end
 
@@ -127,7 +135,7 @@ end
 local R = {}
 R.fight = fight
 R.beats = beats
-R.duel  = duel
+R.duel_with = duel_with
 R.sort  = roshambo_sort
 --- an alias for fight
 -- @function __call
