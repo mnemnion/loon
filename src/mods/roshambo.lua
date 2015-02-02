@@ -71,6 +71,7 @@ local function beats(roshambo, champ, loser)
 	if champion then 
 		champion = champion + Set{loser}
 	else 
+		--@todo foo all teh barz
 		champion = Set{loser}
 	end
 	roshambo._beats[champ] = champion
@@ -115,6 +116,13 @@ local function fight(roshambo, champ, challenge)
 	end 
 end
 
+--- provides a sorting function using Roshambo
+-- @use roshambo(rock,scissors) => true
+-- @function sort
+-- @within methods
+-- @param champ true if victor
+-- @param challenge false if victor
+-- @return boolean
 function roshambo_sort(roshambo, champ, challenge)
 	local victor = fight(roshambo,champ,challenge)
 	return victor == champ and true or false
@@ -135,7 +143,7 @@ R["__index"] = R
 setmetatable(R,clu.Meta)
 
 --- instantiates a roshambo
--- @function Roshambo(init)
+-- @function Roshambo
 -- @param init a optional table of champ/loser key/value pairs.
 -- @return an instance of roshambo
 local function Roshambo(init)

@@ -122,9 +122,9 @@ I'll be including quote, unquote, and quasiquote (which I don't even understand 
 
 ## Destructuring form
 
-This is a possible use for the `\/` pair. A form such as `(\form/)` would destructure invisibly into its return values.
+This is a possible use for the `\/` pair. A form such as `\form/` would destructure. In the case of `\(function call)/` we return all values, which we might sugar as simply `\function call/`. To specify multiple return values at the end of a function we can use `\[foo bar baz]/`, which semantically creates a vector then returns the values of it. `\'(foo bar baz)/` would have the same function, but the compiler will create a quoted list, then actually destructure it, which is quite expensive in comparison. Our parser is smart enough to check for the former case, but not the latter, due to macros. 
 
-I like this, but I'm leaving it out of the language for now. The destructuring `let` and `set` is easy to understand, and the anonymous form can be `(ret foo bar baz)`, where `ret` is a template form.  
+This is used as the splicer in our macro system, so `` `(foo ~bar \baz/) `` will write foo literally, substitute the value of bar, and substitute all values of baz. 
 
 ## Type Annotations
 
