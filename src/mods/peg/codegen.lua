@@ -70,9 +70,9 @@ local function write(str)
 end
 
 local function build(ast)
-	local phrase = prefix..ast:root().forwards..
+	local phrase = prefix..ast:root().imports..
 	             local_rules(ast).."\n\n"..
-				 definer..ast:root().imports..
+				 definer..ast:root().start_rule..
 				 cursive_rules(ast)..end_definer
 	write(phrase)
 	return phrase

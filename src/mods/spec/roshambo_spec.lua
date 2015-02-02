@@ -21,8 +21,8 @@ describe("tests over roshambo", function()
 		assert.is.equal(rock,(rosh(rock,scissors)))
 		assert.is_not.equal(paper,rosh(paper,scissors))
 	end)
-	it("Roshambo dual-able", function()
-		pending "Roshambo dual-able"
+	it("Roshambo duel-able", function()
+		pending "Roshambo duel-able"
 	end)
 	it("Roshambo errors", function()
 		assert.has.error(function () roshambo(true) end,"Roshambo must be initialized with a table")

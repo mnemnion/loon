@@ -166,21 +166,16 @@ end
 function t.lhs(ast)
 	local lhs = ast:select(lhs_pred)
 	local imports = ""
-	local forwards = "-- This is a dirty hack that probably doesn't work \n"
+	lhs[1]:root().start_rule = "START "..'"'..lhs[1].val..'"\n'
 	local nocurse = ast:select(t.notrecursive):select(lhs_pred)
-	for i = 1, #nocurse do
-		-- for import into defined structure
-		-- includes dirty hack to avoid sorting rules.
-		forwards = forwards.."local "..nocurse[i].val..
-				   " = ".."P''".."\n"
+--[[	for i = 1, #nocurse do
 		imports = imports.."local "..nocurse[i].val..
 		          " = "..nocurse[i].val.."\n"
 		nocurse[i].val = "local "..nocurse[i].val
-	end 
+	end  --]]
 	for i = 1, #lhs do
 		lhs[i].val = lhs[i].val.." =  "
 	end
-	lhs[1]:root().forwards = forwards.."\n"
 	lhs[1]:root().imports = imports.."\n"
 end
 

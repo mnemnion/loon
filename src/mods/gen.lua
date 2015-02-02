@@ -25,63 +25,28 @@ local V = lpeg.V -- create a variable within a grammar
 
 local WS = P' ' + P'\n' + P',' + P'\09'
 
--- This is a dirty hack that probably doesn't work 
-local lhs = P''
-local pattern = P''
-local hidden_pattern = P''
-local enclosed = P''
-local comment = P''
-local atom = P''
-local ws = P''
-local literal = P''
-local set = P''
-local range = P''
-local comment_m = P''
-local comment_c = P''
-local string = P''
-local string_match = P''
-local letter = P''
-local valid_sym = P''
-local digit = P''
 
-local lhs =  WS * pattern * WS * (Csp":" + Csp"=" + Csp":=")
-local pattern =  symbol + hidden_pattern
-local hidden_pattern =  Csp"`" * symbol * Csp"`"
-local enclosed =  literal + set + range * hidden * WS
-local comment =  P";" * comment_c  --  make real
-local atom =  symbol + ws
-local ws =  Csp"_"
-local literal =  P"\"" * C(string^0) * P"\""
-local set =  P"{" * set_c^1 * P"}"
-local range =  P"[" * range_c * P"]"
-local comment_m =  Csp"\n" * ANY
-local comment_c =  P";" * C(comment_m^0) * P"\n"
-local string =  (string_match^1 + Csp'\\"' + Csp"\\")
-local string_match =  P"\"" * P"\\" * ANY
-local letter =  R"AZ" * R"az"
-local valid_sym =  letter^1 * Csp"-"
-local digit =  R"09"
+lhs =  WS * pattern * WS * (Csp":" + Csp"=" + Csp":=")
+pattern =  symbol + hidden_pattern
+hidden_pattern =  Csp"`" * symbol * Csp"`"
+enclosed =  literal + set + range * hidden * WS
+comment =  P";" * comment_c  --  make real
+atom =  symbol + ws
+ws =  Csp"_"
+literal =  P"\"" * C(string^0) * P"\""
+set =  P"{" * set_c^1 * P"}"
+range =  P"[" * range_c * P"]"
+comment_m =  Csp"\n" * ANY
+comment_c =  P";" * C(comment_m^0) * P"\n"
+string =  (string_match^1 + Csp'\\"' + Csp"\\")
+string_match =  P"\"" * P"\\" * ANY
+letter =  R"AZ" * R"az"
+valid_sym =  letter^1 * Csp"-"
+digit =  R"09"
 
 
 peg = epnf.define(function(_ENV)
-local lhs = lhs
-local pattern = pattern
-local hidden_pattern = hidden_pattern
-local enclosed = enclosed
-local comment = comment
-local atom = atom
-local ws = ws
-local literal = literal
-local set = set
-local range = range
-local comment_m = comment_m
-local comment_c = comment_c
-local string = string
-local string_match = string_match
-local letter = letter
-local valid_sym = valid_sym
-local digit = digit
-
+START "rules"
 rules =  V"rule"^1
 rule =  lhs * V"rhs"
 rhs =  V"element" * V"elements"^0
