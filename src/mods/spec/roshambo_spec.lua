@@ -13,6 +13,8 @@ describe("tests over roshambo", function()
 		assert.is.equal("paper",(rosh("rock","paper")))
 		assert.is.equal("rock",(rosh("rock","vulcan")))
 		assert.is.equal("disco",(rosh("disco","bingo")))
+		rosh:beats("bingo","disco") -- hard call
+		assert.is.equal("bingo",(rosh("disco","bingo")))
 	end)
 	it("Roshambo on tables", function()
 		if verbose then io.write "\n" end
