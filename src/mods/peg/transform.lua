@@ -166,7 +166,7 @@ end
 function t.lhs(ast)
 	local lhs = ast:select(lhs_pred)
 	local imports = ""
-	lhs[1]:root().start_rule = "START "..'"'..lhs[1].val..'"\n'
+	lhs[1]:root().start_rule = "  START "..'"'..lhs[1].val..'"\n'
 	local nocurse = ast:select(t.notrecursive):select(lhs_pred)
 --[[	for i = 1, #nocurse do
 		imports = imports.."local "..nocurse[i].val..

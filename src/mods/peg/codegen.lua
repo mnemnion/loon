@@ -43,6 +43,8 @@ local WS = P' ' + P'\n' + P',' + P'\09'
 
 ]]
 
+--- change to use a provided name, or default to the filename if
+-- read from a file, or the start rule name if nothing else given.
 local definer = "peg = epnf.define(function(_ENV)\n"
 
 local end_definer = "end)\n"
@@ -60,7 +62,7 @@ local function cursive_rules(ast)
 	local cursives = ast:select(isrecursive)
 	local phrase  = ""
 	for i = 1, #cursives do
-		phrase = phrase..cursives[i]:flatten()
+		phrase = phrase.."  "..cursives[i]:flatten()
 	end
 	return phrase
 end

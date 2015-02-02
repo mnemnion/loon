@@ -115,12 +115,16 @@ local function fight(roshambo, champ, challenge)
 	end 
 end
 
-
+function roshambo_sort(roshambo, champ, challenge)
+	local victor = fight(roshambo,champ,challenge)
+	return victor == champ and true or false
+end
 
 local R = {}
 R.fight = fight
 R.beats = beats
 R.duel  = duel
+R.sort  = roshambo_sort
 --- an alias for fight
 -- @function __call
 -- @param champ
