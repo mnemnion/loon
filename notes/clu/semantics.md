@@ -1,8 +1,8 @@
 #Semantics
 
-Clua is designed to run atop LuaJIT. Early releases will remain compatible with Lua, but the intention is to start integrating with libraries at a level that will require us to pick a VM and stick with it. The choice is clear. 
+Clu is designed to run atop LuaJIT. Early releases will remain compatible with Lua, but the intention is to start integrating with libraries at a level that will require us to pick a VM and stick with it. The choice is clear. 
 
-Clua is defined in terms of S-expressions in the syntactic sense, and leverages this in ways that are pleasant to a Lisp user. It is not a Lisp. Clua is Lua. Lua provides a more powerful semantics in the form of tables. 
+Clu is defined in terms of S-expressions in the syntactic sense, and leverages this in ways that are pleasant to a Lisp user. It is not a Lisp. Clu is Lua. Lua provides a more powerful semantics in the form of tables. 
 
 Lisps proper rely on a particular implementation of the tuple, one which happens to be fast on early hardware. For fast, we have LuaJIT, which erases most of the already low overhead of table lookups. 
 
@@ -10,7 +10,7 @@ We don't disguise the fact that we have tables upon tables, and the ability to r
 
 ###Is it a Lisp though?
 
-Clua handily meets all nine points on [Paul Graham's](http://www.paulgraham.com/diff.html) list of what makes Lisp different. Any programmer who glances at it will call it a Lisp. Anyone who argues with the idea that it's a Lisp, knows what `funcall` does. 
+Clu handily meets all nine points on [Paul Graham's](http://www.paulgraham.com/diff.html) list of what makes Lisp different. Any programmer who glances at it will call it a Lisp. Anyone who argues with the idea that it's a Lisp, knows what `funcall` does. 
 
 Look I feel you. I'm in favor of Lisp-2 myself, but Lua provides neither linked lists nor a separate namespace for functions, so we're stuck with it. Most people prefer Lisp-1, until they get a chance to try otherwise. For my taste, in English you can list a list, in fact that's very common, so `(list list)` is a fine idiom to my taste. 
 
@@ -18,13 +18,13 @@ Similarly, I feel at least moderately bad about taking away all your lovingly cr
 
 ## Incremental Transpiler
 
-The intention is that Clua is translated to Lua by reading, constructing the AST, and transforming the structure into the minimum necessary amount of Lua. No whole-string representation of the program is generated and there are no line errors from the Lua interpreter. 
+The intention is that Clu is translated to Lua by reading, constructing the AST, and transforming the structure into the minimum necessary amount of Lua. No whole-string representation of the program is generated and there are no line errors from the Lua interpreter. 
 
 The result is an ordinary Lua environment. Code which translates down to chunks is called in the global context, functions and other values are entered into the environment, and so on. 
 
 ## Symbols
 
-Lua has a loose distinction between strings and symbols, which is enforced through syntax. It's not sufficiently first class, by itself, for Clua. 
+Lua has a loose distinction between strings and symbols, which is enforced through syntax. It's not sufficiently first class, by itself, for Clu. 
 
 I think this is only important in a quoted context. I believe quoting promotes a primitive value to an anonymous table, so equality tests of `"foo"`, `'foo` in one context, and `'foo` from a second context will not report as equal, and the latter two will be of type `<Symbol>` rather than `<String>`.
 
@@ -42,19 +42,19 @@ What a number is needs to be user defined, for any reasonable mathematics to hap
 
 Normally, a Lisp starts with a small number of atomic operations, introduces a few special forms, and proceeds on that basis. 
 
-We have no need to bootstrap from a level where consing makes sense. Clua doesn't have cons cells, or proper lists, as a built-in type. What would you do with them, make Lua slower? `first` and `rest` probably draw from an iterator. Clua is Lua first, Clojure second, and only emotionally a Lisp. 
+We have no need to bootstrap from a level where consing makes sense. Clu doesn't have cons cells, or proper lists, as a built-in type. What would you do with them, make Lua slower? `first` and `rest` probably draw from an iterator. Clu is Lua first, Clojure second, and only emotionally a Lisp. 
 
 Therefore, our basic building block are template forms. You can define one, once we complete the bootstrap, they're a user-level technology. They take a template, fill it with the arguments, and compile it. They can be recursive, and call other templates, and keep proper track of lexical scope, although it's possible to confuse a template since they don't know what's in the strings. Templates do keep an eagle eye out for `_ENV` and try to do the right thing, so it may be possible to make it, at least, difficult to accidentally subvert hygiene.
 
-It should be the case that the only Clua form that needs to be implemented in pure Lua is `deftemplate`. That would be nice. I'll be writing the whole shebang in Lua first, because that's how bootstrapping works. `deftemplate` is dead simple, of course, and could also be written in Clua, but I prefer to leave the straps on the boot. 
+It should be the case that the only Clu form that needs to be implemented in pure Lua is `deftemplate`. That would be nice. I'll be writing the whole shebang in Lua first, because that's how bootstrapping works. `deftemplate` is dead simple, of course, and could also be written in Clu, but I prefer to leave the straps on the boot. 
 
 I'm told this templating business is important to conducting operations on the World Wide Web. It may also be the case that there are many grammars to cope with in a coherent way, used out there. Blessedly, I would have no idea. 
 
-Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clua would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. Templates are expected to evaluate their contents, not merely read them (that's a macro), but parsing is a degenerate case of evaluation, as is returning a string, or writing to a file and returning the handle, or whatever you want. What. ever. you. want. 
+Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clu would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. Templates are expected to evaluate their contents, not merely read them (that's a macro), but parsing is a degenerate case of evaluation, as is returning a string, or writing to a file and returning the handle, or whatever you want. What. ever. you. want. 
 
 Specifically, a reader decomposes into a syntax and an evaluator for that syntax. What Lisp folks call a "reader" is actually a `<Syntax>` in Clu, aka `<||>` which we read as 'the type of the empty syntax'. What we call a reader evaluates its context, as well as parsing it.  
 
-I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr if you pass it the Clua reader. But it's more than a fexpr. If we ever decide to bypass the Lua layer, the templates can emit and compile LuaJIT bytecode directly. Or asm.js, or whatever's clever. 
+I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr if you pass it the Clu reader. But it's more than a fexpr. If we ever decide to bypass the Lua layer, the templates can emit and compile LuaJIT bytecode directly. Or asm.js, or whatever's clever. 
 
 `#`, which is read as 'reader macro', calls the local reader when placed at the head position. 
 
@@ -72,7 +72,7 @@ Templates will make extensive use of implicit gensyms. Every anonymous function 
 
 The usual approach to a new Lisp is to bootstrap: create linked lists, cons, car and cdr, reverse (for some reason, this is always written early). The axiomatic approach, if you will. Rich Hickey started with really good data structures.
 
-This is closer to what we're doing with Clua. `first` and `rest` will exist, as a semantic convenience. Reverse is almost useless with a vector class, and anything you'd do with a linked list involving shared structure, you can do with tables and should. 
+This is closer to what we're doing with Clu. `first` and `rest` will exist, as a semantic convenience. Reverse is almost useless with a vector class, and anything you'd do with a linked list involving shared structure, you can do with tables and should. 
 
 It actually makes more sense to think of lists as a unit of transpilation, than as anything else. Though a simple function call list in the global environment turns directly into a table lookup function call, as it would in standard Lua, `fn` and a few friends will need to call `loadstring` on a concatenated piece of Lua. Maybe. 
 
@@ -94,7 +94,7 @@ Question to answer: if I `let` some variables in a lisp, then add them to a quot
 
 Vectors get used a lot, since our lists are completely fake half the time. Arguments to functions are defined in a vector, and we use a syntactic vector in our destructuring let, to capture multiple return values in an elegant fashion. 
 
-They behave exactly as you'd expect, if you expect a dense table that starts at 1 and uses -1 for reverse indexing. Clua should make plenty of sense to all three Lua-aware Clojurians.
+They behave exactly as you'd expect, if you expect a dense table that starts at 1 and uses -1 for reverse indexing. Clu should make plenty of sense to all three Lua-aware Clojurians.
 
 ## Tables
 
@@ -116,7 +116,7 @@ This leads to the most important thing to know about macros in Clu, which is tha
 
 ## $
 
-`$` is going to be important for Clua. It's a selector that operates on tables. You can use it to perform captures as well as rule-based replacement, it does what you'd expect if you spend time with selectors. I put it right under macros because we'll be using it a lot, since `$` can act on the AST of the code being evaluated. 
+`$` is going to be important for Clu. It's a selector that operates on tables. You can use it to perform captures as well as rule-based replacement, it does what you'd expect if you spend time with selectors. I put it right under macros because we'll be using it a lot, since `$` can act on the AST of the code being evaluated. 
 
 I'll be including quote, unquote, and quasiquote (which I don't even understand yet), because a selector-based macro will have invisible effects on the structure, being declarative in nature, while the use of quote and unquote is admirably explicit. Sometimes you want one, sometimes the other. `$` is probably itself a macro.
 
@@ -126,11 +126,13 @@ This is a possible use for the `\/` pair. A form such as `\form/` would destruct
 
 This is used as the splicer in our macro system, so `` `(foo ~bar \baz/) `` will write foo literally, substitute the value of bar, and substitute all values of baz. 
 
+As is typical with such an operator, it is effective to a single level of nesting. On a vector it returns `ipairs`, on a table `pairs`, on a string, an array of the **utf-8** characters, as single-character strings. 
+
 ## Type Annotations
 
 Lua is a classically dynamic language, in that it has types, but it doesn't do much with them unless you tell it to. 
 
-When I'm good and ready, I'll start adding type annotations to Clua. We need them to work in a useful way, and need to discern what that is. Structurally, they're somewhat unusual in a Lisp, in that they're a proper form, meaning `< form >` is always syntactically correct, but they apply to the next form, formally and implicitly joining into a single form. So `{<int> 3 "foo"}` is syntactically correct, despite the requirement that a table contain an even number of forms.
+When I'm good and ready, I'll start adding type annotations to Clu. We need them to work in a useful way, and need to discern what that is. Structurally, they're somewhat unusual in a Lisp, in that they're a proper form, meaning `< form >` is always syntactically correct, but they apply to the next form, formally and implicitly joining into a single form. So `{<int> 3 "foo"}` is syntactically correct, despite the requirement that a table contain an even number of forms.
 
 A type followed by another type should be valid, and should not require a chain, though it should accomodate one. 
 
@@ -144,7 +146,7 @@ How to make it function as a type system? That's not clear, and may be moderatel
 
 The edge cases, such a whether to constrain by failure or attempt a structural cast, can be figured out later. The gist is that type annotations attach metatables to values. 
 
-Which is almost impossibly cool. You can attach a metatable to a string; you can even attach a metatable to a number, by making it an anonymous function which, called, returns its value, then attaching a metatable to the function. In Lua, that's a moderate amount of work, in Clua, we can let you make a literal number a `<Liter>` and dividing it by a `<Kilo>` will yield a `<Ratio>` of type `<Density>`. Eventually. `<Kilo>`, being `(is-a <Mass>)`, should be castable to a `<Pound>`, for those benighted cases where we need one. And so on. This is tractable, but we need a langauge before we can subject it to such delightful uses. 
+Which is almost impossibly cool. You can attach a metatable to a string; you can even attach a metatable to a number, by making it an anonymous function which, called, returns its value, then attaching a metatable to the function. In Lua, that's a moderate amount of work, in Clu, we can let you make a literal number a `<Liter>` and dividing it by a `<Kilo>` will yield a `<Ratio>` of type `<Density>`. Eventually. `<Kilo>`, being `(is-a <Mass>)`, should be castable to a `<Pound>`, for those benighted cases where we need one. And so on. This is tractable, but we need a langauge before we can subject it to such delightful uses. 
 
 Every metatable has a single metatable, leading back to _G. They may contain arbitrary numbers of *references* to metatables, naturally, enabling, I'm certain, a CLOS level of object orientation. 
 
