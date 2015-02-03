@@ -12,3 +12,14 @@ Short answer: we wish to replace `bash` and `emacs`, while modestly extending th
 
 When I refer to replacing `bash`, I do not mean in the sense in which `zsh` replaces `bash`. I mean in the sense in which the shell replaced batch editing, or the sense in which the GUI has replaced `bash` itself for some less-interesting subset of tasks. 
 
+The shell persists where batch does not. It carried itself over into the GUI through the simple trick of emulation, and has lived there happily ever since. It offers certain advantages, which no other tool in the chain can pretend to offer. 
+
+We treat bash, the programming language, much like Church Latin. It is needed, for the preservation and wholeness of our systems going forward. But we needn't limit ourselves to speaking it. 
+
+###The Language of the Keybashers
+
+bash is an expressive programming language. So much so that users are fooled into thinking they know a 'few commands', when in fact they speak a rough, but conversant bash. If you know `ls` and `cd`, you know a couple words of bash. If you know the character `茶`, you can get a steaming cup of it wherever Chinese is used. 
+
+If you can write a `dd` command without first typing `man` or hitting your browser, then certainly, you appreciate the analogy with Chinese. Ancient Chinese, no less. 
+
+Anything `bash` can execute is the bash programming language. It is Unix. It is the most complex programming language in existence, and has been since before the days of `#!/usr/bin/perl`. Which of course says the rest of the file is Perl, and `perl` is expected to deal with it. This makes Perl a dialect of bash. 
