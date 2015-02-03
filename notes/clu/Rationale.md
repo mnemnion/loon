@@ -30,3 +30,8 @@ This is bash's only trick, and it's why you still use it. Bash is the language w
 
 To use a programming language, you either type something into bash, or you click. Clickety clack. When Clu is done, to use `bash`, you will type some bash into Clu. 
 
+###The Language of the Gnomes
+
+"Welcome to Georgian! The extensible, programmable language that anyone can speak!"
+
+Blessedly, this sentence is in English. To dismiss it, type `C-x-C-c`. **Yes I had to look it up why are you looking at me like that now I have to reboot emacs excuse me**
