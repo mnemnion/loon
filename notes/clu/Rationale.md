@@ -35,3 +35,7 @@ To use a programming language, you either type something into bash, or you click
 "Welcome to Georgian! The extensible, programmable language that anyone can speak!"
 
 Blessedly, this sentence is in English. To dismiss it, type `C-x-C-c`. **Yes I had to look it up why are you looking at me like that now I have to reboot emacs excuse me**
+
+Emacs lisp is the best documented language in existence. It is ancient, crufty and weird, but `emacs`, the emacs lisp repl, has decades of relentless optimization surrounding the tail-swallowing problem of teaching the user to program it in itself. 
+
+Emacs is eloquent. It has won its place in history. We must retire it, because it is an editor, and editors, as I hope to demonstrate, are wrong. That is, the (textual) editor, distinct from the shell, distinct from the language, is harmful, an extrusion, bolt-on or aggregate. It should be a use case, just that: a simple, central use case, the editing of texts which themselves comprise programming languages, and the interaction therewith. 
