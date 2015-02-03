@@ -1,6 +1,11 @@
--- Code Generator
-
+--- Code Generator
+--
 -- Parsing Engine
+-- Use (mock):
+-- 
+-- 		function (works) return if works and true or false end end
+-- 
+
 
 local file = require 'pl.file'
 
@@ -43,7 +48,7 @@ local WS = P' ' + P'\n' + P',' + P'\09'
 
 ]]
 
---- change to use a provided name, or default to the filename if
+-- @todo change to use a provided name, or default to the filename if
 -- read from a file, or the start rule name if nothing else given.
 local definer = "peg = epnf.define(function(_ENV)\n"
 
