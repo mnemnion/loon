@@ -42,7 +42,7 @@ Emacs is eloquent. It has won its place in history. We must retire it, because i
 
 This is the chief reason, salient others include: it is dynamic, with lexicality bolted on. The VM is terminally slow. The namespace problem shall never be solved. Last, but not least, it is in the hands of the Gnomes, and is the handiwork of the Gnome in chief. 
 
-I could continue, but to what end? I come to bury, not to disparage. 
+I could continue, but to what end? I come to bury, not to disparage. Emacs comes the closest, of all programs that float upon `bash`, of swallowing its own tail and superceding `bash` entirely. That it doesn't do so, may be traced directly to the question of syntax.
 
 ####An aside to the Partisans of vim
 
