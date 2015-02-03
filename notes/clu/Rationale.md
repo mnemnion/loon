@@ -23,3 +23,10 @@ bash is an expressive programming language. So much so that users are fooled int
 If you can write a `dd` command without first typing `man` or hitting your browser, then certainly, you appreciate the analogy with Chinese. Ancient Chinese, no less. 
 
 Anything `bash` can execute is the bash programming language. It is Unix. It is the most complex programming language in existence, and has been since before the days of `#!/usr/bin/perl`. Which of course says the rest of the file is Perl, and `perl` is expected to deal with it. This makes Perl a dialect of bash. 
+
+This trick, where our language is able to launch another language, is a good trick. We intend to hold onto it. 
+
+This is bash's only trick, and it's why you still use it. Bash is the language where you can call all the other languages, and all the other little gizmos and whatsits they spit out, and munge them together. It is the tool of final resort. Crude, terrible, but here it is, under our fingers, and toes. 
+
+To use a programming language, you either type something into bash, or you click. Clickety clack. When Clu is done, to use `bash`, you will type some bash into Clu. 
+
