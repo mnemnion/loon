@@ -39,3 +39,19 @@ Blessedly, this sentence is in English. To dismiss it, type `C-x-C-c`. **Yes I h
 Emacs lisp is the best documented language in existence. It is ancient, crufty and weird, but `emacs`, the emacs lisp repl, has decades of relentless optimization surrounding the tail-swallowing problem of teaching the user to program it in itself. 
 
 Emacs is eloquent. It has won its place in history. We must retire it, because it is an editor, and editors, as I hope to demonstrate, are wrong. That is, the (textual) editor, distinct from the shell, distinct from the language, is harmful, an extrusion, bolt-on or aggregate. It should be a use case, just that: a simple, central use case, the editing of texts which themselves comprise programming languages, and the interaction therewith. 
+
+This is the chief reason, salient others include: it is dynamic, with lexicality bolted on. The VM is terminally slow. The namespace problem shall never be solved. Last, but not least, it is in the hands of the Gnomes, and is the handiwork of the Gnome in chief. 
+
+I could continue, but to what end? I come to bury, not to disparage. 
+
+####An aside to the Partisans of vim
+
+I do not intend to abandon your spare, thoughtful, and in my opinion severe and confusing, approach to the editing of text. 
+
+Please do not compare your editor, which I'm sure is excellent, with emacs, which is a programming language. A rational shell will support vimification. Where matters of syntax are concerned, we come to the field well equipped.
+
+## Why Clu?
+
+I believe I've made the case that a language that replaces `bash` and `emacs` might be useful. Why invent one? Why not write the whole thing in Python and call it a day?
+
+In a sense that's precisely what I'm doing. LuaJIT and lpeg are written, Clu rides along. Lua, the program, is small, easy to understand, easy to embed in C. The language Lua doesn't expose the Lua(JIT) program in a sufficiently flexible way for our purposes, and that is the intention behind Clu. 
