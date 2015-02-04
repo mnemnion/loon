@@ -67,7 +67,13 @@ Our bridge should run in a virtual machine. It should be small, so we can launch
 
 LuaJIT fits the bill perfectly. I can, and will, go into detail as to why the table object in Lua is the perfect compromise data structure for the kind of highly dynamic system needed to conn a bridge, as well as why prototype objects are correct for this use case. Here I will indicate the argument, and link to it when it exists. 
 
-Lua, the language, is not currently suitable. The reasons for this are subtle, and covered [elsewhere](lun.md), still, the changes must be made. In particular, a bridge language must consider the global namespace sacred and allow only the most limited tampering with it. This requires the full tool kit of local by default, `local` to force shadowing, `outer` to refer to an otherwise shadowed variable, and either `def` or `export` to declare a variable into the global namespace. 
+Lua, the language, is not currently suitable. The reasons for this are subtle, and covered [elsewhere](lun.md), still, the changes must be made. In particular, a bridge language must consider the global namespace sacred and allow only the most limited tampering with it. This requires the full tool kit of local by default, `local` to force shadowing, `outer` to refer to an otherwise shadowed variable, and either `def` or `export` to declare a variable into the global namespace.
+
+This is not, in itself, sufficient. Lua is so simple and beautiful as to be nearly homoiconic, certainly tables may be loaded up in arbitrary ways, but programming computers is neither horseshoes nor hand grenades. Writing a bridge will involve large amounts of generated code, complex introspection, and other concepts that are cleanly expressed with [s-expression](http://en.wikipedia.org/wiki/S-expression) syntax. 
+
+### JSON, Clojure, EDN
+
+Our homoiconic system is simple, and based firmly on the principle of least surprise. No one programming in the twenty teens should be surprised to find `{}` enclosing a map, `[]` defining a vector, nor `()` as an expression. Note that we call `()` an expression or expr, not a list. The `l` in Clu is from Lua and Clojure, not Lisp. `'()` we call a quoted expression, any form which is quoted is literally a table bearing a Node metatable. Nodes can be almost arbitrarily complex. The use of `\o/` (the `o` is stylistic) for destructuring is novel, but consistent, and some convention is absolutely necessary to cleanly represent Lua's embrace of multiple returns. I flirted with hijacking `<>` for type related matters, but relented and returned them to userspace. Jacking `\/` is already fairly provocative behaviour, though I expect I should be able to make `\'(/ 2 3)/` parse correctly and return `~'/, ~'2, ~'3`. Clu's syntax is not particularly minimalist.   
 
 
 ### The Clu contribution

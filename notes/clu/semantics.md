@@ -52,7 +52,7 @@ I'm told this templating business is important to conducting operations on the W
 
 Can you pass templates a reader? Indeed, though it will default to Lun if you don't provide one. Defaulting to Clu would be pointless, no? But if your template was some kind of angle-bracketed markup language, you can assuredly pass a reader to your template. Templates are expected to evaluate their contents, not merely read them (that's a macro), but parsing is a degenerate case of evaluation, as is returning a string, or writing to a file and returning the handle, or whatever you want. What. ever. you. want. 
 
-Specifically, a reader decomposes into a syntax and an evaluator for that syntax. What Lisp folks call a "reader" is actually a `<Syntax>` in Clu, aka `<||>` which we read as 'the type of the empty syntax'. What we call a reader evaluates its context, as well as parsing it.  
+Specifically, a reader decomposes into a syntax and an evaluator for that syntax. What Lisp folks call a "reader" is actually a `:[Syntax]:` in Clu, aka `:[||]:` which we read as 'the type of the empty syntax'. What we call a reader evaluates its context, as well as parsing it.  
 
 I think these reasonably qualify as fexprs. Maybe? I'm pretty sure it's a fexpr if you pass it the Clu reader. But it's more than a fexpr. If we ever decide to bypass the Lua layer, the templates can emit and compile LuaJIT bytecode directly. Or asm.js, or whatever's clever. 
 

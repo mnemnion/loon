@@ -1,0 +1,16 @@
+#Ssyntax
+
+```clojure
+
+(foo.bar baz bux) ; simple enough
+
+(foo@bar baz bux) ; method call
+
+(foo.bar.baz bux quux) ; field access may be chained
+
+(foo@(bar@(baz bux quux))) ; 
+
+(foo . bar . baz bux quux) ; hard to read, valid
+
+(foo @ (bar @ (baz bux quux))) ; easier to read, valid
+```
