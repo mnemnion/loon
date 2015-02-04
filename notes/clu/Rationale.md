@@ -65,6 +65,13 @@ We're going to call this kind of program a bridge. This is in two senses: the br
 
 Our bridge should run in a virtual machine. It should be small, so we can launch many of them; it should have a simple, easy to program interface from the systems side (C,D,Nim,Rust,etc), with a complementary FFI, semantics that are easy to grasp, and the ability to sandbox, so `curl http://example.com/init.br | br` will not by default hose you in the face of a hostile script. It should be as fast as possible given these constraints, and it should be designed and maintained by someone else, ideally a genius whose work is widely emulated but never yet surpassed. 
 
+LuaJIT fits the bill perfectly. I can, and will, go into detail as to why the table object in Lua is the perfect compromise data structure for the kind of highly dynamic system needed to conn a bridge, as well as why prototype objects are correct for this use case. Here I will indicate the argument, and link to it when it exists. 
+
+Lua, the language, is not currently suitable. The reasons for this are subtle, and covered [elsewhere](lun.md), still, the changes must be made. In particular, a bridge language must consider the global namespace sacred and allow only the most limited tampering with it. This requires the full tool kit of local by default, `local` to force shadowing, `outer` to refer to an otherwise shadowed variable, and either `def` or `export` to declare a variable into the global namespace. 
+
+
+### The Clu contribution
+
 A language in which syntax is a first-class property is a language equipped to marshal, edit, run, chain and interact with other languages. Clu is an S-expression language simply because without the resulting cellularity the whole enterprise falls apart. 
 
 A syntax is a tool that forms a string into a tree. Given a symbol not recognized by that syntax, it is possible to construct a pair of symbols which may enclose that syntax, and those symbols may if necessary be further enclosed with `||` to form an S-expression within a larger arcy. Without this enclosing property, composability is never frictionless.
