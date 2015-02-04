@@ -56,6 +56,15 @@ I've made the case that a language that replaces `bash` and `emacs` might be use
 
 In a sense that's precisely what I'm doing. LuaJIT and lpeg are written, Clu rides along. Lua, the program, is small, easy to understand, easy to embed in C. The language Lua doesn't expose the Lua(JIT) program in a sufficiently flexible way for our purposes, and that is the intention behind Clu. 
 
+
+### The Requirements
+
+We're designing a tool that conflates and replaces the shell and the editor. We can't call it a browser, despite the excellent historical precedent. Referring to it as a REPL is suggestive, but technically incorrect, as we'll see: a shell reads, evaluates, and prints in a loop, while our program will have more options available. 
+
+We're going to call this kind of program a bridge. This is in two senses: the bridge as place from which a ship is piloted, and a bridge as a structure that bridges gaps in various channels. **bridge** is our program, invoked as `br`. `br` is not a command in my current Unix environment, and `brew` won't install it, so that's reasonable namespacing. 
+
+Our bridge should run in a virtual machine. It should be small, so we can launch many of them; it should have a simple, easy to program interface from the systems side (C,D,Nim,Rust,etc), with a complementary FFI, semantics that are easy to grasp, and the ability to sandbox, so `curl http://example.com/init.br | br` will not by default hose you in the face of a hostile script. It should be as fast as possible given these constraints, and it should be designed and maintained by someone else, ideally a genius whose work is widely emulated but never yet surpassed. 
+
 A language in which syntax is a first-class property is a language equipped to marshal, edit, run, chain and interact with other languages. Clu is an S-expression language simply because without the resulting cellularity the whole enterprise falls apart. 
 
 A syntax is a tool that forms a string into a tree. Given a symbol not recognized by that syntax, it is possible to construct a pair of symbols which may enclose that syntax, and those symbols may if necessary be further enclosed with `||` to form an S-expression within a larger arcy. Without this enclosing property, composability is never frictionless.
