@@ -42,7 +42,7 @@ Emacs is eloquent. It has won its place in history. We must retire it, because i
 
 This is the chief reason, salient others include: it is dynamic, with lexicality bolted on. The VM is terminally slow. The namespace problem shall never be solved. Last, but not least, it is in the hands of the Gnomes, and is the handiwork of the Gnome in chief. 
 
-I could continue, but to what end? I come to bury, not to disparage. Emacs comes the closest, of all programs that float upon `bash`, of swallowing its own tail and superceding `bash` entirely. That it doesn't do so, may be traced directly to the question of syntax.
+I could continue, but to what end? I come to bury, not to disparage. Emacs comes the closest, of all programs that float upon `bash`, of swallowing its own tail and superseding `bash` entirely. That it doesn't do so, may be traced directly to the question of syntax.
 
 ####An aside to the Partisans of vim
 
@@ -52,6 +52,10 @@ Please do not compare your editor, which I'm sure is excellent, with emacs, whic
 
 ## Why Clu?
 
-I believe I've made the case that a language that replaces `bash` and `emacs` might be useful. Why invent one? Why not write the whole thing in Python and call it a day?
+I've made the case that a language that replaces `bash` and `emacs` might be useful. Why invent one? Why not write the whole thing in Python and call it a day?
 
 In a sense that's precisely what I'm doing. LuaJIT and lpeg are written, Clu rides along. Lua, the program, is small, easy to understand, easy to embed in C. The language Lua doesn't expose the Lua(JIT) program in a sufficiently flexible way for our purposes, and that is the intention behind Clu. 
+
+A language in which syntax is a first-class property is a language equipped to marshal, edit, run, chain and interact with other languages. Clu is an S-expression language simply because without the resulting cellularity the whole enterprise falls apart. 
+
+A syntax is a tool that forms a string into a tree. Given a symbol not recognized by that syntax, it is possible to construct a pair of symbols which may enclose that syntax, and those symbols may if necessary be further enclosed with `||` to form an S-expression within a larger arcy. Without this enclosing property, composability is never frictionless.
