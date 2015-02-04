@@ -10,7 +10,7 @@
 
 (foo@(bar@(baz bux quux)))     ; necessaary because it might be
 
-(foo@(bar bux @(baz quux)))    ; for example
+(foo@(bar bux@(baz quux)))    ; for example
 							   ; which chains the return of (bar bux)
 							   ; as the first argument to baz
 							   ; (before quuux)
