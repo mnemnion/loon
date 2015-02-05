@@ -75,13 +75,18 @@ This is not, in itself, sufficient. Lua is so simple and beautiful as to be near
 
 Our homoiconic system is simple, and based firmly on the principle of least surprise. No one programming in the twenty teens should be surprised to find `{}` enclosing a map, `[]` defining a vector, nor `()` as an expression. Note that we call `()` an expression or expr, not a list. The `l` in Clu is from Lua and Clojure, not Lisp. `'()` we call a quoted expression, any form which is quoted is literally a table bearing a Node metatable. Nodes can be almost arbitrarily complex. The use of `\o/` (the `o` is stylistic) for destructuring is novel, but consistent, and some convention is absolutely necessary to cleanly represent Lua's embrace of multiple returns. I flirted with hijacking `<>` for type related matters, but relented and returned them to userspace. Jacking `\/` is already fairly provocative behaviour, though I expect I should be able to make `\'(/ 2 3)/` parse correctly and return `~'/, ~'2, ~'3`. Clu's syntax is not particularly minimalist.   
 
-The resulting language must hew closely to the underlying semantics of Lua: it is prototype based, using (meta)tables for the usual purposes including the environment, mutable, imperative, etc. Where we break with Clojure is with the latter's emphasis on immutable operations and resulting memory model. Clojure has that ground thoroughly covered. A bridge needs to expose and work with the underlying OS concepts for mutation and concurrency: Lua's single-core imperative model with coroutines is a good fit. 
+The resulting language must hew closely to the underlying semantics of Lua: it is prototype based, using (meta)tables for the usual purposes including the environment, mutable, imperative, etc. Where we break with Clojure is with the latter's emphasis on immutable operations and resulting memory model. Clojure has that ground thoroughly covered. A bridge needs to expose and work with the underlying OS concepts for mutation and concurrency: Lua's single-core imperative model with coroutines is a good fit for expressing a bridge instance.  
 
 A Lispy language is absolutely the right tool for many of our tasks. The particular strength of Algol is that it was build to resemble the pseudocode with which computer programmers exchange algorithms. I'm writing Clu because I believe it to be possible to harmoniously combine the virtues of these two approaches, while accounting for any other syntax we may need to work with. 
-
 
 ### The Clu contribution
 
 A language in which syntax is a first-class property is a language equipped to marshal, edit, run, chain and interact with other languages. Clu is an S-expression language simply because without the resulting cellularity the whole enterprise falls apart. 
 
 A syntax is a tool that forms a string into a tree. Given a symbol not recognized by that syntax, it is possible to construct a pair of symbols which may enclose that syntax, and those symbols may if necessary be further enclosed with `||` to form an S-expression within a larger arcy. Without this enclosing property, composability is never frictionless.
+
+We use this tool to switch from Lun to Clu as appropriate, and to embed other syntaxes and their transformations. 
+
+### The path ahead
+
+I am working on the PEGylator engine that will drive Clu. Spending a lot of time on the parser is a weird place to be while writing a Lisp-like, but then, Clu Is Not Lisp: our parser generator is central to the aesthetic and function. PEGylator written, Clu will take form fairly rapidly. For writing several extended Xterm programs and a bridge, I'm going to need (a lot of) help and some means of consistent financial support. 
