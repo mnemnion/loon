@@ -4,7 +4,7 @@ Clu is a new programming language, written to write a new type of program called
 
 Clu clearly resembles a Lisp, particularly Clojure; just as clearly, it embraces the Lua semantics. A bridge is most like a shell, a REPL, or an editor, embracing and extending each of these functions. 
 
-A [bridge](http://en.wikipedia.org/wiki/Bridge_(nautical)) is a command center for interacting with a computer. This activity is also referred to as programming. `cd ~` is a small program, written in bash, executed by bash. If you type it into `br`, it has the same effect, in context. 
+A [bridge](http://en.wikipedia.org/wiki/Bridge_(nautical)) is a command center for interacting with a computer. This activity is also referred to as programming. `cd ~` is a small program, written in bash, executed by `bash`. If you type it into `br`, it has the same effect, in context. 
 
 It does so somewhat differently. In a shell, running `cd ~` causes `pwd` to change to `/~`, and causes stdio to print another command line. Often, this new command line includes the updated directory, but this is of course configurable, and we will often treat defaults as a given.  
 
@@ -22,7 +22,7 @@ The bridge is an abstraction which lets hackers get work done.
 
 For any interface, there can be a single canonical best fit. For the bridge, it is the laptop and desktop computer. A bridge may be squeezed into a jeejaw but we depend on the user having access to keys and a trackpad. The trackpad/mouse/trackball/clit/moveypointey is both optional and useable, won't be referred to often, and does what you expect. 
 
-The screen of a bridge is rectangular, and is composed of a grid of cells, in rows and columns. A typical Unicode point fills exactly one cell on a bridge. Not all Unicode points are typical; Chinese being what it is, the atypical may even outnumber the typical, but in either case, all Unicode points have an exact and predictable effect when displayed by the cells of a bridge. 
+The screen of a bridge is rectangular, and is composed of a grid of cells, in rows and columns. A typical Unicode point fills exactly one cell on a bridge. Not all Unicode points are typical; Chinese being what it is, the atypical may even outnumber the typical, in any case, all Unicode points have an exact and predictable effect when displayed by the cells of a bridge. 
 
 This is not the only use of cells. It is the *typical* use of cells. We use monospacing because we are hackers, and it is correct to our purposes. When we wish to display graphical elements, we do so. 
 
@@ -41,4 +41,3 @@ What that means, depends on the program that is the card. The simplest card, lik
 A more complex card might contain several screens of data, and wake up enough to let you scroll around in it and select something. A long cat would do this. A card containing a video would offer you controls to replay it, or edit it. Depends on what you were doing with that card.
 
 Wait a video? I thought we were in the Matrix? We're not on a terminal, though we're using an evolution of the xterm protocol to drive the bridge. It's not challenging to request a frame of cells and render pixels onto it using graphics acceleration, requesting a fractional number of cells is what's impossible. Normally our bridge will want to render text into cells, but exceptions are normal among the Fleet.
-
