@@ -36,8 +36,22 @@ I hope you're nodding along. To help you picture it: a card can be less than a s
 
 There is no strange, legacy paper trail of terminal residue above you. Everything is on a card, cards are a screen tall but can contain multitudes, and wake up when you visit them. 
 
-What that means, depends on the program that is the card. The simplest card, like `cat foo.txt`, just has some text on it. Would you expect to be able to edit on a cat card? No. Copy, of course. 
+What that means, depends on the program that is the card. The simplest card, like `cat foo.txt`, just has some text on it. Would you expect to be able to edit on a cat card? You would not. 
 
-A more complex card might contain several screens of data, and wake up enough to let you scroll around in it and select something. A long cat would do this. A card containing a video would offer you controls to replay it, or edit it. Depends on what you were doing with that card.
+A more complex card might contain several screens of data, and wake up enough to let you scroll around in it and select something. A long `cat` would do this. A card containing a video would offer you controls to replay it, or edit it. Depends on what you were doing with that card.
 
-Wait a video? I thought we were in the Matrix? We're not on a terminal, though we're using an evolution of the xterm protocol to drive the bridge. It's not challenging to request a frame of cells and render pixels onto it using graphics acceleration, requesting a fractional number of cells is what's impossible. Normally our bridge will want to render text into cells, but exceptions are normal among the Fleet.
+Wait, a video? I thought we were in the Matrix? We're not on a terminal, though we're using an evolution of the xterm protocol to drive the bridge. It's not challenging to request a frame of cells and render pixels onto it using graphics acceleration, requesting a fractional number of cells is what's impossible. Normally our bridge will want to render text into cells, but exceptions are normal among the Fleet.
+
+Cards have history, as do decks, as does the bridge. Since the bridge must reckon with the operating system, we are able to copy and paste. When we do so, we also pick, and place, and when we cut, we snip also. Cut, copy and paste act on text, pick, place and snip on cards, and the contents of cards. No hacker who has used a descendent of Finder should be lost here.
+
+##Aesthetics of the Bridge
+
+The hacker is normally concerned with telling computers what to do. We use digital text as an acceptable compromise between pure numbers and the beautiful, pure depictions of which our hands are capable. This accord is thousands of years old, and it is the basis of civilization. 
+
+At one time, interface was subject to technical constraints. The design of typewriters and line printers is greatly simplified if each glyph is of the same width. For this reason, these tools are naturally monospaced. The terminal, too, was simplified by monospacing: each glyph assigned a cell, lit in certain ways. 
+
+This is not a natural match to the Latin character set. Particularly with minuscules, i and w are not of a width. Just look at them. We [lucked out](https://imgflip.com/readImage?iid=101470) in that the Latin alphabet is a less uncomfortable fit for monospacing than many of its relatives and anything from a different clade. 
+
+
+
+
