@@ -65,16 +65,27 @@ In any case, these glyphs, on the bridge, are all a single cell wide. Backspace 
 This is important because it lets us aggressively overlay data in a consistent and viable way. The most information rich unit is the glyph, and we have many, but choose to use few. Because, as mentioned, we can only type 94 in any given keyboard configuration. Though it would seem we have more buttons...
 
 You may have an escape key. On the bridge, you are certainly allowed to touch it, if that's your thing. It's certainly there, if small, up, and to the left. It's a mere remap of one of your four chord keys, which in Neoclassical space cadet fashion, we refer to as hyper, control, alt, and super. You could call this a political compromise. You'd be right.
+They are `h-, c-, a-, s-` for short.
 
 On a bridge, we remap the huge and tasty caps lock to backspace, and make a single alt press equivalent to escape. A bridge being a hacker tool, you can of course fuck this up if you're stubborn. But try it first, you only have two wrists and statistically the right is more important (I'm an outlier here).
 
-Speaking of your wrists, you'll be using one of three techniques to navigate: arrows, touchpad, or that weird vim thing you guys always want to implement. Only perverts navigate by typing space cadet keys and hitting glyph keys. It's gross. The vim thing isn't, that's pleasant, just weird. 
+Speaking of your wrists, you'll be using one of three techniques to navigate: arrows, touchpad, or that weird vim thing you guys always want to implement. Only perverts navigate by typing space cadet keys and hitting glyph keys. It's gross. The vim thing isn't, that's pleasant, just weird. You can of course provide any keymapping your heart desires, the bridge is both Turing complete and sensibly designed. That's why it needs an aesthetics. We have arrow keys. Use them to their intended purpose. 
 
-Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid computer use. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. 
+Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid computer use. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. Saying something like `s-c-r` is silly, `s-c-→` might well not be. 
 
+The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. 
 
+You can also click on things. Sometimes you're feeling lazy, drinking coffee, high, or otherwise not in the mood. 
 
+Ah, and we have a tab key. Poor tab key: the single most ad-hoc, confusing key on the board. We continue the tradition of combining some navigation functions with indentation, though we intend to issue the actual tab character as seldom as possible. Horizontal Tab is Deprecated, yo. I may actually forbid the issuing of physical tabs in edit modes for programming languages that don't require them, on the main trunk. 
 
+The deep wisdom of editor writing: always doing the write thing when the user strike the tab key. This goes double for the bridge. 
+
+The bridge has no truck with function keys, or anything on an extended board. The user is welcome to populate them as desired. They aren't deprecated, so much as superfluous. 
+
+As for which chord is mapped to what function in which context: don't know, don't care. We construct the bridge in such a way that the user can discover and assign these things. This takes thorough design, culminating in a help card that actually tells you which keys do what in various contexts, and contains information that's accurate to the running bridge. 
+
+This is critical: the underlying bridge structure is tight enough that if you define the bare key `a` to mean `quit`, the tutorial will tell you to press `a` to quit. I can't make your blogs automagically update, but all internal documentation within a running bridge is generated from the bridge itself, and there is no blessed mapping betewen keystrokes and the functions they invoke. 
 
 
 
