@@ -30,4 +30,15 @@ A frame is some subdivision of this screen. When we open a new frame, it display
 
 In a clean default, you have no directory, or need for one. Perhaps you want to compose a tweet; the card is not picky. Typing `cd` and a return will give you your user directory, and put us in directory mode. 
 
-`ls` launches **ls**, an interactive file browser. It prints precisely what you expect, you can configure it persistently on a per-directory basis, clicking around will select in various ways. 
+`ls` launches **ls**, an interactive file browser. It prints precisely what you expect, you can configure it persistently on a per-directory basis, clicking around will select in various ways. `ls` is launched onto a card, the interface looks like what happens when bash prints `ls` to a VT-100, there is a new card below all the action. Navigation between cards is done using chord-arrows or by clicking. 
+
+I hope you're nodding along. To help you picture it: a card can be less than a screen, or a full screen. If it's more than a screen, it's still only a screen big. So an `ls` call on a huge directory, you get the first page and then the prompt on your next card. You want more, you upcard, scroll around, then downcard. Capiche? Molto bem.
+
+There is no strange, legacy paper trail of terminal residue above you. Everything is on a card, cards are a screen tall but can contain multitudes, and wake up when you visit them. 
+
+What that means, depends on the program that is the card. The simplest card, like `cat foo.txt`, just has some text on it. Would you expect to be able to edit on a cat card? No. Copy, of course. 
+
+A more complex card might contain several screens of data, and wake up enough to let you scroll around in it and select something. A long cat would do this. A card containing a video would offer you controls to replay it, or edit it. Depends on what you were doing with that card.
+
+Wait a video? I thought we were in the Matrix? We're not on a terminal, though we're using an evolution of the xterm protocol to drive the bridge. It's not challenging to request a frame of cells and render pixels onto it using graphics acceleration, requesting a fractional number of cells is what's impossible. Normally our bridge will want to render text into cells, but exceptions are normal among the Fleet.
+
