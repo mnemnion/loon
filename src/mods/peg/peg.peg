@@ -1,4 +1,3 @@
-return [[
 	           rules :  rule +
 	            rule :  lhs rhs
 	             lhs :  _pattern_ (":" / "=" / ":=")
@@ -54,4 +53,3 @@ return [[
 	letter : [A-Z] + [a-z] 
 	valid-sym = letter + "-"  
 	digit = [0-9]   
-]]

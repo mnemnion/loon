@@ -1,3 +1,6 @@
+local pl = require "pl.file"
+local read = pl.read
+
 local g = {}
 
  g.range_s = [[ \]\--CD ]]
@@ -19,7 +22,7 @@ local g = {}
 			  D : E F G
 ]]
 
- g.peg_s = dofile "peg/peg.peg"
+ g.peg_s =  read "peg/peg.peg"
  g.clu_s = [[
 
      clu :  form* / EOF
