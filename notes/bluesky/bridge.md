@@ -73,7 +73,7 @@ Speaking of your wrists, you'll be using one of three techniques to navigate: ar
 
 Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid bridge hacking. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. Saying something like `s-c-r` is silly, `s-c-→` might well not be. 
 
-The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. We support an `altgr, ag-` for those who require it. In general, the alt key wants to support an idiom of abbreviated command typing, vim-ish. Note that the emacsian distinction between, say, `C-x-C-f` and `C-x-C f` isn't normally possible, because the second `C` is a null press, giving you `C-x f` in the latter sequence. 
+The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. We support an `altgr, AGr-` for those who require it. In general, the alt key wants to support an idiom of abbreviated command typing, vim-ish. Note that the emacsian distinction between, say, `C-x-C-f` and `C-x-C f` isn't normally possible, because the second `C` is a null press, giving you `C-x f` in the latter sequence. 
 
 You can also click on things. Sometimes you're feeling lazy, drinking coffee, high, or otherwise not in the mood. 
 
