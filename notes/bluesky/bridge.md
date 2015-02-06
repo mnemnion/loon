@@ -58,20 +58,20 @@ Look at your keyboard. Take a good hard look at it. A Zen look. This is your ins
 
 Variations and edge cases ignored, you're looking at 47 keys which, when you press them, normally generate precisely one glyph. Shift them, they generate another glyph. One other key, a large one, is never shifted, and makes a space. You have a key which we'll call return, by tradition, a key you call backspace and I call delete, and a key you call caps lock and I call backspace. Those give you a fresh line, delete forward, and delete backward, as you'd expect.
 
-Note that on the bridge you delete mistakes with the left pinky off the home row and then hit enter with the right pinky, also off the home row. Try it, you'll like it. I do not care if you Dvorak, but I do care that you do this. 
+Note that on the bridge you delete mistakes with the left pinky off the home row and then hit return with the right pinky, also off the home row. Try it, you'll like it. I do not care if you Dvorak, but I do care that you do this. 
 
 In any case, these glyphs, on the bridge, are all a single cell wide. Backspace removes the contents of a cell to the left of the cursor, delete does the same to the right, and return puts you in the leftmost sensible cell, below the row of cells you were on. Sometimes. 
 
 This is important because it lets us aggressively overlay data in a consistent and viable way. The most information rich unit is the glyph, and we have many, but choose to use few. Because, as mentioned, we can only type 94 in any given keyboard configuration. Though it would seem we have more buttons...
 
 You may have an escape key. On the bridge, you are certainly allowed to touch it, if that's your thing. It's certainly there, if small, up, and to the left. It's a mere remap of one of your four chord keys, which in Neoclassical space cadet fashion, we refer to as hyper, control, alt, and super. You could call this a political compromise. You'd be right.
-They are `h-, c-, a-, s-` for short.
+They are `h-, c-, a-, s-` for short. Because of the equivalence of escape and alt, the alt key is sticky, making `a-n` and `esc n` equivalent in all cases. The command `a-esc, esc-esc, a-a-` is a null command. The other space cadets are not sticky unless you assign them so, nor is shift.  
 
 On a bridge, we remap the huge and tasty caps lock to backspace, and make a single alt press equivalent to escape. A bridge being a hacker tool, you can of course fuck this up if you're stubborn. But try it first, you only have two wrists and statistically the right is more important (I'm an outlier here).
 
-Speaking of your wrists, you'll be using one of three techniques to navigate: arrows, touchpad, or that weird vim thing you guys always want to implement. Only perverts navigate by typing space cadet keys and hitting glyph keys. It's gross. The vim thing isn't, that's pleasant, just weird. You can of course provide any keymapping your heart desires, the bridge is both Turing complete and sensibly designed. That's why it needs an aesthetics. We have arrow keys. Use them to their intended purpose. 
+Speaking of your wrists, you'll be using one of three techniques to navigate: arrows, touchpad, or that weird vim thing you guys always want to implement. Only weirdos and holdouts navigate by typing space cadet keys and hitting glyph keys. It's passé. The vim thing isn't, that's pleasant, just weird. You can of course provide any keymapping your heart desires, the bridge is both Turing complete and sensibly designed. That's why it needs an aesthetics. We have arrow keys. Use them to their intended purpose. 
 
-Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid computer use. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. Saying something like `s-c-r` is silly, `s-c-→` might well not be. 
+Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid bridge hacking. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. Saying something like `s-c-r` is silly, `s-c-→` might well not be. 
 
 The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. 
 
@@ -98,5 +98,7 @@ Again: the bridge is quite capable of rendering images, moving or otherwise, wit
 The enhanced terminal does little more than interpret an extension of the xterm protocol that allows programs to display canvases over selected frames. One might display a browser window, I'd imagine this as quite a normal activity, all the terminal would then know is that a certain region is being blitted to rather than texted at. **bridge** would have as much awareness of the underlying processes as desired: any program of this nature wants to grow until you can check your gmail. 
 
 The terminal is a single running instance that creates and manages various windows in the GUI, and is able to move stdios around from window to window, when cards are moved. So epsilon more integrated with the GUI than a typical terminal emulator. Our terminal program, which we just call **term**, is a terminal, not a terminal emulator. It can't emulate terminals it's not descended from, though **bridge** could do so. 
+
+We build as little into **term** as practical. I consider keyboard comprehension an edge case. If you know about keyboards, you'll know that it's non-trivial in some contexts to capture keypresses and render them intelligibly. Whether that's a bridge or term level function is unclear. 
 
 
