@@ -79,7 +79,7 @@ You can also click on things. Sometimes you're feeling lazy, drinking coffee, hi
 
 Ah, and we have a tab key. Poor tab key: the single most ad-hoc, confusing key on the board. We continue the tradition of combining some navigation functions with indentation, though we intend to issue the actual tab character as seldom as possible. Horizontal Tab is Deprecated, yo. I may actually forbid the issuing of physical tabs in edit modes for programming languages that don't require them, on the main trunk. 
 
-The deep wisdom of editor writing: always doing the write thing when the user strike the tab key. This goes double for the bridge. 
+The deep wisdom of editor writing: always doing the right thing when the user strike the tab key. This goes double for the bridge. 
 
 The bridge has no truck with function keys, or anything on an extended board. The user is welcome to populate them as desired. They aren't deprecated, so much as superfluous. The same is true for any keys not commonly found on a laptop, and pointer devices are only expected to provide the equivalents of left and right clicks. 
 
