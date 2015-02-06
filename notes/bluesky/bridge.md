@@ -89,12 +89,14 @@ This is critical: the underlying bridge structure is tight enough that if you de
 
 The grid is cellular and addressable. This is an enormous leap in our expressive power, when we choose to use it. Further, we can render the glyphs in living, vivid color. In bridge programming, we abstract color, the background is called Black, default text White, something else might be Red and so on: for a blind user, these are clearly not colors at all. 
 
-This is not typical, just better. As hackers, some of us like to use color to interact with data, and those who can should, because it's an extra dimension and hence more usable information on the screen. We like this. 
+This is not typical, just better. As hackers, some of us like to use color to interact with data, and those who can should, because it's an extra dimension and hence more usable information on the screen. We like this. Programmers map a semantics to a Color, users map that Color to a color, or some other pleasing affect. We recognize foreground and background colors, but provide no underlining or strikeout, considering those Unicode matters.  
 
 Again: the bridge is quite capable of rendering images, moving or otherwise, within a frame of cells. The essence is that the grid is respected and textuality is primary.
 
 **bridge** runs inside another program. We call it the terminal by long convention; the changes we make to this program don't justify a new genus. **bridge** will degrade gracefully in xterm, perform glumly in a black and white setting, and become unusable should the user encounter a genuine line printer in the wild. Changes are good the shuttles need a good oiling. 
 
-The enhanced terminal does little more than interpret an extension of the xterm protocol that allows programs to display canvases over selected frames. One might display a browser window, I'd imagine this as quite a normal activity, all the terminal would then know is that a certain region is being blitted to rather than texted at. **bridge** would have as much awareness of the underlying processes as desired: any program of this nature want to grow until you can check your gmail. 
+The enhanced terminal does little more than interpret an extension of the xterm protocol that allows programs to display canvases over selected frames. One might display a browser window, I'd imagine this as quite a normal activity, all the terminal would then know is that a certain region is being blitted to rather than texted at. **bridge** would have as much awareness of the underlying processes as desired: any program of this nature wants to grow until you can check your gmail. 
+
+The terminal is a single running instance that creates and manages various windows in the GUI, and is able to move stdios around from window to window, when cards are moved. So epsilon more integrated with the GUI than a typical terminal emulator. Our terminal program, which we just call **term**, is a terminal, not a terminal emulator. It can't emulate terminals it's not descended from, though **bridge** could do so. 
 
 
