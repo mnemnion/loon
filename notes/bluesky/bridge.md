@@ -107,4 +107,10 @@ The grid is an interface abstraction, and may be locally reset to a different pi
 
 Decks, and I chose not to emphasize this, are recursive, a deck being properly a 'deck card'. This is no particular surprise, I imagine, no different from directories being a type of file, and if you guessed files and directories are cards and decks in a bridge you're not missing anything I'm laying down for you. 
 
+A somewhat degenerate bridge could run in a browser window. Degenerate not for display purposes, but because it is impossible for a Q1 2015 browser to capture all keystrokes issued by a user and translate them to a webapp. It is probably easier for us to jack a render engine, hopefully ServoMonkey, into **term** than to petition the powers that be to redress this grievance. 
+
+This would also have the advantage that your #FaceTweetGrams can be decks of cards, organized by date of retrieval. I'd enjoy that, personally, as well as the ability to pipe and filter the `curl` on the way to the render engine. 
+
+I hope this suffices as a brief introduction to the project. Don't expect to see quick action on anything presented here, because the bridge wants to be written in Clu. If you're into mockups, I'm into collaborations. 
+
 
