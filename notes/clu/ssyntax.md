@@ -4,13 +4,17 @@
 
 (foo.bar baz bux)                ; simple enough
 
+((foo bar) baz bux)				 ; meaning
+
 (foo@bar baz bux)                ; method call
+
+((foo bar) foo baz bux)          ; meaning
 
 (foo.bar.baz bux quux)           ; field access may be chained
 
 (foo.1 bar.3)				     ; presuming they may be indexed why not?
 
-(foo 1 (bar 3))                  ; if these are vectors this works anyway
+((foo 1) (bar 3))                ; if these are vectors this is the same
 
 (foo."bar" baz.:bux )            ; lookup on strings, keywords, why not?
 
