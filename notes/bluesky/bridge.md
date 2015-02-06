@@ -73,7 +73,7 @@ Speaking of your wrists, you'll be using one of three techniques to navigate: ar
 
 Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid bridge hacking. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. Saying something like `s-c-r` is silly, `s-c-→` might well not be. 
 
-The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. 
+The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. We support an `altgr, ag-` for those who require it. 
 
 You can also click on things. Sometimes you're feeling lazy, drinking coffee, high, or otherwise not in the mood. 
 
@@ -103,7 +103,7 @@ We build as little into **term** as practical. I consider keyboard comprehension
 
 **bridge** is responsible for translating addresses. A card has a certain amount of frame, and as far as the card is concerned, the leftmost fillable corner is 1,1. **bridge** turns these into absolute jump calls into the window's grid. The card has in principle infinite positive dimensions it may fill, **bridge** sees to it that the relevant cells are displayed. **term** informs **bridge** of the pixel density of a single cell, so it can allocate and fill regions accordingly. 
 
-The grid is an interface abstraction, and may be locally reset to a different pitch. A 10x10 allocation of cells from a window may be cast by a **bridge** process as 7x7, making glyphs larger, and what have you. Can you do arbitrary suballocation? In principle, yes, but this abstraction is difficult to support on current hardware and brings more headaches than value. At first. 
+The grid is an interface abstraction, and may be locally reset to a different pitch. A 10x10 allocation of cells from a window may be cast by a **bridge** process as 7x7, making glyphs larger, and what have you. Can you do arbitrary suballocation? In principle, yes, but this abstraction is difficult to support on current hardware and brings more headaches than value. At first. We do want **bridge** to function well in xterm, so it should be reasonably mature before we start relying on enhanced function from **term**.
 
 Decks, and I chose not to emphasize this, are recursive, a deck being properly a 'deck card'. This is no particular surprise, I imagine, no different from directories being a type of file, and if you guessed files and directories are cards and decks in a bridge you're not missing anything I'm laying down for you. 
 
