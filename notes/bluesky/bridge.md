@@ -81,7 +81,7 @@ Ah, and we have a tab key. Poor tab key: the single most ad-hoc, confusing key o
 
 The deep wisdom of editor writing: always doing the write thing when the user strike the tab key. This goes double for the bridge. 
 
-The bridge has no truck with function keys, or anything on an extended board. The user is welcome to populate them as desired. They aren't deprecated, so much as superfluous. 
+The bridge has no truck with function keys, or anything on an extended board. The user is welcome to populate them as desired. They aren't deprecated, so much as superfluous. The same is true for any keys not commonly found on a laptop, and pointer devices are only expected to provide the equivalents of left and right clicks. 
 
 As for which chord is mapped to what function in which context: don't know, don't care. We construct the bridge in such a way that the user can discover and assign these things. This takes thorough design, culminating in a help card that actually tells you which keys do what in various contexts, and contains information that's accurate to the running bridge. 
 
