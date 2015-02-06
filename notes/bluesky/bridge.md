@@ -101,4 +101,10 @@ The terminal is a single running instance that creates and manages various windo
 
 We build as little into **term** as practical. I consider keyboard comprehension an edge case. If you know about keyboards, you'll know that it's non-trivial in some contexts to capture keypresses and render them intelligibly. Whether that's a bridge or term level function is unclear. 
 
+**bridge** is responsible for translating addresses. A card has a certain amount of frame, and as far as the card is concerned, the leftmost fillable corner is 1,1. **bridge** turns these into absolute jump calls into the window's grid. The card has in principle infinite positive dimensions it may fill, **bridge** sees to it that the relevant cells are displayed. **term** informs **bridge** of the pixel density of a single cell, so it can allocate and fill regions accordingly. 
+
+The grid is an interface abstraction, and may be locally reset to a different pitch. A 10x10 allocation of cells from a window may be cast by a **bridge** process as 7x7, making glyphs larger, and what have you. Can you do arbitrary suballocation? In principle, yes, but this abstraction is difficult to support on current hardware and brings more headaches than value. At first. 
+
+Decks, and I chose not to emphasize this, are recursive, a deck being properly a 'deck card'. This is no particular surprise, I imagine, no different from directories being a type of file, and if you guessed files and directories are cards and decks in a bridge you're not missing anything I'm laying down for you. 
+
 
