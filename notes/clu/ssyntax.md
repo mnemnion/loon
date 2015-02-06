@@ -30,4 +30,6 @@
 (foo . "bar" . :baz bux . :quux) ; please don't
 
 (foo @ (bar @ (baz bux quux)))   ; easier to read, valid
+
+(foo @(bar @(baz bux quux)))     ; preferred spacing
 ```
