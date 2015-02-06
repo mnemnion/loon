@@ -30,8 +30,6 @@ The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encou
 
 `;` begins a comment, which ends with a newline. 
 
-`:` must be followed by a valid symbol, which may not be separated by whitespace. This is a keyword.
-
 `'` quotes the following form.
 
 `"` begins and ends strings, with `\` as an escape character for `"` in this context. They may not contain a newline.
@@ -63,12 +61,12 @@ Atomic tokens translate to semantic atoms, that is, data which is singular under
 
 The reader, encountering any character not previously defined, will attempt to construct a symbol. 
 
-If it encounters a character in the range `[0-9]` it will fail to do so. If it encounters `-` and a digit, it 
+If it encounters a character in the range `[0-9]`, or `_`, it will fail to do so. If it encounters `-` and a digit, it 
 will also fail.
 
 A symbol is guaranteed to be valid if it begins with a Latin alphabetic character, and continues with any valid alphanumeric code point in Unicode. Any single character token immediately ends the symbol. 
 
-A symbol may also contain at least `!@$%?-_*+=&^`, which are allowed to begin symbols also.
+A symbol may also contain at least `!@$%?-*+=&^`, which are allowed to begin symbols also. Digits and `_` are allowed within a symbol, but not at the beginning. 
 
 Currently undefined behavior: beginning a symbol with a non-Latin alphanumeric, or including Unicode characters outside of the defined alphabetic ranges. The former requirement will likely be relaxed, the latter is unlikely to be checked for. 
 
@@ -98,7 +96,7 @@ The reader specification does not provide an internal format for strings, other 
 
 ###Keywords
 
-`:` begins a keyword. It must be followed by a symbol, with no whitespace. 
+`#` followed by a symbol, with no whitespace, defines a keyword.  
 
 Keywords are always equal to themselves, and never refer to another value. 
 
