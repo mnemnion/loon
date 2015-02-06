@@ -65,7 +65,7 @@ In any case, these glyphs, on the bridge, are all a single cell wide. Backspace 
 This is important because it lets us aggressively overlay data in a consistent and viable way. The most information rich unit is the glyph, and we have many, but choose to use few. Because, as mentioned, we can only type 94 in any given keyboard configuration. Though it would seem we have more buttons...
 
 You may have an escape key. On the bridge, you are certainly allowed to touch it, if that's your thing. It's certainly there, if small, up, and to the left. It's a mere remap of one of your four chord keys, which in Neoclassical space cadet fashion, we refer to as hyper, control, alt, and super. You could call this a political compromise. You'd be right.
-They are `h-, c-, a-, s-` for short. Because of the equivalence of escape and alt, the alt key is sticky, making `a-n` and `esc n` equivalent in all cases. The command `a-esc, esc-esc, a-a-` is a null command. The other space cadets are not sticky unless you assign them so, nor is shift.  
+They are `H-, C-, A-, s-` for short. Because of the equivalence of escape and alt, the alt key is sticky, making `A-n` and `esc n` equivalent in all cases. The command `A-esc, esc-esc, A-A-` is a null command. The other space cadets are not sticky unless you assign them so, nor is shift.  
 
 On a bridge, we remap the huge and tasty caps lock to backspace, and make a single alt press equivalent to escape. A bridge being a hacker tool, you can of course fuck this up if you're stubborn. But try it first, you only have two wrists and statistically the right is more important (I'm an outlier here).
 
@@ -73,7 +73,7 @@ Speaking of your wrists, you'll be using one of three techniques to navigate: ar
 
 Arrow navigation, and some edit actions, are coupled to the space cadets on a chorded basis. This is subtle kung fu and the basis of fluid bridge hacking. There are 14 ways you can press hyper, control, alt, and super. We only abuse that privilege where the arrow keys are concerned, and there we abuse it heavily: 56 navigational idioms become available. Saying something like `s-c-r` is silly, `s-c-→` might well not be. 
 
-The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. We support an `altgr, ag-` for those who require it. 
+The hyper key is mostly left undefined for userspace, and the super key is normally needed to cooperate with the OS in various ways. We support an `altgr, ag-` for those who require it. In general, the alt key wants to support an idiom of abbreviated command typing, vim-ish. Note that the emacsian distinction between, say, `C-x-C-f` and `C-x-C f` isn't normally possible, because the second `C` is a null press, giving you `C-x f` in the latter sequence. 
 
 You can also click on things. Sometimes you're feeling lazy, drinking coffee, high, or otherwise not in the mood. 
 
