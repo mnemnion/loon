@@ -39,15 +39,15 @@ local function transform_atoms(ast)
 	end
 end
 
-local function rule_tables(node)
-	local lhs = node:select"lhs"
-	local rhs = node:select"rhs":pick"atom" 
+local function rule_tables(ast)
+	local lhs = ast:select"lhs"
+	local rhs = ast:select"rhs":pick"atom" 
 	local ndx = {}
 	for i,v in ipairs(lhs) do
 		ndx[i] = {}
 		ndx[i].lhs = lhs[i]
 		if v.val then
-			ndx[i].val = v.val  -- lookup Node, get index.
+			ndx[i].val = v.val  -- lookup ast, get index.
 		elseif v[1].id == "hidden_pattern" then
 				ndx[i].val = v[1].val
 		end
@@ -58,7 +58,7 @@ local function rule_tables(node)
 		end
 		ndx[i].rhs = rights
 	end
-	
+	ast:root().rule_table = ndx
 	return ndx
 end
 

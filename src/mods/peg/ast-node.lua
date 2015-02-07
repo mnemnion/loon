@@ -42,11 +42,13 @@ local function node_pr(node, depth, str)
 		else 
 			phrase = prefix
 		end
-		phrase = phrase..
-			  -- blue,node.parent().id," ",
-				 c.id..node.id.." "..
-				 c.range..node.first..
-				 "-"..c.range..node.last..clear.."\n"
+		if node.last then 
+			phrase = phrase..
+			-- blue,node.parent().id," ",
+			c.id..node.id.." "..
+			c.range..node.first..
+			"-"..c.range..node.last..clear.."\n"
+		end
 		if node.val then
 			 phrase = phrase..prefix..'"'..c.val..node.val..clear..'"'.."\n"
 		end 
