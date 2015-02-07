@@ -113,4 +113,18 @@ This would also have the advantage that your #FaceTweetGrams can be decks of car
 
 I hope this suffices as a brief introduction to the project. Don't expect to see quick action on anything presented here, because the bridge wants to be written in Clu. If you're into mockups, I'm into collaborations. 
 
+###Glossary
 
+**bridge:** a program which: bridges between the essential system functions and the user, bridges between multiple programs, and bridges between the power user and expert stages of computer fluency. The idiom is basically nautical. **bridge**, command line **br**, is the first implementation of a bridge, per se. There are an arbitrary number of antecedents. 
+
+**grid** the basic abstraction of a bridge. The grid is a column-row array of cells, which typically contain a Unicode glyph. The bridge apportions screen real estate on the basis of the grid. 
+
+**window** the GUI element holding a running instance of bridge. **bridge** may control multiple windows.
+
+**screen** the largest division of a grid. A typical window will have one or more screens. Screens may be tab stacked, and typically are when an instance has more than one. 
+
+**frame** a subdivision of the grid. Frames may not stack within a given screen or window. Picturing a simple running bridge, there will be a thin bottom frame with a status bar, a thin top frame with tabs, possibly a side frame with another view of the tabs, and a single frame that displays the active screen. Each screen may have an arbitrary number of frames. Each frame displays a card.
+
+**card** The basic unit of information in a bridge. A card may have arbitrary dimensions, and may contain text, images, video, sound, running programs, or anything else. A deck is a type of card.
+
+**deck** a card whose main purpose is as a container of other cards. The stack grows downward in the typical case. 

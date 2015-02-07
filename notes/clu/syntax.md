@@ -147,7 +147,7 @@ The `'` character quotes the following form. The effects of this depend on the f
 
 ###The Hash Modifier
 
-The `#` character, in general, modifies the following form. 
+The `#` character, in general, modifies the following form. No whitespace is allowed between a hash modifier and the form it affects; this is a syntax error, not a silent failure. 
 
 `#{}` produces a set. Unlike a table, a set does not require paired forms within the region. 
 

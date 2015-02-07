@@ -16,9 +16,9 @@
 
 ((foo 1) (bar 3))                ; if these are vectors this is the same
 
-(foo."bar" baz.:bux )            ; lookup on strings, keywords, why not?
+(foo."bar" baz.#bux )            ; lookup on strings, keywords, why not?
 
-(foo@(bar@(baz bux quux)))       ; necessaary because it might be
+(foo:(bar:(baz bux quux)))       ; necessary because it might be
 
 (foo@(bar bux@(baz quux)))       ; for example
 							     ; which chains the return of (bar bux)
@@ -27,9 +27,9 @@
 
 (foo . bar . baz bux quux)       ; hard to read, valid
 
-(foo . "bar" . :baz bux . :quux) ; please don't
+(foo . "bar" . #baz bux . :quux) ; please don't
 
-(foo @ (bar @ (baz bux quux)))   ; easier to read, valid
+(foo : (bar : (baz bux quux)))   ; easier to read, valid
 
-(foo @(bar @(baz bux quux)))     ; preferred spacing
+(foo :(bar :(baz bux quux)))     ; etc.
 ```
