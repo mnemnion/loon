@@ -27,7 +27,7 @@
 
 (foo . bar . baz bux quux)       ; hard to read, valid
 
-(foo . "bar" . #baz bux . :quux) ; please don't
+(foo . "bar" . #baz bux . #quux) ; please don't
 
 (foo : (bar : (baz bux quux)))   ; easier to read, valid
 

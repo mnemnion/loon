@@ -6,6 +6,8 @@
 
 local sort = require "peg/rule-sort"
 
+local roshambo = require "roshambo"
+
 local t = {}
 
 function t.whitespace(ast)
@@ -168,8 +170,11 @@ function t.lhs(ast)
 	local imports = ""
 	lhs[1]:root().start_rule = "  START "..'"'..lhs[1].val..'"\n'
 	local nocurse = ast:select(t.notrecursive):select(lhs_pred)
+	local rosh = roshambo()
+	rosh.isverbose = true
 	-- do a roshambo for mentioned-by
 	for i = 1, #lhs do
+
 		lhs[i].val = lhs[i].val.." =  "
 	end
 	lhs[1]:root().imports = imports.."\n"

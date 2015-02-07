@@ -161,7 +161,7 @@ assert(#grammar.range_s+1 == (match(range_c,grammar.range_s)))
 assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
 assert(#grammar.string_s+1 == (match(d_string,grammar.string_s)))
 
-io.write(clear)
-print(tree)
+io.write(tostring(clear))
+--print(tree)
 
 return { peg = peg }
