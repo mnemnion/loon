@@ -149,6 +149,8 @@ The `'` character quotes the following form. The effects of this depend on the f
 
 The `#` character, in general, modifies the following form. No whitespace is allowed between a hash modifier and the form it affects; this is a syntax error, not a silent failure. 
 
+`#symbol` is a keyword.
+
 `#{}` produces a set. Unlike a table, a set does not require paired forms within the region. 
 
 `#[]` produces a ring. A ring is a vector, with a zero element, which may be indexed modulo its length. 
@@ -175,6 +177,6 @@ One doesn't want to hand control back over at a place where the enclosing langua
 
 Comments begin with `;`, continuing to the end of the line. 
 
-Comments containing more than one `;`, with only whitespace between the `;` and the preceding newline, should be formatted in Markdown and otherwise conform to Clu documentation conventions. 
+Comments containing more than one `;`, with only whitespace between the `;` and the preceding newline, should be formatted in Markdown and otherwise conform to Clu documentation conventions. Any comments following the first `;;` may be preceded with a single `;`, with no blank lines allowed. 
 
 The Clu runtime discards comments, which hold no place in the resulting syntax tree. 
