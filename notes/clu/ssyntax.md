@@ -20,7 +20,7 @@
 
 (foo:(bar:(baz bux quux)))       ; necessary because it might be
 
-(foo@(bar bux@(baz quux)))       ; for example
+(foo:(bar bux:(baz quux)))       ; for example
 							     ; which chains the return of (bar bux)
 							     ; as the first argument to baz
   							     ; (before quux)
