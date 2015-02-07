@@ -16,3 +16,4 @@ So our special forms are simply fexprs, aren't special at all, and are simply un
 
 The transform context has an important consequence, inner evaluators can be used to launch arbitrarily elaborate subprograms, either waiting for their results or simply continuing. As a salient example, the source might contain a script to launch unit tests and/or continuous integration, then continue compiling and running without waiting for the results. One might keep git parameters in a configuration table and autocommit with each run. 
 
+There is a separate instance of the Lua evaluator called `Now`, and a template designed to use it will evaluate in the `Now` context. Note that, called within an existing `Now` context, the template wil defer, don't be thrown by the name. The effect is the same, a Now template will execute during compilation. By default, the string is parsed by Clu, it is of course possible to e.g. parse with JSON and evaluate with Now. 
