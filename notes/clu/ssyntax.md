@@ -25,6 +25,11 @@
 							     ; as the first argument to baz
   							     ; (before quux)
 
+(((foo bar) foo) baz ((foo bar) foo) bux quux)   ; translation of first
+												 ; i *think*
+
+(bar (foo foo bar bux) quux)     ; translation of second
+
 (foo . bar . baz bux quux)       ; hard to read, valid
 
 (foo . "bar" . #baz bux . #quux) ; please don't
