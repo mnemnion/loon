@@ -31,7 +31,7 @@ Clu offers tags. Tags are a short form for specifying strings that can be valid 
 
 In Clu, tags are strings. Symbols are strings also, but they live in environment tables and resolve to values. 
 
-`(*G* #foo)` is equivalent to `foo` in Lua, which can also be written `_G.foo`. Note that we use a CL-like idiom for variables that would otherwise take a leading underscore; I believe a metamethod like `__call` we would refer to as `^call`. 
+`(*G* #foo)` is equivalent to `foo` in Lua, which can also be written `_G.foo`. Note that we use a CL-like idiom for variables that would otherwise take a leading underscore; I believe a metamethod like `__call` we would refer to as `^call`. We will have a consistent system for translating forbidden symbols into Lua/Lun for interoperability purposes. 
 
 `*G*.foo` also works. Note that the leading hash is not retained and that we don't allow hashes at the beginning of symbols, anywhere else is okay. 
 

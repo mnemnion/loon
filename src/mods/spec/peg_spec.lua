@@ -1,7 +1,7 @@
 local epeg = require "peg/epeg"
 local match = epeg.match
-local strings = require "peg/strings"
-local failstrings = require "peg/failstrings"
+local strings = require "spec/strings"
+local failstrings = require "spec/failstrings"
 local core = require "peg/core-rules"
 local say = require "say"
 local ansi = require "ansi"
