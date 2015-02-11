@@ -16,4 +16,9 @@ function Meta.pr(self, ...)
 	end
 end
 
+local env = { ansi = true,
+			  xterm = true,
+			  darwin = true,
+			  unix = true}
+
 return { Meta = Meta }

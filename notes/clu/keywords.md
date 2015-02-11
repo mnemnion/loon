@@ -22,3 +22,17 @@ I'm not entirely sure we need keywords per se.
 
 Verdict: the `.keyword` syntax is winning. I think it just makes a string that must be a valid Clu symbol. Probably, this is actually a memoized table. I dunno. I'm overthinking this question.
 
+
+Let's try again:
+
+#Tags
+
+Clu offers tags. Tags are a short form for specifying strings that can be valid (Clu) symbols. 
+
+In Clu, tags are strings. Symbols are strings also, but they live in environment tables and resolve to values. 
+
+`(*G* #foo)` is equivalent to `foo` in Lua, which can also be written `_G.foo`. Note that we use a CL-like idiom for variables that would otherwise take a leading underscore; I believe a metamethod like `__call` we would refer to as `^call`. 
+
+`*G*.foo` also works. Note that the leading hash is not retained and that we don't allow hashes at the beginning of symbols, anywhere else is okay. 
+
+Tags aren't special anywhere. They're slightly more than a semantic convenience, since they are strings that obey symbol syntax. `(eq "foo" #foo)` is true by design. We'll have an `&key` form for handling final arguments, so `(foo bar #baz bux #quux flux)` on `(defn foo [bar &key])` works as you'd like it to. 
