@@ -11,7 +11,7 @@ local dump_ast = util.dump_ast
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
 local ast = require "peg/ast"
-local grammar = require "peg/grammars"
+local grammar = require "peg/pegs/grammars"
 t = require "peg/transform"
 codegen = require "peg/codegen"
 
@@ -161,7 +161,8 @@ assert(#grammar.range_s+1 == (match(range_c,grammar.range_s)))
 assert(#grammar.set_s+1 == (match(set_c,grammar.set_s)))
 assert(#grammar.string_s+1 == (match(d_string,grammar.string_s)))
 
-io.write(tostring(clear))
+local clear = tostring(ansi.clear)
+io.write(clear)
 --print(tree)
 
 return { peg = peg }
