@@ -1,0 +1,3 @@
+busted
+#remove -i to complete doc coverage
+ldoc -i -f markdown ./

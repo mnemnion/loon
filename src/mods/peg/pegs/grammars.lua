@@ -8,7 +8,7 @@ local g = {}
 
  g.set_s   = [[ abc\def\}g䷀䷁ ]]
  g.string_s = [[ asldfr\"adf  asdf\asdf]]
- g.grammar_s = [[ A : B C ( E / F ) / F G H
+ g.grammar_s = [[ A  : B      C ( E / F ) / G H
 			  I : "J" 
 			  K : L* M+ N?
 			  O : !P &Q !R*

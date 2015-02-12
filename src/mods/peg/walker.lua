@@ -62,6 +62,8 @@ local function lift(ast, str)
 		for i,v in ipairs(ast) do
 			if type(v) == "table" and v.span then
 				ast.val = str:sub(v[1],v[2])
+				ast.first = v[1]
+				ast.last = v[2] 
 			elseif type(v) == "table" and v.isnode then
 				lifter(v,str)
 			elseif type(v) == "string" then
