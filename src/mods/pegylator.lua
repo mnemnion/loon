@@ -12,6 +12,7 @@ local clear = ansi.clear()
 local epnf = require "peg/epnf"
 local ast = require "peg/ast"
 local grammar = require "peg/pegs/grammars"
+h = require "peg/highlight"
 t = require "peg/transform"
 codegen = require "peg/codegen"
 
@@ -145,13 +146,14 @@ a = ast.parse(peg,a)
 --s.sort(a)
 --s.sort(tree)
 --ast.pr(tree)
----[[
+--[[
 t.transform(a)
 t.transform(tree)
 t.transform(g)
+codegen.build(tree)
 --]]
 
-codegen.build(tree)
+
 
 assert(tree == tree.index(5):root())
 

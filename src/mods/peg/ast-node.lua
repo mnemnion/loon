@@ -261,6 +261,7 @@ Forest["pick"]   = forest.pick
 local function parse(grammar, str)
 	local ast = lpeg.match(grammar,str)
 	ast.str = str
+	ast.grammar = grammar
 	return walker.walk_ast(ast)
 end
 
