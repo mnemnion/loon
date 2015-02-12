@@ -97,7 +97,7 @@ function backwalk.walk_ast (ast)
 	ast.index = index
 	lift(ast)
 	walker(ast,ast,0)
-	ast.lifted = true -- I hate myself right now
+	ast.lifted = true 
 --	print("index length is now: ", #index)
 	return ast 
 end

@@ -137,21 +137,12 @@ local pretty = require "pl.pretty"
 function tshow(table)
 	io.write(pretty.write(table))
 end
-
---dump_ast (match(grammar.peg,grammar_s))
---dump_ast(match(grammar.peg,clu_s))
---dump_ast (match(grammar.peg,peg_s))
---dump_ast(match(grammar.peg,deco_s))
-
 tree = ast.parse(peg,grammar.peg_s)
 
 g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/a.peg"
 a = ast.parse(peg,a)
 
---s.sort(a)
---s.sort(tree)
---ast.pr(tree)
 --[[
 t.transform(a)
 t.transform(tree)
