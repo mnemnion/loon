@@ -62,8 +62,6 @@ end
 
 local function Csp (patt)
 -- rewrite: should group all captured tokens together.
--- currently, it does this 'span' business, which just didn't turn out 
--- useful, and has to be factored out.
 	return lpeg.Cp() * lpeg.Cmt(patt,function() return true end) * lpeg.Cp() / spanner
 end
 

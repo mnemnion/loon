@@ -26,6 +26,7 @@ end
 -- quoted verbatim, so if the context is Red,
 -- it will be Red also. 
 local function light(node, rules)
+	--this doesn't need a closure
 	local source = node:root().str
 	local phrase = ""
 	local cursor = 1
@@ -34,13 +35,16 @@ local function light(node, rules)
 		-- I spent a lot of time on that index.
 		-- Why not use it?
 		local ndx, first, last = ast:range()
+		local new = true
 		for i = first, last do
 			if ndx[i].id and ndx[i].val then
+				if new then 
+					phrase = phrase..source:sub(1,ndx[1].first-1)
+					new = false
+				end
 				if cursor < ndx[i].first then
-					  dot = --spot(p.Blue)
-					  	    p.Blue..
-					  	    source:sub(cursor,ndx[i].first-1)..
-					  	    p.Clear
+					  dot = 
+					  	    source:sub(cursor,ndx[i].first-1)
 				end
 				cursor = ndx[i].last+1
 				phrase = phrase..dot..source:sub(ndx[i].first,ndx[i].last)
@@ -48,7 +52,8 @@ local function light(node, rules)
 				-- handle span classes without values (e.g. parens)
 			end
 		end
-		print(phrase)
+		phrase = phrase..source:sub(cursor,-1)
+		--print(phrase)
 		return phrase
 	end
 	return lighter(node)

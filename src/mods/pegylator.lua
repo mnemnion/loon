@@ -46,10 +46,12 @@ local V = lpeg.V -- create a variable within a grammar
 					 +   (P"+" + P"-")^0 * digit^1
  peg = epnf.define(function(_ENV)
 	START "rules"
+	---[[
 	SUPPRESS ("WS",  "enclosed", "form", 
 		      "element" ,"elements", "pattern",
 		      "allowed_prefixed", "allowed_suffixed",
-		      "simple", "compound", "prefixed", "suffixed" )
+		      "simple", "compound", "prefixed", "suffixed"  )
+	--]]
 	local WS         =  WS^0
 	local symbol     =  Csp(symbol)
 	local d_string     =  Csp(d_string) 
@@ -57,8 +59,8 @@ local V = lpeg.V -- create a variable within a grammar
 	local hidden_string = Csp(h_string)
 	local range_c    =  Csp(range_c)  
 	local set_c      =  Csp(set_c)
-	local some_num_c =  Csp(some_num_c)
-	local cmnt       =  P";" * Csp(comment_c) 
+	local cmnt       =  P";" * Csp(comment_c)
+	local some_num_c = some_num_c 
 
 
 	rules   =  V"rule"^1
@@ -121,9 +123,9 @@ local V = lpeg.V -- create a variable within a grammar
 	     optional      =  V"allowed_suffixed" * WS * P"*"
 	     more_than_one =  V"allowed_suffixed" * WS * P"+"
 	     maybe         =  V"allowed_suffixed" * WS * P"?"
-   	     some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
 	     with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
-	     some_number   =  V"allowed_suffixed" * WS * P"$" * some_num_c
+	     some_number   =  V"allowed_suffixed" * WS * P"$" * V"repeats"
+	     repeats    =  Csp(some_num_c)
 	  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
 	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
     atom =  V"ws" + symbol 
@@ -133,6 +135,7 @@ end)
 -- Rig
 
 local pretty = require "pl.pretty"
+local diff = require "diff"
 
 function tshow(table)
 	io.write(pretty.write(table))
