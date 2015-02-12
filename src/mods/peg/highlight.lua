@@ -36,16 +36,14 @@ local function light(node, rules)
 		local ndx, first, last = ast:range()
 		for i = first, last do
 			if ndx[i].id and ndx[i].val then
-	---[[
 				if cursor < ndx[i].first then
-					  dot = --spot(p.Blue)..
+					  dot = --spot(p.Blue)
 					  	    p.Blue..
 					  	    source:sub(cursor,ndx[i].first-1)..
 					  	    p.Clear
 				end
-	--]]
 				cursor = ndx[i].last+1
-				phrase = phrase..dot..source:sub(ndx[i].first,ndx[i].last)--..spot(p.Blue)
+				phrase = phrase..dot..source:sub(ndx[i].first,ndx[i].last)
 			else
 				-- handle span classes without values (e.g. parens)
 			end
