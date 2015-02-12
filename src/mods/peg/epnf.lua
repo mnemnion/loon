@@ -89,11 +89,6 @@ local function anon_node (t)
   local tok = ""
   for i,v in ipairs(t) do 
     if type (v) == "table" then  
-      setmetatable(v,epnf.Node)
- --[[   elseif type(v) == "string" then
-      print ("Table: "..pretty.write(t).."Token["..i.."] ", v)
-      t.val = tok..v
-      --]]
     end
   end
   return unpack(t)

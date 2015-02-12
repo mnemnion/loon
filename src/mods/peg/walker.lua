@@ -66,7 +66,7 @@ local function lift(ast, str)
 				lifter(v,str)
 			elseif type(v) == "string" then
 				ast.val = v
-		--		ast[i] = ""
+				ast:remove(i)
 			end
 		end
 	end
@@ -96,6 +96,7 @@ function backwalk.walk_ast (ast)
 	walker(ast,ast,0)
 	ast.index = index
 	lift(ast)
+	walker(ast,ast,0)
 	ast.lifted = true -- I hate myself right now
 --	print("index length is now: ", #index)
 	return ast 

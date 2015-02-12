@@ -130,7 +130,13 @@ local V = lpeg.V -- create a variable within a grammar
     ws = Csp(P"_")
 end)
 
+-- Rig
 
+local pretty = require "pl.pretty"
+
+function tshow(table)
+	io.write(pretty.write(table))
+end
 
 --dump_ast (match(grammar.peg,grammar_s))
 --dump_ast(match(grammar.peg,clu_s))
