@@ -22,7 +22,7 @@ local g = {}
 			  D : E F G
 ]]
 
- g.peg_s =  read "peg/peg.peg"
+ g.peg_s =  read "peg/pegs/peg.peg"
  g.clu_s = [[
 
      clu :  form* / EOF
