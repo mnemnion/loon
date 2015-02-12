@@ -42,15 +42,18 @@ local function light(node, rules)
 					phrase = phrase..source:sub(1,ndx[1].first-1)
 					new = false
 				end
-				if cursor < ndx[i].first then
-					  dot = 
+				if cursor <= ndx[i].first then
+					  dot = spot(p.Red)..
+					  		p.Blue..
 					  	    source:sub(cursor,ndx[i].first-1)
+					  	    ..p.Clear
 				end
 				cursor = ndx[i].last+1
 				phrase = phrase..dot..source:sub(ndx[i].first,ndx[i].last)
 			else
 				-- handle span classes without values (e.g. parens)
 			end
+			print(cursor)
 		end
 		phrase = phrase..source:sub(cursor,-1)
 		--print(phrase)
@@ -79,5 +82,4 @@ local function Highlighter(ast, rules)
 end
 
 return {Highlighter = Highlighter,
-		light = light,
-		l = light}
+		light = light}

@@ -12,8 +12,8 @@ local clear = ansi.clear()
 local epnf = require "peg/epnf"
 local ast = require "peg/ast"
 local grammar = require "peg/pegs/grammars"
-h = require "peg/highlight"
-t = require "peg/transform"
+highlight = require "peg/highlight"
+transform = require "peg/transform"
 codegen = require "peg/codegen"
 
 local match = lpeg.match -- match a pattern against a string
@@ -115,7 +115,7 @@ local V = lpeg.V -- create a variable within a grammar
 		   if_and_this = P"&" * WS * V"allowed_prefixed"
                literal =  Csp(C'"' * d_string * C'"')
                        +  Csp(C"'" * s_string * C"'")
-        hidden_literal = P"`" * hidden_string * P"`"
+        hidden_literal = -P"``" * P"`" * hidden_string * -P"``" * P"`"
                set     =  P"{" * set_c^1 * P"}"  
 -- Change range to not use '-' separator instead require even # of bytes.
 -- Ru catches edge cases involving multi-byte chars. 
@@ -145,7 +145,10 @@ tree = ast.parse(peg,grammar.peg_s)
 g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/pegs/a.peg"
 a = ast.parse(peg,a)
+w = ast.parse(peg,grammar.wtf)
 
+hl = highlight.light
+t  = transform.transform
 --[[
 t.transform(a)
 t.transform(tree)
