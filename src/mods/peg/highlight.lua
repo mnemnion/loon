@@ -84,21 +84,11 @@ end
 
 --- generates a highlighter
 -- @function Highlighter
--- @param ast a parsed syntax
+-- @param syntax a parsed syntax
 -- @param rules a palette
 -- @return a function: λ (string|Node) -> string 
-local function Highlighter(ast, rules)
-	local p = rules
-	local function hilight(phrase)
-		local node = nil
-		if type(phrase) == "string" then
-			node = lpeg.match(ast.grammar,phrase)
-		elseif tableand(phrase, phrase.isnode) then
-			node = phrase
-		end
-		print(node)
-	end
-	return hilight
+local function Highlighter(syntax, rules)
+
 end
 
 return {Highlighter = Highlighter,

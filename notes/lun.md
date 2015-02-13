@@ -51,8 +51,8 @@ end
 
 Which is low-noise but kind of weird from my Pascal background. I'm just not sure why `:=` should have that meaning. 
 
-
 `defn` being the obvious `def function`. Note that `outer` is a compiler directive that can be found to the left of most symbols, the exception that comes to mind being inside the arguments of a function definition, where it would be meaningless, since we're binding local references by definition. 
+
 
 ##Keywords and Method Calls
 
