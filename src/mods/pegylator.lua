@@ -60,7 +60,6 @@ local peg_fn = function(_ENV)
 	local hidden_string = Csp(h_string)
 	local range_c    =  Csp(range_c)  
 	local set_c      =  Csp(set_c)
-	local cmnt       =  P";" * Csp(comment_c)
 	local some_num_c = some_num_c 
 
 
@@ -102,14 +101,13 @@ local peg_fn = function(_ENV)
 	simple   =  V"suffixed"
 			 +  V"prefixed"
 			 +  V"atom" 
-		comment = cmnt
+		comment = Csp( P";" * comment_c)
 	prefixed =  V"if_not_this"
 			 +  V"not_this"
 			 +  V"if_and_this"
     suffixed =  V"optional"
 	         +  V"more_than_one"
 	         +  V"maybe"
-	         +  V"with_suffix"
 	    	 +  V"some_number"
 		   if_not_this = P"!" * WS * V"allowed_prefixed"
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
@@ -125,7 +123,8 @@ local peg_fn = function(_ENV)
 	     more_than_one =  V"allowed_suffixed" * WS * P"+"
 	     maybe         =  V"allowed_suffixed" * WS * P"?"
 	     with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
-	     some_number   =  V"allowed_suffixed" * WS * P"$" * V"repeats"
+	     some_number   =  V"allowed_suffixed" * WS * P"$" * V"repeats" * V"some_suffix"^0
+	     some_suffix   = (Csp"*" + Csp"+" + Csp"?")
 	     repeats    =  Csp(some_num_c)
 	  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
 	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
@@ -148,6 +147,7 @@ tree_hl = ast.parse(peg_hl,grammar.peg_s)
 g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/pegs/a.peg"
 a = ast.parse(peg,a)
+clu = ast.parse(peg,grammar.clu_s)
 w = ast.parse(peg,grammar.wtf)
 l = ast.parse(peg,grammar.lisp_s)
 

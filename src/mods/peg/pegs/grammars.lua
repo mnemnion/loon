@@ -28,12 +28,12 @@ local g = {}
  g.lisp_s = read "peg/pegs/lisp.peg"
  g.clu_s = [[
 
-     clu :  form* / EOF
+       clu :  form* / EOF
 
-      form :  unary* (_atom_ / _compound_) / _<comment>
+      form :  unary* (_atom_ / _compound_) / _comment
 
      unary :  ","
-              /  "~"
+           /  "~"
            /  "`"
            /  reader-macro
 
@@ -54,17 +54,17 @@ local g = {}
     list   :  "(" form* ")"
     hash   :  "{" form$2* "}"
     vector :  "[" form* "]"
-    type   :  "<" form* ">" !type form
+    type   :  ":[" form* "]:"
     syntax :  "|" dispatch* "|"
 
   dispatch :  "--|" moonscript "|--" 
            /  "--!" dispatch-string 
            /  lun
-       lun :  !"|" ANYTHING    ;-) looks like lua!  
-moonscript :  !"|" ANYTHING    ;-) looks like moonscript!
+       lun :  !"|" ANY    ;-) looks like lua!  
+moonscript :  !"|" ANY    ;-) looks like moonscript!
 
      latin :  ([A-Z] / [a-z])
- <comment> :  ";" !"\n" ANYTHING "\n"
+ `comment` :  ";" !"\n" ANYTHING "\n"
 
 ]]
 

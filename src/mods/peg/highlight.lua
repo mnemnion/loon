@@ -11,6 +11,7 @@ local tableand = util.tableand
 local p = {Blue = tostring(ansi.blue),
 				 Red = tostring(ansi.red),
 				 Clear = tostring(ansi.clear),
+				 Grey = tostring(ansi.dim)..tostring(ansi.white),
 				 Magenta = tostring(ansi.magenta),
 				 White = tostring(ansi.white)}
 
@@ -18,7 +19,8 @@ local p = {Blue = tostring(ansi.blue),
 -- only parser we have for awhile. 
 
  testrules = { atom = {p.White,p.Clear},
-  			   lhs  = {p.Blue,p.Clear}}
+  			   lhs  = {p.Blue,p.Clear},
+  			   comment = {p.Grey,p.Clear}}
 
 --local testrules = { atom = {"",""}, lhs = {"",""}}
 
@@ -102,25 +104,28 @@ local function light(ast, rules)
 				  gap = source:sub(cursor,node.first-1)
 			end
 			cursor = node.last+1
+			--print(p.Red..node.id..p.Clear)
 			phrase = phrase..gap..rulewrap_value(node,rules)
-		elseif rules[node.id] then
+---[[
+		elseif rules[node.id] and node.val == nil then
+			print(node.id)
 			gap = source:sub(cursor,node.first-1)
 			cursor = node.first
 			queue[close] = node
 			phrase = phrase..gap..rulewrap_start(node,rules)
 		end
 		if queue[i] then -- close regional rule
-			print ("closing "..queue[i].id.." at "..queue[i].last)
+			--print (queue[i].id)
 			gap = source:sub(cursor,queue[i].last-1)
 			cursor = queue[i].last
 			phrase = phrase..rulewrap_close(queue[i],rules)..gap
-		--	print("close "..queue[i].." at "..tostring(cursor))
+		--	print("close "..queue[i].." at "..tostring(cursor)) --]]
 		end
 	end
 	phrase = phrase..source:sub(cursor,-1)
 	--print(pl.write(queue))
 	--print(phrase)
-	return phrase
+	return phrase, queue
 end
 
 --- generates a highlighter
