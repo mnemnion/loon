@@ -21,7 +21,7 @@ If we want to restrict the use of a function by type:
 
 ```clojure
 (defn with-types
-	[[:[Node]: foo bar] {baz: #bux}]
+	[[:[Node]: foo bar] {baz #bux}]
 	(do ...))
 ```
 
@@ -29,4 +29,4 @@ I feel like the `:[Node]:` syntax is pretty heavyweight stuff. But types can be 
 
 In LuaJIT dispatching on primitive types is effectively free. Dynamic languages being what they are, type annotation on compound types are a runtime check, basically a built-in unit test for your program. 
 
-All of the defining forms are templates, or macros which expand into templates
+All of the defining forms are templates (`fn`), or macros which expand into templates (`defn`), so we can conditionally compile out type checks for production-ready code. 
