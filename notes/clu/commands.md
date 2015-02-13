@@ -2,7 +2,7 @@
 
 In Clu, we have expressions. Expressions evaluate, and return a value. We call our expressions exprs.
 
-Exprs are denoted as `(command arguments)`, with a single command and an arbitrary number of arguments. Arguments are not necessarily evaluated before the command is called; if so, they are evaluated 
+Exprs are denoted as `(command arguments)`, with a single command and an arbitrary number of arguments. Arguments are not necessarily evaluated before the command is called; if so, they are evaluated in the order written. 
 
 Exprs are not called lists, and commands are not necessarily functions. A quoted expr of the form `'(command arguments)` is a Node. Like any other quoted value, it is a fragment of syntax. There are no lists anywhere in Clu. 
 
