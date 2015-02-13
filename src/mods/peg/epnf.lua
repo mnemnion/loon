@@ -111,9 +111,9 @@ local function W( s )
 end
 local WS = L.S" \r\n\t\f\v"
 
--- setup an environment where you can easily define lpeg grammars
+--- setup an environment where you can easily define lpeg grammars
 -- with lots of syntax sugar
-function epnf.define( func, g )
+function epnf.define( func, g, unsuppressed)
   g = g or {}
   local suppressed = {}
   local env = {}
@@ -141,7 +141,7 @@ function epnf.define( func, g )
   setmetatable( env, {
     __index = env_index,
     __newindex = function( _, name, val )
-      if suppressed[ name ] then
+      if suppressed[ name ] and not unsuppressed then
         local v = L.Ct( val ) / anon_node
           g[ name ] = v
       else

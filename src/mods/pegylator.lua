@@ -130,7 +130,7 @@ local V = lpeg.V -- create a variable within a grammar
 	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
     atom =  V"ws" + symbol 
     ws = Csp(P"_")
-end)
+end, nil, true) -- nil is _G, false = suppress output
 
 -- Rig
 
