@@ -15,7 +15,8 @@ local g = {}
 			  O : !P &Q !R*
 			  `S` : ``T`` (U V)
 			  W : {XY} [a-z] 
-			  A : B$2 C$-3 D$4..5 E$+4]]
+			  A : B$2 C$-3 D$4..5 E$+4
+        ]]
 
  g.deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
  g.rule_s  = [[A:B C(D E)/(F G H)

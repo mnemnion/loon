@@ -159,7 +159,7 @@ codegen.build(tree)
 
 
 assert(tree == tree.index(5):root())
-
+assert(tree.str == hl(tree))
 --print (match(grammar.symbol, symbol_s))
 assert(#grammar.symbol_s+1 == (match(symbol, grammar.symbol_s)))
 assert(#grammar.range_s+1 == (match(range_c,grammar.range_s)))
