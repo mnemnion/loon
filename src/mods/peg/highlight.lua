@@ -17,25 +17,60 @@ local p = {Blue = tostring(ansi.blue),
 -- peg rules. Don't belong here, but this is the
 -- only parser we have for awhile. 
 
-local testrules = { atom = p.White, 
-				   lhs  = p.Blue}
+local testrules = { atom = {p.White,p.Clear}, 
+  				    pattern  = {p.Blue,p.Clear}}
+
+local testrules = { atom = {"",""}, lhs = {"",""}}
 
 
 -- wraps a value in a rule, or
 -- returns it if the rule is nil.
-local function rulewrap(ast,rules)
+local function rulewrap_value(ast,rules)
 	 if rules[ast.id] then
 	 	local rule = rules[ast.id]
 	 	if type (rule) == "string" then -- pre only
 		 	return rule..ast.val..p.Clear
 		elseif type (rule) == "table" then -- pre and post
-			print "table reached in rulewrap"
+			return rule[1]..ast.val..rule[2]
 		elseif type (rule) == "function" then -- function over value
-			print "function reached in rulewrap"
+			print "function reached in rulewrap_value"
+			return ""
 		end
 	 else
 	 	return ast.val
 	 end
+end
+
+local function rulewrap_start(ast,rules)
+	if rules[ast.id] then
+		local rule = rules[ast.id]
+		if type(rule) == "string" then -- pre only
+			return rule
+		elseif type(rule) == "table" then -- use pre
+			return rule[1]
+		elseif type(rule) == "function" then -- fn over span
+			print "function reached in rulewrap_start"
+			return ""
+		end
+	else 
+		return "" 
+	end
+end
+
+local function rulewrap_close(ast,rules)
+	if rules[ast.id] then
+		local rule = rules[ast.id]
+		if type(rule) == "string" then 
+			return ""
+		elseif type(rule) == "table" then
+			return rule[2]
+		elseif type(rule) == "function" then
+			print "function reached in rulewrap_close"
+			return ""
+		end
+	else
+		return ""
+	end
 end
 
 --- highlights a Node.
@@ -67,12 +102,17 @@ local function light(ast, rules)
 				  gap = source:sub(cursor,node.first-1)
 			end
 			cursor = node.last+1
-			phrase = phrase..gap..rulewrap(node,rules)
+			phrase = phrase..gap..rulewrap_value(node,rules)
 		else -- start regional rule
-			queue[close] = node.id
-			
+			gap = source:sub(cursor,node.first-1)
+			cursor = node.first
+			queue[close] = node
+			phrase = phrase..gap..rulewrap_start(node,rules)
 		end
 		if queue[i] then -- close regional rule
+			gap = source:sub(cursor,queue[i].last-1)
+			cursor = queue[i].last
+			phrase = phrase..rulewrap_close(node,rules)..gap
 		--	print("close "..queue[i].." at "..tostring(cursor))
 		end
 	end
