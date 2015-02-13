@@ -11,7 +11,7 @@ local tableand = util.tableand
 local p = {Blue = tostring(ansi.blue),
 				 Red = tostring(ansi.red),
 				 Clear = tostring(ansi.clear),
-				 Grey = tostring(ansi.dim)..tostring(ansi.white),
+				 Green = tostring(ansi.green),
 				 Magenta = tostring(ansi.magenta),
 				 White = tostring(ansi.white)}
 
@@ -20,7 +20,8 @@ local p = {Blue = tostring(ansi.blue),
 
  testrules = { atom = {p.White,p.Clear},
   			   lhs  = {p.Blue,p.Clear},
-  			   comment = {p.Grey,p.Clear}}
+  			   optional = {p.Green,p.Clear},
+  			   comment = {p.Magenta,p.Clear}}
 
 --local testrules = { atom = {"",""}, lhs = {"",""}}
 
@@ -43,7 +44,7 @@ local function rulewrap_value(ast,rules)
 	 end
 end
 
-local function rulewrap_start(ast,rules)
+local function rulewrap_open(ast,rules)
 	if rules[ast.id] then
 		local rule = rules[ast.id]
 		if type(rule) == "string" then -- pre only
@@ -95,7 +96,13 @@ local function light(ast, rules)
 	local new = true
 	for i = first, last do
 		local node, close, _ = ndx(i)
-		if node.id and node.val then -- wrap values in rule
+		if rules[node.id] and node.val == nil then
+			print(node.id)
+			gap = source:sub(cursor,node.first-1)
+			cursor = node.first
+			queue[close] = node
+			phrase = phrase..gap..rulewrap_open(node,rules)
+		elseif node.id and node.val then -- wrap values in rule
 			if new then 
 				phrase = phrase..source:sub(1,ndx[1].first-1)
 				new = false
@@ -107,18 +114,16 @@ local function light(ast, rules)
 			--print(p.Red..node.id..p.Clear)
 			phrase = phrase..gap..rulewrap_value(node,rules)
 ---[[
-		elseif rules[node.id] and node.val == nil then
-			print(node.id)
-			gap = source:sub(cursor,node.first-1)
-			cursor = node.first
-			queue[close] = node
-			phrase = phrase..gap..rulewrap_start(node,rules)
+		
 		end
 		if queue[i] then -- close regional rule
 			--print (queue[i].id)
 			gap = source:sub(cursor,queue[i].last-1)
 			cursor = queue[i].last
-			phrase = phrase..rulewrap_close(queue[i],rules)..gap
+			phrase = phrase
+			         ..rulewrap_open(queue[i],rules)
+			         ..gap
+			         ..rulewrap_close(queue[i],rules)
 		--	print("close "..queue[i].." at "..tostring(cursor)) --]]
 		end
 	end
