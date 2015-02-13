@@ -44,7 +44,8 @@ local V = lpeg.V -- create a variable within a grammar
 	local set_c    = (set_match + P"\\}" + P"\\")^1
 	local some_num_c =   digit^1 * P".." * digit^1
 					 +   (P"+" + P"-")^0 * digit^1
- peg = epnf.define(function(_ENV)
+
+local peg_fn = function(_ENV)
 	START "rules"
 	---[[
 	SUPPRESS ("WS",  "enclosed", "form", 
@@ -130,8 +131,10 @@ local V = lpeg.V -- create a variable within a grammar
 	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
     atom =  V"ws" + symbol 
     ws = Csp(P"_")
-end, nil, true) -- nil is _G, false = suppress output
+end
 
+peg = epnf.define(peg_fn, nil, false) -- nil is _G, false = suppress output
+peg_hl = epnf.define(peg_fn, nil, true)
 -- Rig
 
 local pretty = require "pl.pretty"
@@ -141,7 +144,7 @@ function tshow(table)
 	io.write(pretty.write(table))
 end
 tree = ast.parse(peg,grammar.peg_s)
-
+tree_hl = ast.parse(peg_hl,grammar.peg_s)
 g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/pegs/a.peg"
 a = ast.parse(peg,a)
