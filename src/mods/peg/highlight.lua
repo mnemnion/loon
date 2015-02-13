@@ -17,10 +17,10 @@ local p = {Blue = tostring(ansi.blue),
 -- peg rules. Don't belong here, but this is the
 -- only parser we have for awhile. 
 
-local testrules = { atom = {p.White,p.Clear}, 
-  				    pattern  = {p.Blue,p.Clear}}
+ testrules = { atom = {p.White,p.Clear},
+  			   lhs  = {p.Blue,p.Clear}}
 
-local testrules = { atom = {"",""}, lhs = {"",""}}
+--local testrules = { atom = {"",""}, lhs = {"",""}}
 
 
 -- wraps a value in a rule, or
@@ -103,16 +103,17 @@ local function light(ast, rules)
 			end
 			cursor = node.last+1
 			phrase = phrase..gap..rulewrap_value(node,rules)
-		else -- start regional rule
+		elseif rules[node.id] then
 			gap = source:sub(cursor,node.first-1)
 			cursor = node.first
 			queue[close] = node
 			phrase = phrase..gap..rulewrap_start(node,rules)
 		end
 		if queue[i] then -- close regional rule
+			print ("closing "..queue[i].id.." at "..queue[i].last)
 			gap = source:sub(cursor,queue[i].last-1)
 			cursor = queue[i].last
-			phrase = phrase..rulewrap_close(node,rules)..gap
+			phrase = phrase..rulewrap_close(queue[i],rules)..gap
 		--	print("close "..queue[i].." at "..tostring(cursor))
 		end
 	end
