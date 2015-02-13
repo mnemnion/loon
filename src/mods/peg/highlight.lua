@@ -25,7 +25,14 @@ local testrules = { atom = p.White,
 -- returns it if the rule is nil.
 local function rulewrap(ast,rules)
 	 if rules[ast.id] then
-	 	return rules[ast.id]..ast.val..p.Clear
+	 	local rule = rules[ast.id]
+	 	if type (rule) == "string" then -- pre only
+		 	return rule..ast.val..p.Clear
+		elseif type (rule) == "table" then -- pre and post
+			print "table reached in rulewrap"
+		elseif type (rule) == "function" then -- function over value
+			print "function reached in rulewrap"
+		end
 	 else
 	 	return ast.val
 	 end
