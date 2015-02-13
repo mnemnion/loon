@@ -25,6 +25,7 @@ local g = {}
 ]]
 
  g.peg_s =  read "peg/pegs/peg.peg"
+ g.lisp_s = read "peg/pegs/lisp.peg"
  g.clu_s = [[
 
      clu :  form* / EOF

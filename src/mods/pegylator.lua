@@ -146,6 +146,7 @@ g = ast.parse(peg,grammar.grammar_s)
 a = dofile "peg/pegs/a.peg"
 a = ast.parse(peg,a)
 w = ast.parse(peg,grammar.wtf)
+l = ast.parse(peg,grammar.lisp_s)
 
 hl = highlight.light
 t  = transform.transform
@@ -155,8 +156,6 @@ t.transform(tree)
 t.transform(g)
 codegen.build(tree)
 --]]
-
-
 
 assert(tree == tree.index(5):root())
 --assert(tree.str == hl(tree))
