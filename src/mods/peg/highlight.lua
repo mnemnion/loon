@@ -13,6 +13,12 @@ local p = {Blue = tostring(ansi.blue),
 				 Clear = tostring(ansi.clear),
 				 Magenta = tostring(ansi.magenta)}
 
+-- peg rules. Don't belong here, but this is the
+-- only parser we have for awhile. 
+
+local pegrules = { atom = p.Red, 
+				   lhs  = p.Blue}
+
 local testrules = { lhs = "Red",
 					atom = "White"}
 
@@ -25,26 +31,29 @@ end
 -- anything not collected by the grammar is 
 -- quoted verbatim, so if the context is Red,
 -- it will be Red also. 
+-- @function light
+-- @param ast the parsed string
+-- @param rules the rule table
+-- @return highlighted string
 local function light(ast, rules)
 	local source = ast:root().str
 	local phrase = ""
 	local cursor = 1
-	local dot = ""
+	local gap = ""
 	local ndx, first, last = ast:range()
 	local new = true
 	for i = first, last do
-		if ndx[i].id and ndx[i].val then
+		local node = ndx[i]
+		if node.id and node.val then
 			if new then 
 				phrase = phrase..source:sub(1,ndx[1].first-1)
 				new = false
 			end
-			if cursor <= ndx[i].first then
-				  dot = 
-				  	    source:sub(cursor,ndx[i].first-1)
-				  	  
+			if cursor <= node.first then
+				  gap = source:sub(cursor,node.first-1)
 			end
-			cursor = ndx[i].last+1
-			phrase = phrase..dot..ndx[i].val
+			cursor = node.last+1
+			phrase = phrase..gap..node.val
 		else
 			-- handle span classes without values (e.g. parens)
 		end
