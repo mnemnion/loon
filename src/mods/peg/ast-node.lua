@@ -73,12 +73,12 @@ local function ast_tostring(ast)
 	-- now we can print an AST.
 	local ndx, first, last = ast:range()
 	local og = ndx(1).str
-	local str = ""
+	local phrase = ""
 	for i= first,last do 
 		local node,_,depth = ndx(i)
-		str = str..node_pr(node,depth,og)
+		phrase = phrase..node_pr(node,depth,og)
 	end
-	return str
+	return phrase
 end
 
 local function ast_pr(ast)

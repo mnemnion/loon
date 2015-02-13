@@ -47,6 +47,7 @@ describe("tests over PEGylator", function()
 	end)
 	it("int asserts", function()
 		assert.equal(#("123")+1, (match(core.int,"123")))
+		assert.is_not.equal(#("123#")+1,(match(core.int,("123#"))))
 	end)
 	it("Float asserts", function()
 		pending "Add float tests"

@@ -11,21 +11,26 @@ local tableand = util.tableand
 local p = {Blue = tostring(ansi.blue),
 				 Red = tostring(ansi.red),
 				 Clear = tostring(ansi.clear),
-				 Magenta = tostring(ansi.magenta)}
+				 Magenta = tostring(ansi.magenta),
+				 White = tostring(ansi.white)}
 
 -- peg rules. Don't belong here, but this is the
 -- only parser we have for awhile. 
 
-local pegrules = { atom = p.Red, 
+local testrules = { atom = p.White, 
 				   lhs  = p.Blue}
 
-local testrules = { lhs = "Red",
-					atom = "White"}
 
-local function spot(color)
-	return color.."◉"..p.Clear
-	--return ""
+-- wraps a value in a rule, or
+-- returns it if the rule is nil.
+local function rulewrap(ast,rules)
+	 if rules[ast.id] then
+	 	return rules[ast.id]..ast.val..p.Clear
+	 else
+	 	return ast.val
+	 end
 end
+
 --- highlights a Node.
 -- uses spans and the original string.
 -- anything not collected by the grammar is 
@@ -36,15 +41,17 @@ end
 -- @param rules the rule table
 -- @return highlighted string
 local function light(ast, rules)
+	if not rules then rules = testrules end
 	local source = ast:root().str
+	local queue = {}
 	local phrase = ""
 	local cursor = 1
 	local gap = ""
 	local ndx, first, last = ast:range()
 	local new = true
 	for i = first, last do
-		local node = ndx[i]
-		if node.id and node.val then
+		local node, close, _ = ndx(i)
+		if node.id and node.val then -- wrap values in rule
 			if new then 
 				phrase = phrase..source:sub(1,ndx[1].first-1)
 				new = false
@@ -53,12 +60,17 @@ local function light(ast, rules)
 				  gap = source:sub(cursor,node.first-1)
 			end
 			cursor = node.last+1
-			phrase = phrase..gap..node.val
-		else
-			-- handle span classes without values (e.g. parens)
+			phrase = phrase..gap..rulewrap(node,rules)
+		else -- start regional rule
+			queue[close] = node.id
+			
+		end
+		if queue[i] then -- close regional rule
+		--	print("close "..queue[i].." at "..tostring(cursor))
 		end
 	end
 	phrase = phrase..source:sub(cursor,-1)
+	--print(pl.write(queue))
 	--print(phrase)
 	return phrase
 end
