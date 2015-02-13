@@ -1,6 +1,6 @@
 #Compiling
 
-The Clu compiler is incremental. It consists of macros and templates. Here's how it works. 
+The Clu compiler is incremental. It consists of parsers, templates, and macros. Here's how it works. 
 
 `eval` is a template form. A template form takes a string as input, using a parser. We will presume the parser is Clu, since we're discussing the Clu compiler, which is, entirely, the template form `eval`. 
 
