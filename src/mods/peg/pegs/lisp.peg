@@ -1,0 +1,13 @@
+
+lisp : form+
+
+form : atom / list
+
+list : "(" form* ")"
+
+atom : symbol / number
+
+symbol: ({AZ} / {az})+
+
+number : {09}+
+
