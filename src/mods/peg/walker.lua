@@ -67,9 +67,9 @@ local function lift(ast, str)
 			elseif type(v) == "table" and v.isnode then
 				lifter(v,str)
 			elseif type(v) == "string" then
-				print "this happens"
-				ast.val = v
-				ast:remove(i)
+				error "raw string capture found in AST"
+				-- implement a sensible strategy 
+				-- or forbid outright?
 			end
 		end
 	end

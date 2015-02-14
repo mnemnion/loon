@@ -8,7 +8,6 @@ local core = require "peg/core-rules"
 local clear = ansi.clear()
 local epnf = require "peg/epnf"
 local ast = require "peg/ast"
-local grammar = require "peg/grammars"
 local t = require "peg/transform"
 
 local match = lpeg.match -- match a pattern against a string
@@ -39,13 +38,13 @@ number : {09}+
 
 local _lisp_fn = function(_ENV)
 	START"lisp"
-	lisp = V"form"^1+
+	lisp = V"form"^1
 	form = V"_WS" * V"atom" * V"_WS" 
 	     + V"_WS" * V"list" * V"_WS"
-	list = C"(" form* C")"
+	list = P"(" * V"form"^0 * P")"
 	atom = V"symbol" + V"number"
-	symbol = (R"AZ" + R"az")^1
-	number =  R"09"^1
+	symbol = Csp((R"AZ" + R"az")^1)
+	number =  Csp((R"09")^1)
 	_WS = WS
 end
 

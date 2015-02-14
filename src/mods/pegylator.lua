@@ -19,6 +19,7 @@ peg = require "peg/quines/peg"
 peg_hl = peg.peg_hl
 peg = peg.peg
 
+parse = ast.parse
 highlight = require "peg/highlight"
 transform = require "peg/transform"
 codegen = require "peg/codegen"
@@ -37,7 +38,8 @@ a = ast.parse(peg,a)
 clu = ast.parse(peg,grammar.clu_s)
 w = ast.parse(peg,grammar.wtf)
 l = ast.parse(peg,grammar.lisp_s)
-
+lisp = require "peg/quines/lisp"
+lisp = lisp.lisp
 hl = highlight.light
 t  = transform.transform
 hi = function(ast) io.write(hl(ast).."\n") end

@@ -3,7 +3,7 @@ lisp : form+
 
 form : atom / list
 
-list : "(" form* ")"
+list : `(` form* `)`
 
 atom : symbol / number
 
