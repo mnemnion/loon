@@ -74,6 +74,8 @@ Currently undefined behavior: beginning a symbol with a non-Latin alphanumeric, 
 
 The reader is fairly permissive in terms of the symbols it will accept, currently accepting all undefined behavior. The reader and runtime environment are strictly literal, defining symbol equivalence in terms of the UTF-8 sequence accepted.
 
+There will be a short-form [ssyntax](ssyntax.md) for easy slot access. 
+
 ### Numbers
 
 The reader will attempt to make a number if it fails to make a symbol by encountering characters in the range `[0-9]` or `-`. 
