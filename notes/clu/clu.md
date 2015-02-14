@@ -6,6 +6,7 @@ The [core of the notion](precepts.md) is to expose the Lua runtime through sever
 
 Right now we have:
 
+- The [rationale](rationale.md)
 - A [grammar](Grammar.md)
 - Some discussion of [syntax](syntax.md)
 - A bit on the [semantics](semantics.md)
