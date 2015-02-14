@@ -63,4 +63,4 @@ Like this:
  	(...))
 ```
 
-Note that it's an error detected during macro expansion to supply more than one key/value for a table in an argument context. `⟨Type⟩` may be entered as `:[Type]:`, just as `«string»` may be entered as `` `"string"` `` 
+Note that it's an error detected during macro expansion to supply more than one key/value for a table in an argument context. `⟨Type⟩` may be entered as `:[Type]:`, just as `«string»` may be entered as `:"string":`, since method chaining ssyntax requires a symbol that evals to a function. Clu will have certain forms for compatibility with the ASCII era and ease of entry. Unlike C, and unlike most languages in existence, Clu will physically reach into your file and change `:[` to `⟨`, and so on. Whether we do the same to `fn` and `λ` remains to be seen. Most likely, not. 
