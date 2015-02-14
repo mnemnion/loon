@@ -50,3 +50,17 @@ Oh all right. Here's some sugar for the `let` binding, because extra keystrokes 
 ```
 
 I mean we've got our `\o/`, let's use it. 
+
+##Return form
+
+Since we can specify types, we should also be able to specify return values, with types.
+
+Like this:
+
+```clojure
+(defn foo { [ {:[Apple]: foo} {:[Boa]: bux} ]
+			[ :[number]: :[boolean]: ]}
+ 	(...))
+```
+
+Note that it's an error detected during macro expansion to supply more than one key/value for a table in an argument context. 
