@@ -21,8 +21,33 @@ local Csp = epeg.Csp -- captures start and end position of match
 local Ct = lpeg.Ct -- a table with all captures from the pattern
 local V = lpeg.V -- create a variable within a grammar
 
-local WS = P' ' + P'\n' + P',' + P'\09'
+local WS = (P' ' + P'\n' + P',' + P'\09')^0
+
+--[[
+lisp : _form_+
+
+form : atom / list
+
+list : "(" form* ")"
+
+atom : symbol / number
+
+symbol: ({AZ} / {az})+
+
+number : {09}+
+--]]
 
 local _lisp_fn = function(_ENV)
-	
+	START"lisp"
+	lisp = V"_WS" * V"form"^1 * V"_WS"
+	form = V"atom" + V"list"
+	list = C"(" form* C")"
+	atom = V"symbol" + V"number"
+	symbol = (R"AZ" + R"az")^1
+	number =  R"09"^1
+	_WS = WS
 end
+
+return { lisp = epnf.define(_lisp_fn)}
+
+
