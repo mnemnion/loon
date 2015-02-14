@@ -39,3 +39,14 @@ All of the defining forms are templates (`fn`), or macros which expand into temp
 ```
 
 Mas o menos.
+
+##Destructuring
+
+Oh all right. Here's some sugar for the `let` binding, because extra keystrokes are sin.
+
+```clojure
+(defn foo [ \[bar baz bux]/ ] (...))
+(defn foo ( \{#bar bux #quux flux}/ ) (...))
+```
+
+I mean we've got our `\o/`, let's use it. 

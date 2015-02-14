@@ -40,7 +40,7 @@ Emacs lisp is the best documented language in existence. It is ancient, crufty a
 
 Emacs is eloquent. It has won its place in history. We must retire it, because it is an editor, and editors, as I hope to demonstrate, are wrong. That is, the (textual) editor, distinct from the shell, distinct from the language, is harmful, an extrusion, bolt-on or aggregate. It should be a use case, just that: a simple, central use case, the editing of texts which themselves comprise programming languages, and the interaction therewith. 
 
-This is the chief reason, salient others include: it is dynamic, with lexicality bolted on. The VM is terminally slow. The namespace problem shall never be solved. Last, but not least, it is in the hands of the Gnomes, and is the handiwork of the Gnome in chief. 
+This is the chief reason, salient others include: it is dynamic, with lexicality bolted on. The VM is terminally slow. The namespace problem shall never be solved. Last, but not least, it is in the hands of the Gnomes, and is the handiwork of the Gnome in Chief. 
 
 I could continue, but to what end? I come to bury, not to disparage. Emacs comes the closest, of all programs that float upon `bash`, of swallowing its own tail and superseding `bash` entirely. That it doesn't do so, may be traced directly to the question of syntax.
 

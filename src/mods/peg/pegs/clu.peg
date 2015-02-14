@@ -12,7 +12,7 @@
            /  keyword
            /  string
 
-  compound :  list
+  compound :  expr
            /  hash
            /  vector
            /  type 
@@ -21,7 +21,7 @@
    symbol  :  latin !(forbidden) ANYTHING
    keyword :  ":" symbol
 
-    list   :  "(" form* ")"
+    expr   :  "(" form* ")"
     hash   :  "{" (form$2)* "}"
     vector :  "[" form* "]"
     type   :  ":[" form* "]:"

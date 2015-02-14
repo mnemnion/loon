@@ -95,7 +95,7 @@ This is not typical, just better. As hackers, some of us like to use color to in
 
 Again: the bridge is quite capable of rendering images, moving or otherwise, within a frame of cells. The essence is that the grid is respected and textuality is primary.
 
-**bridge** runs inside another program. We call it the terminal by long convention; the changes we make to this program don't justify a new genus. **bridge** will degrade gracefully in xterm, perform glumly in a black and white setting, and become unusable should the user encounter a genuine line printer in the wild. Changes are good the shuttles need a good oiling. 
+**bridge** runs inside another program. We call it the terminal by long convention; the changes we make to this program don't justify a new genus. **bridge** will degrade gracefully in xterm, perform glumly in a black and white setting, and become unusable should the user encounter a genuine line printer in the wild. Chances are the shuttles need a good oiling. 
 
 The enhanced terminal does little more than interpret an extension of the xterm protocol that allows programs to display canvases over selected frames. One might display a browser window, I'd imagine this as quite a normal activity, all the terminal would then know is that a certain region is being blitted to rather than texted at. **bridge** would have as much awareness of the underlying processes as desired: any program of this nature wants to grow until you can check your gmail. 
 
