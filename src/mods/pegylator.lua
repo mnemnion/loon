@@ -12,6 +12,7 @@ local ast = require "peg/ast"
 local grammar = require "peg/pegs/grammars"
 local pretty = require "pl.pretty"
 local diff = require "diff"
+local clu = require "clu/prelude"
 
 -- Rig 
 
@@ -28,7 +29,7 @@ local match = lpeg.match
 local clear = tostring(ansi.clear)
 
 function tshow(table)
-	io.write(pretty.write(table))
+	io.write(pretty.write(table).."\n")
 end
 tree = ast.parse(peg,grammar.peg_s)
 tree_hl = ast.parse(peg_hl,grammar.peg_s)

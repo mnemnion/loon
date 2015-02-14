@@ -1,44 +1,55 @@
 --- Generates a terminal syntax highlighter for a given grammar. 
 
-local ansi = require "ansi"
+local clu = require "clu/prelude"
 local lpeg = require "lpeg"
 local pl   = require "pl.pretty"
 local util = require "util"
 local tableand = util.tableand
 
--- default palette, probably belongs in Clu prelude? 
--- actually in ansi itself. Hmm. 
-local p = {Blue = tostring(ansi.blue),
-				 Red = tostring(ansi.red),
-				 Clear = tostring(ansi.clear),
-				 Green = tostring(ansi.green),
-				 Magenta = tostring(ansi.magenta),
-				 Cyan  = tostring(ansi.cyan),
-				 Yellow = tostring(ansi.yellow),
-				 White = tostring(ansi.white),
-				 Grey  = tostring(ansi.dim..ansi.white)}
-
 -- peg rules. Don't belong here, but this is the
--- only parser we have for awhile. 
+-- only parser we have for awhile.
 
- testrules = { atom = {p.White,p.Clear},
-  			   pattern  = {p.Blue,p.Clear},
-  			   optional = {p.Green,p.Clear},
-  			   more_than_one = {p.Green,p.Clear},
-  			   some_number = {p.Green,p.Clear},
-  			   some_suffix = {p.Green,p.Clear},
-  			   which_suffix = {p.Green,p.Clear},
-  			   maybe = {p.Green,p.Clear},
-  			   set    = {p.Yellow,p.Clear},
-  			   range   = {p.Yellow,p.Clear},
-  			   literal = {p.Yellow,p.Clear},
-  			   PEL = {p.Grey,p.Clear},
-  			   PER = {p.Grey,p.Clear},
-  			   hidden_rule = {p.Cyan,p.Clear},
-  			   hidden_pattern = {p.Cyan,p.Clear},
-  			   hidden_match = {p.Cyan,p.Clear},
-  			   repeats = {p.Red,p.Clear},
-  			   comment = {p.Grey,p.Clear}}
+local p = clu.env.palette
+
+ testrules = { atom           = {"White","Clear"},
+  			   pattern        = {"Blue","Clear"},
+  			   optional       = {"Green","Clear"},
+  			   more_than_one  = {"Green","Clear"},
+  			   some_number    = {"Green","Clear"},
+  			   some_suffix    = {"Green","Clear"},
+  			   which_suffix   = {"Green","Clear"},
+  			   maybe          = {"Green","Clear"},
+  			   set            = {"Yellow","Clear"},
+  			   range          = {"Yellow","Clear"},
+  			   literal        = {"Yellow","Clear"},
+  			   PEL            = {"Grey","Clear"},
+  			   PER            = {"Grey","Clear"},
+  			   hidden_rule    = {"Cyan","Clear"},
+  			   hidden_pattern = {"Cyan","Clear"},
+  			   hidden_match   = {"Cyan","Clear"},
+  			   repeats        = {"Red","Clear"},
+  			   comment        = {"Grey","Clear"}}
+
+
+function makerules(rules)
+ 	local rule_table = {}
+ 	local p = nil
+ 	if clu.env.ansi then
+		p = clu.env.palette
+	else
+		p = clu.env.no_color
+	end 
+	for k,v in pairs(rules) do
+		if type(v) == "table" then 
+			rule_table[k] = { p[v[1]] , p[v[2]] }
+		else -- string or function
+			error "error in makerules, non-table values NYI"
+		end
+	end
+	return rule_table
+end
+
+
 
 --local testrules = { atom = {"",""}, lhs = {"",""}}
 
@@ -103,7 +114,15 @@ end
 -- @param rules the rule table
 -- @return highlighted string
 local function light(ast, rules)
-	if not rules then rules = testrules end
+	if rules then 
+		rules = makerules(rules)
+	else 
+		rules = makerules(testrules) 
+	end
+	if not clu.env.ansi then
+		print "no ansi" 
+		p = clu.env.no_color
+	end
 	local source = ast:root().str
 	local queue = {}
 	local phrase = ""
