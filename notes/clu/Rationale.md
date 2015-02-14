@@ -8,6 +8,8 @@ Short answer: we wish to replace `bash` and `emacs`, while modestly extending th
 
 `bash` and `emacs` are both programming languages. `bash` is referred to as a 'shell', while `emacs` is an 'editor'. A shell is the exoskeleton of a mollusk, and an editor is a vanishing profession. 
 
+We refer to our mythical program as a [bridge](../bluesky/bridge.md).
+
 ##Bourne Again, again
 
 When I refer to replacing `bash`, I do not mean in the sense in which `zsh` replaces `bash`. I mean in the sense in which the shell replaced batch editing, or the sense in which the GUI has replaced `bash` itself for some less-interesting subset of tasks. 
