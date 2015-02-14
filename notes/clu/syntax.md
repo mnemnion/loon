@@ -26,7 +26,7 @@ The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encou
 
 `:` represents method access within a symbol.
 
-`@`: represents the first argument of a function within its definition. 
+`@` represents the first argument of a function within its definition. 
 
 `` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
