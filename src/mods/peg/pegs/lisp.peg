@@ -1,3 +1,4 @@
+; a deliberately bad lisp
 
 lisp : form+
 

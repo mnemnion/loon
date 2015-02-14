@@ -57,7 +57,7 @@ local _peg_fn = function(_ENV)
 	local some_num_c = some_num_c 
 
 
-	rules   =  V"rule"^1
+	rules   =  V"comment"^0 * V"rule"^1
 	rule    =  V"lhs" * V"rhs"
 	lhs     =  WS * V"pattern" * WS * ( P":" + P"=" + ":=")
     rhs     =  V"form"

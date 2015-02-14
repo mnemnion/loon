@@ -1,4 +1,4 @@
-	           rules :  rule+
+	           rules :  comment* rule+
 	            rule :  lhs rhs
 	             lhs :  _pattern_ (":" / "=" / ":=")
                  rhs :  element elements*

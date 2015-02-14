@@ -22,19 +22,7 @@ local V = lpeg.V -- create a variable within a grammar
 
 local WS = (P' ' + P'\n' + P',' + P'\09')^0
 
---[[
-lisp : form+
-
-form : _atom_ / _list_
-
-list : "(" form* ")"
-
-atom : symbol / number
-
-symbol: ({AZ} / {az})+
-
-number : {09}+
---]]
+-- a deliberately bad lisp
 
 local _lisp_fn = function(_ENV)
 	START"lisp"
@@ -42,9 +30,9 @@ local _lisp_fn = function(_ENV)
 	form = V"_WS" * V"atom" * V"_WS" 
 	     + V"_WS" * V"list" * V"_WS"
 	list = P"(" * V"form"^0 * P")"
-	atom = V"symbol" + V"number"
-	symbol = Csp((R"AZ" + R"az")^1)
-	number =  Csp((R"09")^1)
+	atom = Csp(V"symbol") + Csp(V"number")
+	symbol = (R"AZ" + R"az")^1
+	number =  (R"09")^1
 	_WS = WS
 end
 

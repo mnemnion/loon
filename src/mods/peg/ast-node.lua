@@ -259,10 +259,17 @@ Forest["with"]   = forest.select_with
 Forest["pick"]   = forest.pick
 
 local function parse(grammar, str)
+	if grammar == nil then
+		error "grammar failed to generate"
+	end
 	local ast = lpeg.match(grammar,str)
-	ast.str = str
-	ast.grammar = grammar
-	return walker.walk_ast(ast)
+	if type(ast) == "table" then
+		ast.str = str
+		ast.grammar = grammar
+		return walker.walk_ast(ast)
+	else
+		error "lpeg did not match grammar"
+	end
 end
 
 return {
