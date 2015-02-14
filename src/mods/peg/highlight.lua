@@ -13,15 +13,32 @@ local p = {Blue = tostring(ansi.blue),
 				 Clear = tostring(ansi.clear),
 				 Green = tostring(ansi.green),
 				 Magenta = tostring(ansi.magenta),
-				 White = tostring(ansi.white)}
+				 Cyan  = tostring(ansi.cyan),
+				 Yellow = tostring(ansi.yellow),
+				 White = tostring(ansi.white),
+				 Grey  = tostring(ansi.dim..ansi.white)}
 
 -- peg rules. Don't belong here, but this is the
 -- only parser we have for awhile. 
 
  testrules = { atom = {p.White,p.Clear},
-  			   lhs  = {p.Blue,p.Clear},
+  			   pattern  = {p.Blue,p.Clear},
   			   optional = {p.Green,p.Clear},
-  			   comment = {p.Magenta,p.Clear}}
+  			   more_than_one = {p.Green,p.Clear},
+  			   some_number = {p.Green,p.Clear},
+  			   some_suffix = {p.Green,p.Clear},
+  			   which_suffix = {p.Green,p.Clear},
+  			   maybe = {p.Green,p.Clear},
+  			   set    = {p.Yellow,p.Clear},
+  			   range   = {p.Yellow,p.Clear},
+  			   literal = {p.Yellow,p.Clear},
+  			   PEL = {p.Grey,p.Clear},
+  			   PER = {p.Grey,p.Clear},
+  			   hidden_rule = {p.Cyan,p.Clear},
+  			   hidden_pattern = {p.Cyan,p.Clear},
+  			   hidden_match = {p.Cyan,p.Clear},
+  			   repeats = {p.Red,p.Clear},
+  			   comment = {p.Grey,p.Clear}}
 
 --local testrules = { atom = {"",""}, lhs = {"",""}}
 
@@ -96,8 +113,8 @@ local function light(ast, rules)
 	local new = true
 	for i = first, last do
 		local node, close, _ = ndx(i)
-		if rules[node.id] and node.val == nil then
-			print(node.id)
+		if rules[node.id] 
+		  and node.val == nil then -- open regional rule
 			gap = source:sub(cursor,node.first-1)
 			cursor = node.first
 			queue[close] = node
@@ -111,26 +128,19 @@ local function light(ast, rules)
 				  gap = source:sub(cursor,node.first-1)
 			end
 			cursor = node.last+1
-			--print(p.Red..node.id..p.Clear)
 			phrase = phrase..gap..rulewrap_value(node,rules)
----[[
-		
 		end
 		if queue[i] then -- close regional rule
-			--print (queue[i].id)
 			gap = source:sub(cursor,queue[i].last-1)
 			cursor = queue[i].last
 			phrase = phrase
 			         ..rulewrap_open(queue[i],rules)
 			         ..gap
 			         ..rulewrap_close(queue[i],rules)
-		--	print("close "..queue[i].." at "..tostring(cursor)) --]]
 		end
 	end
 	phrase = phrase..source:sub(cursor,-1)
-	--print(pl.write(queue))
-	--print(phrase)
-	return phrase, queue
+	return phrase
 end
 
 --- generates a highlighter

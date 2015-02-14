@@ -15,7 +15,7 @@ local g = {}
 			  O : !P &Q !R*
 			  `S` : ``T`` (U V)
 			  W : {XY} [a-z] 
-			  A : B$2 C$-3 D$4..5 E$+4
+			  A : (B$2)* C$-3 D$4..5* E$+4
         ]]
 
  g.deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
@@ -26,46 +26,5 @@ local g = {}
 
  g.peg_s =  read "peg/pegs/peg.peg"
  g.lisp_s = read "peg/pegs/lisp.peg"
- g.clu_s = [[
-
-       clu :  form* / EOF
-
-      form :  unary* (_atom_ / _compound_) / _comment
-
-     unary :  ","
-           /  "~"
-           /  "`"
-           /  reader-macro
-
-      atom :  symbol 
-           /  number 
-           /  keyword
-           /  string
-
-  compound :  list
-           /  hash
-           /  vector
-           /  type 
-           /  syntax
-
-   symbol  :  latin !(forbidden) ANYTHING
-   keyword :  ":" symbol
-
-    list   :  "(" form* ")"
-    hash   :  "{" form$2* "}"
-    vector :  "[" form* "]"
-    type   :  ":[" form* "]:"
-    syntax :  "|" dispatch* "|"
-
-  dispatch :  "--|" moonscript "|--" 
-           /  "--!" dispatch-string 
-           /  lun
-       lun :  !"|" ANY    ;-) looks like lua!  
-moonscript :  !"|" ANY    ;-) looks like moonscript!
-
-     latin :  ([A-Z] / [a-z])
- `comment` :  ";" !"\n" ANYTHING "\n"
-
-]]
-
+ g.clu_s =  read "peg/pegs/clu.peg"
 return g

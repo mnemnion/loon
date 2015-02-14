@@ -49,7 +49,7 @@ local peg_fn = function(_ENV)
 	START "rules"
 	---[[
 	SUPPRESS ("WS",  "enclosed", "form", 
-		      "element" ,"elements", "pattern",
+		      "element" ,"elements", 
 		      "allowed_prefixed", "allowed_suffixed",
 		      "simple", "compound", "prefixed", "suffixed"  )
 	--]]
@@ -108,6 +108,7 @@ local peg_fn = function(_ENV)
     suffixed =  V"optional"
 	         +  V"more_than_one"
 	         +  V"maybe"
+	         +  V"with_suffix"
 	    	 +  V"some_number"
 		   if_not_this = P"!" * WS * V"allowed_prefixed"
 	   	   not_this    = P"-" * WS * V"allowed_prefixed"
@@ -122,9 +123,10 @@ local peg_fn = function(_ENV)
 	     optional      =  V"allowed_suffixed" * WS * P"*"
 	     more_than_one =  V"allowed_suffixed" * WS * P"+"
 	     maybe         =  V"allowed_suffixed" * WS * P"?"
-	     with_suffix   =  V"some_number" * ( Csp"*" + Csp"+" + Csp"?")
-	     some_number   =  V"allowed_suffixed" * WS * P"$" * V"repeats" * V"some_suffix"^0
-	     some_suffix   = (Csp"*" + Csp"+" + Csp"?")
+	     with_suffix   =  V"some_number" * V"which_suffix"
+	     which_suffix  =  ( Csp"*" + Csp"+" + Csp"?")
+	     some_number   =  V"allowed_suffixed" * WS * V"some_suffix"
+	     some_suffix   = P"$" * V"repeats"
 	     repeats    =  Csp(some_num_c)
 	  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
 	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
@@ -153,6 +155,7 @@ l = ast.parse(peg,grammar.lisp_s)
 
 hl = highlight.light
 t  = transform.transform
+hi = function(ast) io.write(hl(ast).."\n") end
 --[[
 t.transform(a)
 t.transform(tree)

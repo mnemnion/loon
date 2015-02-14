@@ -1,7 +1,7 @@
-	           rules :  rule +
+	           rules :  rule+
 	            rule :  lhs rhs
 	             lhs :  _pattern_ (":" / "=" / ":=")
-                 rhs :  element elements *
+                 rhs :  element elements*
 	       `pattern` :  symbol / hidden-pattern
 	  hidden-pattern :  "`" symbol "`"
 	       `element` :  !lhs _( compound
