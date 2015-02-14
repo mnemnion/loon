@@ -50,6 +50,6 @@
     comment-c : `;` ~(comment-m*) `\n`
 	`string` : (string-match / '\\"' / "\\")+
     `string-match` : !`"` !`\\` ANY 
-	letter : [A-Z] + [a-z] 
+	letter : [A-Z] / [a-z] 
 	valid-sym = letter + "-"  
 	digit = [0-9]   
