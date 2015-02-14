@@ -96,9 +96,9 @@ The reader specification does not provide an internal format for strings, other 
 
 ###Keywords
 
-`#` followed by a symbol, with no whitespace, defines a keyword.  
+`#` followed by a symbol, with no whitespace, defines a [keyword](keyword.md). We may call this a tag.  
 
-Keywords are always equal to themselves, and never refer to another value. 
+Keywords, which we may call tags, are always equal to themselves, and never refer to another value. They are a string which meets the format requirements to be a symbol.
 
 #### Reminder
 
