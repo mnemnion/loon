@@ -58,9 +58,9 @@ Since we can specify types, we should also be able to specify return values, wit
 Like this:
 
 ```clojure
-(defn foo { [ {:[Apple]: foo} {:[Boa]: bux} ]
-			[ :[number]: :[boolean]: ]}
+(defn foo { [ {⟨Apple⟩ foo} {⟨Boa⟩ bux} ]
+			[ ⟨number⟩ ⟨boolean⟩ ]}
  	(...))
 ```
 
-Note that it's an error detected during macro expansion to supply more than one key/value for a table in an argument context. 
+Note that it's an error detected during macro expansion to supply more than one key/value for a table in an argument context. `⟨Type⟩` may be entered as `:[Type]:`, just as `«string»` may be entered as `` `"string"` `` 
