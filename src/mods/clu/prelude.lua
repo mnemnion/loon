@@ -20,15 +20,16 @@ function Meta.pr(self, ...)
 	end
 end
 
-local p = { Blue = tostring(ansi.blue),
-		    Red = tostring(ansi.red),
-			Clear = tostring(ansi.clear),
-			Green = tostring(ansi.green),
-			Magenta = tostring(ansi.magenta),
-			Cyan  = tostring(ansi.cyan),
-			Yellow = tostring(ansi.yellow),
-			White = tostring(ansi.white),
-			Grey  = tostring(ansi.dim..ansi.white)}
+local p = { Blue = ansi.blue(),
+		    Red = ansi.red(),
+			Clear = ansi.clear(),
+			Green = ansi.green(),
+			Magenta = ansi.magenta(),
+			Cyan  = ansi.cyan(),
+			Yellow = ansi.yellow(),
+			White = ansi.white(),
+			Black = ansi.black(),
+			Grey  = ansi.fg(8)}
 
 local no_color = { Blue    = "",
 				   Red     = "",
@@ -38,6 +39,7 @@ local no_color = { Blue    = "",
 				   Cyan    = "",
 				   Yellow  = "",
 				   White   = "",
+				   Black   = "",
   				   Grey    = ""}
 
 local env = { ansi = true,

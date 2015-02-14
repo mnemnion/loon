@@ -16,7 +16,11 @@ function colormt:__concat(other)
 end
 
 function colormt:__call(s)
-    return self .. s .. _M.reset
+    if s then
+        return self .. s .. _M.reset
+    else
+        return self.value
+    end
 end
 
 colormt.__metatable = {}
