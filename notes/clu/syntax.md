@@ -24,7 +24,9 @@ The characters ``.  @ ` ~ ; : ' " « » # |`` are not valid in symbols. If encou
 
 `.` represents field access within a symbol, or the decimal in a numeric context. 
 
-`@` represents method access within a symbol, or as a prefix, field access to the first argument of a function. 
+`:` represents method access within a symbol.
+
+`@`: represents the first argument of a function within its definition. 
 
 `` ` `` and ` ~ ` quasiquote and unquote within the macro system.
 
