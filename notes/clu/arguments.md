@@ -58,7 +58,7 @@ Since we can specify types, we should also be able to specify return values, wit
 Like this:
 
 ```clojure
-(defn foo { [ {⟨Apple⟩ foo} {⟨Boa⟩ bux} ]
+(defn foo { [ {⟨Apple⟩ foo} {⟨Boa⟩ bux} ] ; ->
 			[ ⟨number⟩ ⟨boolean⟩ ]}
  	(...))
 ```
