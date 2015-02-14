@@ -6,7 +6,7 @@ Here you are, in a code repository nurturing what appears to be another programm
 
 Short answer: we wish to replace `bash` and `emacs`, while modestly extending the xterm protocol. That's the purpose of Clu, Lun, and the Loon ecosystem generally. They should be a pleasant toolkit to work within, as a result of this design choice. 
 
-`bash` and `emacs` are both programming languages. `bash` is referred to as a 'shell', while `emacs` is an 'editor'. A shell is the exoskeleton of a mollusk, and an editor is a vanishing profession. 
+`bash` and `emacs` are both programming languages. `bash` is referred to as a 'shell', while `emacs` is an 'editor'. A shell is the exoskeleton of a mollusk, and an editor is a vanishing profession. We refer to our mythical program as a [bridge](../bluesky/bridge.md)
 
 ##Bourne Again, again
 
