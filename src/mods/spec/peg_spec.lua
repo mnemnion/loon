@@ -10,11 +10,8 @@ local ast = require "peg/ast"
 local clu = require "clu/prelude"
 local g = require "peg/pegs/grammars"
 local highlight = require "peg/highlight"
-local oldass = assert
---local epnf = require "peg/epnf"
+local epnf = require "peg/epnf"
 local peg = require "peg/quines/peg"
-assert = oldass
-verbose = nil
 if verbose then clu.Meta.isverbose = true end
 
 local function whole_match(state, args)
@@ -56,12 +53,14 @@ describe("tests over PEGylator", function()
 		assert.equal(#("123")+1, (match(core.int,"123")))
 		assert.is_not.equal(#("123#")+1,(match(core.int,("123#"))))
 	end)
---[[
+----[[
 	it("highlighter asserts", function()
 		clu.env.ansi = false
 		for _,v in pairs(g) do
-			print (v)
-			assert.is.equal(g.str,highlight.light(ast.parse(peg.peg,v)))
+			print(v)
+			node = ast.parse(peg.peg,v)
+			assert.is.equal(type(node),"table")
+			assert.is.equal(node.str,highlight.light(node))
 		end
 		clu.env.ansi = true
 	end)

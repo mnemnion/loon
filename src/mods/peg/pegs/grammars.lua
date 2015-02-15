@@ -3,11 +3,6 @@ local read = pl.read
 
 local g = {}
 
- g.range_s = [[ \]\--CD ]]
- g.symbol_s = "rgsr09gao--ijf-sdfkrtjhaADSFASDFAr"
-
- g.set_s   = [[ abc\def\}g䷀䷁ ]]
- g.string_s = [[ asldfr\"adf  asdf\asdf]]
  g.wtf = [[S: ``T`` (U V)]]
  g.grammar_s = [[ A  : B      C ( E / F ) / G H
 			  I : "J" 
@@ -18,7 +13,7 @@ local g = {}
 			  A : (B$2)* C$-3 D$4..5* E$+4
         ]]
 
- g.deco_s  = [[ A: <-(B C/ D)$2..5*> ]]
+ g.deco_s  = [[ A: `-(B C/ D)$2..5*` ]]
  g.rule_s  = [[A:B C(D E)/(F G H)
 			  C : "D" 
 			  D : E F G

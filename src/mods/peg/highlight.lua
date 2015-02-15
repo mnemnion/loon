@@ -121,10 +121,7 @@ local function light(ast, rules)
 	else 
 		rules = makerules(testrules) 
 	end
-	if not clu.env.ansi then
-		print "no ansi" 
-		p = clu.env.no_color
-	end
+
 	local source = ast:root().str
 	local queue = {}
 	local phrase = ""

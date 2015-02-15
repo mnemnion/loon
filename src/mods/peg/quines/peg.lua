@@ -1,4 +1,4 @@
-require 'pl.strict'
+--require 'pl.strict'
 local util = require "util"
 local lpeg = require "lpeg"
 local ansi = require "ansi"
@@ -39,7 +39,7 @@ local V = lpeg.V -- create a variable within a grammar
 	local some_num_c =   digit^1 * P".." * digit^1
 					 +   (P"+" + P"-")^0 * digit^1
 
-local _peg_fn = function(_ENV)
+local peg  = epnf.define(function(_ENV)
 	START "rules"
 	---[[
 	SUPPRESS ("WS",  "enclosed", "form", 
@@ -126,9 +126,9 @@ local _peg_fn = function(_ENV)
 	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
     atom =  V"ws" + symbol 
     ws = Csp(P"_")
-end
-
+end)
+--[[
 peg = epnf.define(_peg_fn, nil, false) -- nil is _G, false = suppress output
 peg_hl = epnf.define(_peg_fn, nil, true)
-
-return {peg = peg, peg_hl = peg_hl}
+--]]
+return {peg = peg}

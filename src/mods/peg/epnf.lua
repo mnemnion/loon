@@ -110,9 +110,10 @@ local function W( s )
   return L.P( s ) * -(letter+digit)
 end
 local WS = L.S" \r\n\t\f\v"
-
+--[[
 --- setup an environment where you can easily define lpeg grammars
 -- with lots of syntax sugar
+--]]
 function epnf.define( func, g, unsuppressed)
   g = g or {}
   local suppressed = {}
@@ -181,7 +182,6 @@ function epnf.parsestring( g, str, ... )
   local name = "[\"" .. string.gsub( s, "\n", "\\n" ) .. "\"]"
   return epnf.parse( g, name, str, ... )
 end
-
 -- export a function for reporting errors during ast validation
 epnf.raise = raise_error
 
