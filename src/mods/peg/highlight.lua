@@ -34,10 +34,12 @@ local p = clu.env.palette
 function makerules(rules)
  	local rule_table = {}
  	local p = nil
- 	if clu.env.ansi then
-		p = clu.env.palette
+ 		-- this logic belongs in a palette 
+		-- object which may be called. 
+ 	if clu.env.ansi then 
+		p = clu.env.palette.default
 	else
-		p = clu.env.no_color
+		p = clu.env.palette.no_color
 	end 
 	for k,v in pairs(rules) do
 		if type(v) == "table" then 

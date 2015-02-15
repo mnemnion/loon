@@ -1,5 +1,6 @@
 local pretty = require "pl.pretty"
 local roshambo = require "roshambo"
+local peg = require "peg/epnf"
 if verbose then clu.Meta.isverbose = true end
 
 describe("tests over roshambo", function()

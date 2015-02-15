@@ -46,8 +46,9 @@ local env = { ansi = true,
 			  xterm = true,
 			  darwin = true,
 			  unix = true,
-			  palette = p,
-			  no_color = no_color}
+			  version = "ε",
+			  palette = { default = p,
+			  			  no_color = no_color}}
 
 
 return { Meta = Meta,

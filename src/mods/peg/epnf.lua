@@ -2,7 +2,7 @@
 
 local L = require( "lpeg" )
 local pretty = require "pl.pretty"
-
+--[[
 local assert = assert
 local _VERSION = assert( _VERSION )
 local string, io = assert( string ), assert( io )
@@ -16,7 +16,7 @@ local setfenv = setfenv
 if _VERSION == "Lua 5.1" then
   assert( setfenv )
 end
-
+--]]
 
 -- module table
 local epnf = {}
