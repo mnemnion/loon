@@ -39,96 +39,100 @@ local V = lpeg.V -- create a variable within a grammar
 	local some_num_c =   digit^1 * P".." * digit^1
 					 +   (P"+" + P"-")^0 * digit^1
 
-local peg  = epnf.define(function(_ENV)
-	START "rules"
-	---[[
-	SUPPRESS ("WS",  "enclosed", "form", 
-		      "element" ,"elements", 
-		      "allowed_prefixed", "allowed_suffixed",
-		      "simple", "compound", "prefixed", "suffixed"  )
-	--]]
-	local WS         =  WS^0
-	local symbol     =  Csp(symbol)
-	local d_string     =  Csp(d_string) 
-	local s_string   =  Csp(s_string)
-	local hidden_string = Csp(h_string)
-	local range_c    =  Csp(range_c)  
-	local set_c      =  Csp(set_c)
-	local some_num_c = some_num_c 
+local _peg_fn   = function ()
+	local function pegger (_ENV)
+		START "rules"
+		---[[
+		SUPPRESS ("WS",  "enclosed", "form", 
+			      "element" ,"elements", 
+			      "allowed_prefixed", "allowed_suffixed",
+			      "simple", "compound", "prefixed", "suffixed"  )
+		--]]
+		local WS         =  WS^0
+		local symbol     =  Csp(symbol)
+		local d_string     =  Csp(d_string) 
+		local s_string   =  Csp(s_string)
+		local hidden_string = Csp(h_string)
+		local range_c    =  Csp(range_c)  
+		local set_c      =  Csp(set_c)
+		local some_num_c = some_num_c 
 
 
-	rules   =  V"comment"^0 * V"rule"^1
-	rule    =  V"lhs" * V"rhs"
-	lhs     =  WS * V"pattern" * WS * ( P":" + P"=" + ":=")
-    rhs     =  V"form"
-    form   =  V"element" * V"elements"
-	pattern =  symbol
-			+  V"hidden_pattern"
-	hidden_pattern =  P"`" * symbol * P"`"
-	element  =  -V"lhs" * WS 
-	         *  ( V"simple"
-			 + 	  V"compound"
-			 +    V"comment")
+		rules   =  V"comment"^0 * V"rule"^1
+		rule    =  V"lhs" * V"rhs"
+		lhs     =  WS * V"pattern" * WS * ( P":" + P"=" + ":=")
+	    rhs     =  V"form"
+	    form   =  V"element" * V"elements"
+		pattern =  symbol
+				+  V"hidden_pattern"
+		hidden_pattern =  P"`" * symbol * P"`"
+		element  =  -V"lhs" * WS 
+		         *  ( V"simple"
+				 + 	  V"compound"
+				 +    V"comment")
 
-	elements  =  V"choice"  
-			       +  V"cat"
-			       +  P""
-	choice =  WS * P"/" * V"form"
-	cat =  WS * V"form"
-	compound =  V"group"
-			 +  V"capture_group"
-			 +  V"enclosed"
-			 +  V"hidden_match"
-	capture_group = P"~" * V"group" 
-	group   =  WS * V"PEL" 
-			 *  WS * V"form" * WS 
-			 *  V"PER"
-	PEL        = Csp "("
-    PER        = Csp ")"
-    enclosed =  V"literal"
-    		 +  V"hidden_literal"
-             +  V"set"
-       	     +  V"range"
-	hidden_match =  WS * P"``"
-				 *  WS * V"form" * WS
-				 *  P"``"
-	simple   =  V"suffixed"
-			 +  V"prefixed"
-			 +  V"atom" 
-		comment = Csp( P";" * comment_c)
-	prefixed =  V"if_not_this"
-			 +  V"not_this"
-			 +  V"if_and_this"
-    suffixed =  V"optional"
-	         +  V"more_than_one"
-	         +  V"maybe"
-	         +  V"with_suffix"
-	    	 +  V"some_number"
-		   if_not_this = P"!" * WS * V"allowed_prefixed"
-	   	   not_this    = P"-" * WS * V"allowed_prefixed"
-		   if_and_this = P"&" * WS * V"allowed_prefixed"
-               literal =  Csp(C'"' * d_string * C'"')
-                       +  Csp(C"'" * s_string * C"'")
-        hidden_literal = -P"``" * P"`" * hidden_string * -P"``" * P"`"
-               set     =  P"{" * set_c^1 * P"}"  
--- Change range to not use '-' separator instead require even # of bytes.
--- Ru catches edge cases involving multi-byte chars. 
-               range   =  P"[" * range_c * P"]" 
-	     optional      =  V"allowed_suffixed" * WS * P"*"
-	     more_than_one =  V"allowed_suffixed" * WS * P"+"
-	     maybe         =  V"allowed_suffixed" * WS * P"?"
-	     with_suffix   =  V"some_number" * V"which_suffix"
-	     which_suffix  =  ( Csp"*" + Csp"+" + Csp"?")
-	     some_number   =  V"allowed_suffixed" * WS * V"some_suffix"
-	     some_suffix   = P"$" * V"repeats"
-	     repeats    =  Csp(some_num_c)
-	  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
-	  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
-    atom =  V"ws" + symbol 
-    ws = Csp(P"_")
-end)
---[[
-peg = epnf.define(_peg_fn, nil, false) -- nil is _G, false = suppress output
-peg_hl = epnf.define(_peg_fn, nil, true)
+		elements  =  V"choice"  
+				       +  V"cat"
+				       +  P""
+		choice =  WS * P"/" * V"form"
+		cat =  WS * V"form"
+		compound =  V"group"
+				 +  V"capture_group"
+				 +  V"enclosed"
+				 +  V"hidden_match"
+		capture_group = P"~" * V"group" 
+		group   =  WS * V"PEL" 
+				 *  WS * V"form" * WS 
+				 *  V"PER"
+		PEL        = Csp "("
+	    PER        = Csp ")"
+	    enclosed =  V"literal"
+	    		 +  V"hidden_literal"
+	             +  V"set"
+	       	     +  V"range"
+		hidden_match =  WS * P"``"
+					 *  WS * V"form" * WS
+					 *  P"``"
+		simple   =  V"suffixed"
+				 +  V"prefixed"
+				 +  V"atom" 
+			comment = Csp( P";" * comment_c)
+		prefixed =  V"if_not_this"
+				 +  V"not_this"
+				 +  V"if_and_this"
+	    suffixed =  V"optional"
+		         +  V"more_than_one"
+		         +  V"maybe"
+		         +  V"with_suffix"
+		    	 +  V"some_number"
+			   if_not_this = P"!" * WS * V"allowed_prefixed"
+		   	   not_this    = P"-" * WS * V"allowed_prefixed"
+			   if_and_this = P"&" * WS * V"allowed_prefixed"
+	               literal =  Csp(C'"' * d_string * C'"')
+	                       +  Csp(C"'" * s_string * C"'")
+	        hidden_literal = -P"``" * P"`" * hidden_string * -P"``" * P"`"
+	               set     =  P"{" * set_c^1 * P"}"  
+	-- Change range to not use '-' separator instead require even # of bytes.
+	-- Ru catches edge cases involving multi-byte chars. 
+	               range   =  P"[" * range_c * P"]" 
+		     optional      =  V"allowed_suffixed" * WS * P"*"
+		     more_than_one =  V"allowed_suffixed" * WS * P"+"
+		     maybe         =  V"allowed_suffixed" * WS * P"?"
+		     with_suffix   =  V"some_number" * V"which_suffix"
+		     which_suffix  =  ( Csp"*" + Csp"+" + Csp"?")
+		     some_number   =  V"allowed_suffixed" * WS * V"some_suffix"
+		     some_suffix   = P"$" * V"repeats"
+		     repeats    =  Csp(some_num_c)
+		  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
+		  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
+	    atom =  V"ws" + symbol 
+	    ws = Csp(P"_")
+	end
+	return pegger
+end
+---[[
+peg = epnf.define(_peg_fn(), nil, false) -- nil is _G, false = suppress output
+peg_hl = epnf.define(_peg_fn(), nil, true)
 --]]
-return {peg = peg}
+return {peg = peg,
+		peg_hl = peg_hl}

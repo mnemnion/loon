@@ -52,4 +52,4 @@
     `string-match` : !`"` !`\\` ANY 
 	letter : [A-Z] / [a-z] 
 	valid-sym = letter + "-"  
-	digit = [0-9]   
+	digit = [0-9]

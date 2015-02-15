@@ -57,7 +57,6 @@ describe("tests over PEGylator", function()
 	it("highlighter asserts", function()
 		clu.env.ansi = false
 		for _,v in pairs(g) do
-			print(v)
 			node = ast.parse(peg.peg,v)
 			assert.is.equal(type(node),"table")
 			assert.is.equal(node.str,highlight.light(node))
