@@ -40,7 +40,7 @@ w = ast.parse(peg,grammar.wtf)
 l = ast.parse(peg,grammar.lisp_s)
 lisp = require "peg/quines/lisp"
 lisp = lisp.lisp
-hl = highlight.light
+hl = highlight.Highlighter(peg)
 t  = transform.transform
 hi = function(ast) io.write(hl(ast).."\n") end
 --[[

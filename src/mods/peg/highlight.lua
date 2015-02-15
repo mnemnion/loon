@@ -161,13 +161,19 @@ local function light(ast, rules)
 	return phrase
 end
 
---- generates a highlighter
+--- generates a highlighter from a rule table
 -- @function Highlighter
--- @param syntax a parsed syntax
+-- @param parser a parser
 -- @param rules a palette
 -- @return a function: λ (string|Node) -> string 
-local function Highlighter(syntax, rules)
-
+local function Highlighter(parser, rules)
+	local function lighter(source)
+		if type(source) == "string" then
+			source = ast.parse(parser,source)
+		end
+		return light(source, rules)
+	end
+	return lighter
 end
 
 return {Highlighter = Highlighter,
