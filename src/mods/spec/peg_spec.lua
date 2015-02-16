@@ -1,13 +1,13 @@
+local clu = require "clu/prelude"
 local epeg = require "peg/epeg"
 local match = epeg.match
 local strings = require "spec/strings"
 local failstrings = require "spec/failstrings"
 local core = require "peg/core-rules"
 local say = require "say"
-local ansi = require "ansi"
+local ansi = clu.ansi
 local pretty = require "pl.pretty"
 local ast = require "peg/ast"
-local clu = require "clu/prelude"
 local g = require "peg/pegs/grammars"
 local highlight = require "peg/highlight"
 local epnf = require "peg/epnf"

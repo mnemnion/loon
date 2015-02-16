@@ -6,7 +6,8 @@ Intended to contain the core technology.
 Currently a grab bag.
 ]]
 
-local ansi = require "ansi"
+local ansi = require "clu/ansi"
+local palette = require "clu/palette"
 
 local Meta = {}
 
@@ -20,16 +21,16 @@ function Meta.pr(self, ...)
 	end
 end
 
-local p = { Blue = ansi.blue(),
-		    Red = ansi.red(),
-			Clear = ansi.clear(),
-			Green = ansi.green(),
-			Magenta = ansi.magenta(),
-			Cyan  = ansi.cyan(),
-			Yellow = ansi.yellow(),
-			White = ansi.white(),
-			Black = ansi.black(),
-			Grey  = ansi.fg(8)}
+local p = { Blue = ansi.blue,
+		    Red = ansi.red,
+			Clear = ansi.clear,
+			Green = ansi.green,
+			Magenta = ansi.magenta,
+			Cyan  = ansi.cyan,
+			Yellow = ansi.yellow,
+			White = ansi.white,
+			Black = ansi.black,
+			Grey  = ansi.fg(8) }
 
 local no_color = { Blue    = "",
 				   Red     = "",
@@ -52,4 +53,5 @@ local env = { ansi = true,
 
 
 return { Meta = Meta,
-		 env = env }
+		 env = env,
+		 ansi = ansi }

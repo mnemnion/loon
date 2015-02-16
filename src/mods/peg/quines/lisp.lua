@@ -1,7 +1,8 @@
 require 'pl.strict'
 
 local lpeg = require "lpeg"
-local ansi = require "ansi"
+local clu = require "clu/prelude"
+local ansi = clu.ansi
 local util = require "util"
 local epeg = require "peg/epeg"
 local core = require "peg/core-rules"

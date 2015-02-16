@@ -36,17 +36,17 @@ function t.notrecursive(node)
 end
 
 function t.cursives(ast)
-	local cursors = ast:root().cursors
+--	local cursors = ast:root().cursors
 --	print (cursors)
 	local atoms = ast:select"atom"
-	if cursors then
+	--if cursors then
 		for i = 1, #atoms do
-			if cursors[atoms[i].val] then 
+		--	if cursors[atoms[i].val] then 
 --				print ("Transforming: ", atoms[i].val)
 				atoms[i].val = 'V"'..atoms[i].val..'"'
-			end
+		--	end
 		end
-	end
+	--end
 end
 
 function t.optional(ast)
@@ -156,7 +156,7 @@ function t.choice(ast)
 end
 
 local function lhs_pred(node)
-	if node.id == "lhs" and node.val then
+	if node.id == "pattern" and node.val then
 		return true
 	elseif node.id == "hidden_pattern" then
 		return true

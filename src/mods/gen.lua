@@ -2,7 +2,7 @@
 require 'pl.strict'
 
 local lpeg = require "lpeg"
-local ansi = require "ansi"
+local clu = require "clu/prelude"
 local util = require "util"
 local epeg = require "peg/epeg"
 local core = require "peg/core-rules"
@@ -26,47 +26,45 @@ local V = lpeg.V -- create a variable within a grammar
 local WS = P' ' + P'\n' + P',' + P'\09'
 
 
-lhs =  WS * pattern * WS * (Csp":" + Csp"=" + Csp":=")
-pattern =  symbol + hidden_pattern
-hidden_pattern =  Csp"`" * symbol * Csp"`"
-enclosed =  literal + set + range * hidden * WS
-comment =  P";" * comment_c  --  make real
-atom =  symbol + ws
-ws =  Csp"_"
-literal =  P"\"" * C(string^0) * P"\""
-set =  P"{" * set_c^1 * P"}"
-range =  P"[" * range_c * P"]"
-comment_m =  Csp"\n" * ANY
-comment_c =  P";" * C(comment_m^0) * P"\n"
-string =  (string_match^1 + Csp'\\"' + Csp"\\")
-string_match =  P"\"" * P"\\" * ANY
-letter =  R"AZ" * R"az"
-valid_sym =  letter^1 * Csp"-"
-digit =  R"09"
-
-
 peg = epnf.define(function(_ENV)
   START "rules"
-  rules =  V"rule"^1
-  rule =  lhs * V"rhs"
-  rhs =  V"element" * V"elements"^0
-  element =  -lhs * WS * (V"compound" + V"simple" + comment)  --  with a comment
-  elements =  V"choice" + V"cat"
-  compound =  V"group" + enclosed + hidden_match
-  simple =  V"prefixed" + V"suffixed" + atom
-  choice =  WS * Csp"/" * V"element" * V"elements"^0
-  cat =  WS * V"element" * V"elements"^0
-  group =  WS * Csp"(" * WS * V"rhs" * WS * Csp")"
-  match =  WS * Csp"``" * WS * V"rhs" * WS * Csp"``"
-  prefixed =  V"if_not_this" + V"if_and_this"
-  if_not_this =  P"!" * WS * V"allowed_prefixed"
-  if_and_this =  P"&" * WS * V"allowed_prefixed"
-  suffixed =  V"optional" + V"more_than_one" + V"maybe" + V"with_suffix" + V"some_number"
-  optional =  V"allowed_suffixed" * WS * P"*"
-  more_than_one =  V"allowed_suffixed" * WS * P"+"
-  maybe =  V"allowed_suffixed" * WS * P"?"
-  some_number =  V"allowed_suffixed" * WS * Csp"$" * some_num_c
-  with_suffix =  V"some_number" * (P"*" + P"+" + P"?")
-  allowed_prefixed =  V"compound" + V"suffixed" + atom
-  allowed_suffixed =  V"compound" + V"prefixed" + atom
+rules =  V"comment"^0 * V"rule"^1
+rule =  V"lhs" * V"rhs"
+lhs =  V"WS" * V"pattern" * V"WS" * (Csp":" + Csp"=" + Csp":=")
+rhs =  V"element" * V"elements"^0
+pattern =  V"symbol" + V"hidden_pattern"
+hidden_pattern =  Csp"`" * V"symbol" * Csp"`"
+element =  -V"lhs" * V"WS" * (V"compound" + V"simple" + V"comment")  -- ; with a comment
+elements =  V"choice" + V"cat"
+compound =  V"group" + V"enclosed" + V"hidden_match"
+simple =  V"prefixed" + V"suffixed" + V"atom"
+choice =  V"WS" * Csp"/" * V"element" * V"elements"^0
+cat =  V"WS" * V"element" * V"elements"^0
+group =  V"WS" * Csp"(" * V"WS" * V"rhs" * V"WS" * Csp")"
+enclosed =  V"literal" + V"set" + V"range"
+hidden_match =  V"WS" * Csp"``" * V"WS" * V"rhs" * V"WS" * Csp"``"
+comment =  P";" * V"comment_c"  -- ; make real
+prefixed =  V"if_not_this" + V"if_and_this"
+if_not_this =  P"!" * V"WS" * V"allowed_prefixed"
+if_and_this =  P"&" * V"WS" * V"allowed_prefixed"
+suffixed =  V"optional" + V"more_than_one" + V"maybe" + V"with_suffix" + V"some_number"
+optional =  V"allowed_suffixed" * V"WS" * P"*"
+more_than_one =  V"allowed_suffixed" * V"WS" * P"+"
+maybe =  V"allowed_suffixed" * V"WS" * P"?"
+some_number =  V"allowed_suffixed" * V"WS" * Csp"$" * V"some_num_c"
+with_suffix =  V"some_number" * (P"*" + P"+" + P"?")
+allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
+allowed_suffixed =  V"compound" + V"prefixed" + V"atom"
+atom =  V"symbol" + V"ws"
+ws =  Csp"_"
+literal =  P"\"" * C(V"string"^0) * P"\""
+set =  P"{" * V"set_c"^1 * P"}"
+range =  P"[" * V"range_c" * P"]"
+comment_m =  Csp"\n" * V"ANY"
+comment_c =  P";" * C(V"comment_m"^0) * P"\n"
+string =  (V"string_match"^1 + Csp'\\"' + Csp"\\")
+string_match =  P"\"" * P"\\" * V"ANY"
+letter =  R"AZ" + R"az"
+valid_sym =  V"letter"^1 * Csp"-"
+digit =  R"09"
 end)

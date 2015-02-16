@@ -1,14 +1,8 @@
 -- Rule Sorting module.
-
-local ansi = require "ansi"
+local clu = require "clu/prelude"
 
 Set = require "set" -- todo: remove penlight dependency
 
-local red = tostring(ansi.red)
-local white = tostring(ansi.white)
-local clear = tostring(ansi.clear)
-local magenta = tostring(ansi.magenta)
-local blue = tostring(ansi.blue)
 
 local sort = {}
 
@@ -20,7 +14,9 @@ local function transform_atoms(ast)
 		return str:gsub("-","_")
 	end
 	local function lhs_pred(ast)
-		if ast.id == "lhs" and ast[1].id ~= "hidden_pattern" then
+		-- note: this function is brittle. If it breaks again
+		-- find a better way.
+		if ast.id == "pattern" and not ast[1].val then
 			return true
 		elseif ast.id == "hidden_pattern" then
 			return true
@@ -40,7 +36,7 @@ local function transform_atoms(ast)
 end
 
 local function rule_tables(ast)
-	local lhs = ast:select"lhs"
+	local lhs = ast:select"pattern"
 	local rhs = ast:select"rhs":pick"atom" 
 	local ndx = {}
 	for i,v in ipairs(lhs) do

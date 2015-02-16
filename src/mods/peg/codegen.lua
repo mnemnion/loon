@@ -23,7 +23,7 @@ local prefix = [[
 require 'pl.strict'
 
 local lpeg = require "lpeg"
-local ansi = require "ansi"
+local clu = require "clu/prelude"
 local util = require "util"
 local epeg = require "peg/epeg"
 local core = require "peg/core-rules"
@@ -78,9 +78,10 @@ end
 
 local function build(ast)
 	local phrase = prefix..ast:root().imports..
-	             local_rules(ast).."\n\n"..
+	             --local_rules(ast).."\n\n"..
 				 definer..ast:root().start_rule..
-				 cursive_rules(ast)..end_definer
+				 --cursive_rules(ast)..end_definer
+				 local_rules(ast)..end_definer
 	write(phrase)
 	return phrase
 end

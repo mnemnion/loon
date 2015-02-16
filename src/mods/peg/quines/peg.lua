@@ -1,11 +1,12 @@
 --require 'pl.strict'
 local util = require "util"
+local clu  = require "clu/prelude" 
 local lpeg = require "lpeg"
-local ansi = require "ansi"
+local ansi = clu.ansi
 local epeg = require "peg/epeg"
 local core = require "peg/core-rules"
 local dump_ast = util.dump_ast
-local clear = ansi.clear()
+local clear = ansi.clear
 local epnf = require "peg/epnf"
 local ast = require "peg/ast"
 local grammar = require "peg/pegs/grammars"
@@ -44,7 +45,7 @@ local _peg_fn   = function ()
 		START "rules"
 		---[[
 		SUPPRESS ("WS",  "enclosed", "form", 
-			      "element" ,"elements", 
+			      "element" ,"elements",
 			      "allowed_prefixed", "allowed_suffixed",
 			      "simple", "compound", "prefixed", "suffixed"  )
 		--]]
