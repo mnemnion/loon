@@ -78,10 +78,8 @@ local _peg_fn   = function ()
 		choice =  WS * P"/" * V"form"
 		cat =  WS * V"form"
 		compound =  V"group"
-				 +  V"capture_group"
 				 +  V"enclosed"
 				 +  V"hidden_match"
-		capture_group = P"~" * V"group" 
 		group   =  WS * V"PEL" 
 				 *  WS * V"form" * WS 
 				 *  V"PER"
@@ -101,6 +99,7 @@ local _peg_fn   = function ()
 		prefixed =  V"if_not_this"
 				 +  V"not_this"
 				 +  V"if_and_this"
+				 +  V"capture"
 	    suffixed =  V"optional"
 		         +  V"more_than_one"
 		         +  V"maybe"
@@ -109,6 +108,7 @@ local _peg_fn   = function ()
 			   if_not_this = P"!" * WS * V"allowed_prefixed"
 		   	   not_this    = P"-" * WS * V"allowed_prefixed"
 			   if_and_this = P"&" * WS * V"allowed_prefixed"
+			   capture     = P"~" * WS * V"allowed_prefixed"
 	               literal =  Csp(C'"' * d_string * C'"')
 	                       +  Csp(C"'" * s_string * C"'")
 	        hidden_literal = -P"``" * P"`" * hidden_string * -P"``" * P"`"

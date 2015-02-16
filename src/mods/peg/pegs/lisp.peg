@@ -6,7 +6,7 @@ form : atom / list
 
 list : `(` form* `)`
 
-atom : symbol / number
+atom : ~symbol / ~number
 
 symbol: ({AZ} / {az})+
 
