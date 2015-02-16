@@ -13,8 +13,15 @@ local colormt = {}
 
 -- test = (ansi.green..ansi.clear == ansi.green..ansi.clear..ansi.clear..ansi.reset..ansi.reset)
 
--- better: intern the previous value (fg and bg), make "reset" return that value, make "clear"
--- zero out, and make any changes to the color values idempotent. 
+-- better: intern the previous and current values (fg and bg). Make reset return the previous
+-- value, make any other call return the new value and set the current to previous, unless the
+-- call wouldn't change anything, in which case, make it return "". 
+
+-- I feel as though print (ansi.red..."this is red"..ansi.green(" this is green").." still red")
+-- is the correct approach. 
+
+local prior_fg, prior_bg = "",""
+local current_fg, current_bg = "",""
 
 function colormt:__tostring()
     return self.value
@@ -86,6 +93,8 @@ local colors = {
     blink = 5,
     reverse = 7,
     hidden = 8,
+    clear_fg = 39,
+    clear_bg = 49,
 
     -- foreground
     black = 30,
@@ -96,6 +105,7 @@ local colors = {
     magenta = 35,
     cyan = 36,
     white = 37,
+
 
     -- background
     onblack = 40,
