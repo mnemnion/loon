@@ -8,6 +8,14 @@ module 'ansi'
 
 local colormt = {}
 
+-- todo : add clear switch to module so that multiple calls to 
+-- clear or reset produce the empty string. 
+
+-- test = (ansi.green..ansi.clear == ansi.green..ansi.clear..ansi.clear..ansi.reset..ansi.reset)
+
+-- better: intern the previous value (fg and bg), make "reset" return that value, make "clear"
+-- zero out, and make any changes to the color values idempotent. 
+
 function colormt:__tostring()
     return self.value
 end
