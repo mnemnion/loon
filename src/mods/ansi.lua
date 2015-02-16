@@ -1,6 +1,7 @@
 local pairs = pairs
 local tostring = tostring
 local setmetatable = setmetatable
+local error = error
 local schar = string.char
 
 module 'ansi'
@@ -30,8 +31,8 @@ local function makecolor(value)
 end
 
 local function byte_panic(byte_p)
-       if not (0 < byte_p and byte_p <= 255) then
-        error "foreground value must be 8 bit unsigned"
+       if not byte_p or not (0 < byte_p and byte_p <= 255) then
+        error "xterm value must be 8 bit unsigned"
     end
 end 
 
@@ -39,7 +40,7 @@ local function ansi_fg(byte)
     local store = {} -- repeated allocation is a sin.
     local function make (byte)
         byte_panic(byte)
-        return schar(27).."[38;5;"..byte.."m"
+        return setmetatable({ value = schar(27).."[38;5;"..byte.."m" }, colormt)
     end
     if store[byte] then
         return store[byte]
@@ -54,7 +55,7 @@ local function ansi_bg(byte)
     local store = {}
     local function make (byte)
         byte_panic(byte)
-        return schar(27).."[48;5;"..byte.."m"
+        return setmetatable({value = schar(27).."[48;5;"..byte.."m"}, colormt)
     end
     if store[byte] then
         return store[byte]

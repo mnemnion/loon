@@ -2,6 +2,7 @@
 
 local clu = require "clu/prelude"
 local lpeg = require "lpeg"
+local ast = require "peg/ast"
 local pl   = require "pl.pretty"
 local util = require "util"
 local tableand = util.tableand
