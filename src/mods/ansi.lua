@@ -55,6 +55,10 @@ function colormt:__tostring()
     return self.value
 end
 
+local function direct_tostring(color)
+    return color.value
+end
+
 function colormt:__concat(other)
     return tostring(self) .. tostring(other)
 end
@@ -62,7 +66,7 @@ end
 function colormt:__call(s)
     local current_color = current(self).value
     if s then
-        return self .. s .. current_color
+        return direct_tostring(self) .. s .. current_color
     else
         return tostring(self)
     end
@@ -129,9 +133,7 @@ local colors = {
         underscore = 4,
         blink = 5,
         reverse = 7,
-        hidden = 8,
-        clear_fg = 39,
-        clear_bg = 49 },
+        hidden = 8},
     -- foreground
     fg = {  
         black = 30,
@@ -141,7 +143,8 @@ local colors = {
         blue = 34,
         magenta = 35,
         cyan = 36,
-        white = 37 },
+        white = 37,
+        clear_fg = 39  },
     -- background
     bg = {
         onblack = 40,
@@ -151,7 +154,8 @@ local colors = {
         onblue = 44,
         onmagenta = 45,
         oncyan = 46,
-        onwhite = 47 }
+        onwhite = 47,
+        clear_bg = 49}
 }
 
 for kind, val in pairs(colors) do

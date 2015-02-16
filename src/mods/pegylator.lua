@@ -26,7 +26,7 @@ transform = require "peg/transform"
 codegen = require "peg/codegen"
 
 local match = lpeg.match
-local clear = tostring(ansi.clear)
+local clear = ansi.clear
 
 function tshow(table)
 	io.write(pretty.write(table).."\n")
@@ -54,7 +54,7 @@ assert(tree == tree.index(5):root())
 --assert(tree.str == hl(tree))
 --print (match(grammar.symbol, symbol_s))
 
-io.write(clear)
+io.write(ansi.clear_fg(),ansi.clear_bg(),clear())
 --print(tree)
 
 return { peg = peg }
