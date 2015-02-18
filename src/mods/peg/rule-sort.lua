@@ -3,6 +3,17 @@ local clu = require "clu/prelude"
 
 Set = require "set" -- todo: remove penlight dependency
 
+-- This entire module is wrongly conceived.
+
+-- If we track recursion properly, all values become symbols, because all values 
+-- are touched by the top rule, which is presumably recursive.
+
+-- What we need are safe rules. A rule is safe if all the RHS values are in the literal family: 
+-- literal, range, set. A rule that only mentions safe rules is also safe. 
+
+-- more precisely, a rule is safe if it contains no atoms. A rule is also safe if the only atoms 
+-- it contains are safe. 
+
 
 local sort = {}
 
@@ -14,9 +25,7 @@ local function transform_atoms(ast)
 		return str:gsub("-","_")
 	end
 	local function lhs_pred(ast)
-		-- note: this function is brittle. If it breaks again
-		-- find a better way.
-		if ast.id == "pattern" and not ast[1].val then
+		if ast.id == "pattern" and not ast:with"hidden_pattern" then
 			return true
 		elseif ast.id == "hidden_pattern" then
 			return true
@@ -32,6 +41,17 @@ local function transform_atoms(ast)
 	end
 	for i = 1, #lhs do
 		lhs[i].val = symbolize(lhs[i].val)
+	end
+end
+
+function sort.safe(ast)	
+	--	identifies safe rules.
+	local rhs = ast:select"rhs"
+	local lhs = ast:select"lhs"
+	for i,v in ipairs(rhs) do
+		if (#v:with"atom" == 0) then 
+			print(lhs[i], "is safe")
+		end
 	end
 end
 

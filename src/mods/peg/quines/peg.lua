@@ -49,7 +49,6 @@ local _peg_fn   = function ()
 			      "allowed_prefixed", "allowed_suffixed",
 			      "simple", "compound", "prefixed", "suffixed"  )
 		--]]
-		local WS         =  WS^0
 		local symbol     =  Csp(symbol)
 		local d_string     =  Csp(d_string) 
 		local s_string   =  Csp(s_string)
@@ -57,6 +56,7 @@ local _peg_fn   = function ()
 		local range_c    =  Csp(range_c)  
 		local set_c      =  Csp(set_c)
 		local some_num_c = some_num_c 
+	    local WS         =  WS^0
 
 
 		rules   =  V"comment"^0 * V"rule"^1
@@ -127,6 +127,7 @@ local _peg_fn   = function ()
 		  allowed_prefixed =  V"compound" + V"suffixed" + V"atom"
 		  allowed_suffixed =  V"compound" + V"prefixed" + V"atom"	 
 	    atom =  V"ws" + symbol 
+	    WS = WS
 	    ws = Csp(P"_")
 	end
 	return pegger

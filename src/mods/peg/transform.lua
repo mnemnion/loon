@@ -208,7 +208,7 @@ end
 -- @param ast root Node of a PEGylated grammar. 
 -- @return a collection containing the transformed strings.
 function t.transform(ast)
-	t.whitespace(ast)
+    t.whitespace(ast) -- currently required to fix ast :(
 	sort.sort(ast)
 	t.cursives(ast)
 	t.comment(ast)

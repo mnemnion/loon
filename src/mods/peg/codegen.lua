@@ -50,15 +50,27 @@ local WS = P' ' + P'\n' + P',' + P'\09'
 
 -- @todo change to use a provided name, or default to the filename if
 -- read from a file, or the start rule name if nothing else given.
-local definer = "peg = epnf.define(function(_ENV)\n"
+local definer = [[
+local _generator = function{}
+  local function generated(_ENV)
+]]
 
-local end_definer = "end)\n"
+local end_definer = [[
+  end
+  return generated
+end
+]]
+
+local caller = [[
+
+local peg = epnf.define(_generator(),nil,false)
+]]
 
 local function local_rules(ast)
 	local locals = ast:select(notrecursive)
 	local phrase = ""
 	for i = 1, #locals do
-		phrase = phrase..locals[i]:flatten()
+		phrase = phrase.."    "..locals[i]:flatten()
 	end
 	return phrase
 end
@@ -81,7 +93,8 @@ local function build(ast)
 	             --local_rules(ast).."\n\n"..
 				 definer..ast:root().start_rule..
 				 --cursive_rules(ast)..end_definer
-				 local_rules(ast)..end_definer
+				 local_rules(ast)..end_definer..
+				 caller
 	write(phrase)
 	return phrase
 end

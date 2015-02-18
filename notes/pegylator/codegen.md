@@ -1,40 +1,13 @@
 #Codegen
 
-Time to stop tinkering with the base classes and start doing codegen.
+Still working out the smoothest way to do code generation.
 
+It turns out the right way to handle grammars at this stage is to make all atoms `V"atom"` and let Glob sort it out. 
 
-##Symbol Transformation
+The others: `T` for anything that will be an anonymous token, `C` for anything to be captured, `I` for anything to be ignored. Making Lpeg work programatically, the way I want it to, is proving a challenge.
 
-All atoms get rewritten in Lua form. 
+But the general approach that makes sense is to have a single function name for each semantic action on the right hand side of a grammar: ignoring a token, capturing a range, capturing an anonymous token (a literal), capturing a rule as a named token, etc. 
 
-Done.
+This lets us generate several engines from a single function, since the function is called in a custom environment created by `define`. We can pass an expanded `define` different versions of these named functions and it will patch them into the function and generate a grammar accordingly. 
 
-## Recursion Detection
-
-Rules are sorted into regular and recursive form. Done.
-
-## Atomic transformations
-
-This is detailed work but conceptually straightforward. 
-
-For each type of 'simple' rule, we rewrite it to have an LPEG equivalent.
-
-Examples:
-
-` foo = bar*  ->   foo = V"bar"^0 `
-
-` foo = bar+   ->   foo = bar^1 `
-
-` bar?  ->  bar^-1 `
-
-` bar$2  ->  (bar * bar) `
-
-` bar$2..5 -> (bar * bar) * bar^-3 `
-
-` -------------`
-
-` !bar  ->  -bar `
-
-` &bar  ->  #bar `  
-
-I believe that covers the atomic cases. 
+This lets us use a consistent API and generate the various validators. This gets really fun when we define a combinator library using the operator overload semantics of lpeg, letting us define arbitrary operations through the same grammar by combining functinos over pretty much anything. We need this for the table validator and probably to write acceptors, which can dummy up strings a grammar will accept. 
