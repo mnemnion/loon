@@ -2,6 +2,8 @@ local pairs = pairs
 local tostring = tostring
 local setmetatable = setmetatable
 local error = error
+local require = require
+local io = io
 local schar = string.char
 
 
@@ -168,9 +170,25 @@ setmetatable(jump,J)
 
 _M["jump"] = jump
 
-_M["clear_screen"] = function()
-    return jump(1,1)..CSI.."2J"
+-- Term info
+
+local terminfo = require "terminfo"
+
+_M["rowcol"] = function ()
+    return terminfo.getnum("lines"), terminfo.getnum("cols")
 end
 
+--- wipes screen allowing jumps within
+-- improve to not clip prior buffer
+local function clear_screen()
+    io.write(jump(1,1))
+    local rows, cols = _M["rowcol"]()
+    for i = 1, rows*cols do
+        io.write(" ")
+    end
+    io.write(jump(1,1))
+end
+
+_M["clear_screen"] = clear_screen
 return _M
 
