@@ -156,8 +156,7 @@ end
 
 jump.back = function(num)
     if not num then num = "" end 
-       return CSI..num.."D"
-    end
+    return CSI..num.."D"
 end 
 
 local function Jump(_,row,column)
