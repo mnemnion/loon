@@ -1,4 +1,5 @@
 local a = require "ansi"
+local tstring = require "termstring"
 local CSI = string.char(27)..'['
  j = a.jump
 
@@ -20,10 +21,10 @@ local MI = 11
 
 local box_heavy = {"┏","━","┓","┃","┛","┗","┣","┳","┫","┻","╋"}
 
-local box_check = {"┏","-","┓","┃","┛","┗","┣","┳","┫","┻","╋"}
+local box_check = {"/","-","\\","|","/","\\","~","T","~","|","+"}
 local Box = {ch = box_heavy}
 
----returns a string rendering a box
+---returns a string rendering a box, clockwise. 
 local function box_str(b,row,col)
 	local line = b.ch[TL]..b.ch[HR]:rep(col-1)..b.ch[TR]
 	for i = 1, row-2 do
@@ -39,7 +40,7 @@ local function box_str(b,row,col)
 	end
 	return line
 end
-
+--[[
 print(j(1,1)..CSI.."2J")
-print(box_str(Box,5,7))
-print(j(6,1))
+io.write(box_str(Box,10,12))
+--]]

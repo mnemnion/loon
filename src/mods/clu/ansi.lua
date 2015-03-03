@@ -168,5 +168,9 @@ setmetatable(jump,J)
 
 _M["jump"] = jump
 
+_M["clear_screen"] = function()
+    return jump(1,1)..CSI.."2J"
+end
+
 return _M
 
