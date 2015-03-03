@@ -56,7 +56,7 @@ local _peg_fn   = function ()
 		local range_c    =  Csp(range_c)  
 		local set_c      =  Csp(set_c)
 		local some_num_c = some_num_c 
-	    local WS         =  WS^0
+	    local _WS         =  WS^0
 
 
 		rules   =  V"comment"^0 * V"rule"^1

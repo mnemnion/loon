@@ -1,5 +1,4 @@
 -- PEGylator
-
 -- A parser generator for LPEG.
 require 'pl.strict'
 local clu  = require "clu/prelude"
@@ -42,7 +41,8 @@ Clu = ast.parse(op,grammar.clu_s)
 w = ast.parse(op,grammar.wtf)
 l = ast.parse(op,grammar.lisp_s)
 lisp = require "peg/quines/lisp"
-lisp = lisp.lisp
+lisp1 = lisp.lisp
+lisp2 = lisp.lisp2
 hl = highlight.Highlighter(peg)
 t  = transform.transform
 hi = function(ast) io.write(hl(ast).."\n") end

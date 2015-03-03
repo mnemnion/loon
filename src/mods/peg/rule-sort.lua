@@ -48,11 +48,15 @@ function sort.safe(ast)
 	--	identifies safe rules.
 	local rhs = ast:select"rhs"
 	local lhs = ast:select"lhs"
+	local safe_rules = Set {}
 	for i,v in ipairs(rhs) do
 		if (#v:with"atom" == 0) then 
-			print(lhs[i], "is safe")
+			print(lhs[i]:select"pattern"[1].val, "is safe")
+			safe_rules = safe_rules + lhs[i].parent()
 		end
 	end
+	--print(safe_rules)
+	return(safe_rules)
 end
 
 local function rule_tables(ast)

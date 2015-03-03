@@ -1,6 +1,6 @@
 #Clu
 
-Clu is an idea on the verge of becoming real. 
+Clu is a syntax-directed S-expression language, with a focus on developer ergonomics. 
 
 The [core of the notion](precepts.md) is to expose the Lua runtime through several distinct syntaxes, which interoperate sensibly. Ambitiously, syntax is a first class citizen of Clu: Clu is merely one of the possible [Loon](../Loon.md) syntaxes. The other standard syntaxes are [Lun](../lun.md), a homonym, which is a Lua-like with certain light syntactic changes to harmonize with Loon, and [MoonScript](http://moonscript.org/), which provides CoffeeScript-style whitespace sensitive syntax. MoonScript gets added later; I expect we want to do some light syntax changes to harmonize with the extended Loon libraries. 
 

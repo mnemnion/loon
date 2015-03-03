@@ -189,6 +189,8 @@ local function select_with(ast,id)
 	return catch
 end
 
+-- add: select_without
+
 local function pick_tostring(table)
 	local phrase = ""
 	for i,v in ipairs(table) do 

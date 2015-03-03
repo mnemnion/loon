@@ -2,11 +2,11 @@
 
 lisp : form+
 
-form : atom / list
+`form` : atom / list
 
 list : `(` form* `)`
 
-atom : ~symbol / ~number
+`atom` : ~symbol / ~number
 
 symbol: ({AZ} / {az})+
 

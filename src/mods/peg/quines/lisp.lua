@@ -25,18 +25,41 @@ local WS = (P' ' + P'\n' + P',' + P'\09')^0
 
 -- a deliberately bad lisp
 
-local _lisp_fn = function(_ENV)
-	START"lisp"
-	lisp = V"form"^1
-	form = V"_WS" * V"atom" * V"_WS" 
-	     + V"_WS" * V"list" * V"_WS"
-	list = P"(" * V"form"^0 * P")"
-	atom = Csp(V"symbol") + Csp(V"number")
-	symbol = (R"AZ" + R"az")^1
-	number =  (R"09")^1
-	_WS = WS
+local _lisp_fn = function() 
+	local function ret(_ENV)
+		START"lisp"
+		lisp = V"form"^1
+		form = V"_WS" * V"atom" * V"_WS" 
+		     + V"_WS" * V"list" * V"_WS"
+		list = P"(" * V"form"^0 * P")"
+		atom = Csp(V"symbol") + Csp(V"number")
+		symbol = (R"AZ" + R"az")^1
+		number =  (R"09")^1
+		_WS = WS
+	end
+	return ret
 end
 
-return { lisp = epnf.define(_lisp_fn)}
+local _lisp_fn_2 = function()
+	local function ret(_ENV)
+		START"lisp"
+		SUPPRESS ("_WS", "atom", "form")
+		local _symbol = (R"AZ" + R"az")^1
+		local _number = (R"09")^1
+		lisp = V"form"^1
+		form = V"_WS" * V"atom" * V"_WS" 
+		     + V"_WS" * V"list" * V"_WS"
+		list = P"(" * V"form"^0 * P")"
+		atom = V"symbol" + V"number"
+		symbol = Csp(_symbol)
+		number = Csp(_number) 
+		_WS = WS
+	end
+	return ret
+end
+
+
+return { lisp = epnf.define(_lisp_fn()),
+		 lisp2 = epnf.define(_lisp_fn_2())}
 
 
