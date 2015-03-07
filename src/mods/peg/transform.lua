@@ -75,16 +75,12 @@ function t.some_number(ast)
 	-- moderately complex, write later
 end
 
-function t.with_suffix(ast)
-
-end
-
 function t.suffix(ast)
 	t.optional(ast)
 	t.more_than_one(ast)
 	t.maybe(ast)
 	t.some_number(ast)
-	t.with_suffix(ast)
+	--t.with_suffix(ast)
 end
 
 function t.if_not_this(ast)

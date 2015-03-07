@@ -11,3 +11,17 @@ Why? Well, C is great and every extension of it is an attempt to automate things
 Nothing ANSI C provides is available as a runtime. Anything else is more like a preprocessor than a compiler, though since it's all in S-expressions and the compile time stage is Lispy two times over, since it's run by Clu and it's Sexprs. You could call it SexC and I wouldn't stop you but the name is Delve. I'll let you guess why. 
 
 There's not much to add except I intend to use cryptics: Anything in the standard keyword plane can be written using two or three glyphs in combination. Everything built out of letters is available to the user, redefining cryptics must be flag enabled and is normally illegal. This is a tool for advanced users. Cryptics are exactly equivalent to their plain English cousins and you can filter them into such if you insist, just watch your namespace hygiene.
+
+```lisp
+
+(defn foo {char bar uint_least8_t baz} int ( ; void return may be ommitted
+  (set global bar)
+  (ret (>> baz 4))))
+
+```
+
+```c
+int function foo(char bar, uint_least_8_t baz) { // this would have the same comment
+	global = bar;
+	return baz >> 4;	
+}
