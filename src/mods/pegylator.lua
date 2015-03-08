@@ -14,7 +14,6 @@ local grammar = require "peg/pegs/grammars"
 local pretty = require "pl.pretty"
 local diff = require "diff"
 
-
 -- Rig 
 
 op = require "peg/quines/ogpeg"
