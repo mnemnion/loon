@@ -39,6 +39,22 @@ These image frames are powered by the GUI and their use is implementation-specif
 We also need to provide at least one comprehensive font family that does this. It can be a Frankenfamily, we don't have to reinvent the wheel here, but it's depressing how few monospace fonts correctly connect all box-drawing characters, large parens, and other weirdo members of the Unicode family. 
 
 
+##Escape Sequences
+
+**term** interprets a modified set of ANSI-like escape sequences. We don't arbitrarily change semantics, but we can and will drop pointless sequences and possibly reuse them. These handle the usual set of tasks, as well as frame allocation and multiple cursor tracking as discussed earlier, and a few miscellaneous operations like spawing a new terminal in a new window or tab. 
+
+A reasonably well behaved xterm program should have nothing to fear running under **term**. A weird one may have to force xterm compatibility, which is worth providing. 
+
 ###Nothing else
 
-This is the full function of **term**. It is plausible to specify the behavior completely and implement it on any modern GUI. 
+This is the full function of **term**. It is plausible to specify the behavior completely and implement it on any modern GUI. **term** provides a consistent, monospaced textual interface, a way to write to canvas-like frames over that interfaace, comprehensive translation of user input to the underlying program, and that is all. 
+
+##Philosophy
+
+The advanced user of the computer is inevitably concerned with textual manipulation and transformation of data. Whether she writes programs or runs them is immaterial. In point of actual fact, sequences as simple as `ls` constitute programming of a somewhat ad-hoc and janky language called bash. 
+
+A monospaced grid arrangement provides minimum impedance for doing this work. Keyboard interaction must be programmable, because each application, and each user, has different expectations and preferences in this regard. 
+
+The road from simple user, to advanced user, to programmer, should be as smooth as practical. The status quo, a combination of xterm and bash (or what have you) with line-printer oriented Unix tools, is in need of a consistent interactive paradigm, one that takes it for granted that cursors can move backwards as well as forwards. 
+
+To write a better shell, we demand a better terminal. Not dramatically better, just powerful enough to be useful. A user can be taught to use a command-line photo filter if she can see the intermediate results, go back to the command, modify it, and tinker until she likes what she sees. Our shells don't work that way, and our terminals don't quite either. 
