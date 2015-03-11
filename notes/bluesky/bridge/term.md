@@ -60,3 +60,5 @@ A monospaced grid arrangement provides minimum impedance for doing this work. Ke
 The road from simple user, to advanced user, to programmer, should be as smooth as practical. The status quo, a combination of xterm and bash (or what have you) with line-printer oriented Unix tools, is in need of a consistent interactive paradigm, one that takes it for granted that cursors can move backwards as well as forwards. 
 
 To write a better shell, we demand a better terminal. Not dramatically better, just powerful enough to be useful. A user can be taught to use a command-line photo filter if she can see the intermediate results, go back to the command, modify it, and tinker until she likes what she sees. Our shells don't work that way, and our terminals don't quite either. 
+
+There is no reason to continue to do this through layers of emulation. The emulated hardware is long gone. **bridge** and **term** use what Unix has now, not what it had in the early 90s. 
