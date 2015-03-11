@@ -6,7 +6,7 @@
 
 ##Rationale
 
-**bridge** is a control environment intended for advanced users of a personal computer. The advantages of the command line interface and basic Unix substrate are so considerable, that despite meaningful updates to the paradigm in the last 30 years, it remains fundamental to user interaction for many classes of users.
+**bridge** is a control environment intended for advanced users of a personal computer. The advantages of the command line interface and basic Unix substrate are so considerable, that despite few meaningful updates to the paradigm in the last 30 years, it remains fundamental to user interaction for many classes of users.
 
 We consider this a strength and wish to build on it, believing that the textual grid offers advantages which the WIMP GUI can't replace. One cannot help but notice that terminal emulators, versus actual terminals, are universal in practice. 
 
@@ -44,6 +44,8 @@ We also need to provide at least one comprehensive font family that does this. I
 **term** interprets a modified set of ANSI-like escape sequences. We don't arbitrarily change semantics, but we can and will drop pointless sequences and possibly reuse them. These handle the usual set of tasks, as well as frame allocation and multiple cursor tracking as discussed earlier, and a few miscellaneous operations like spawing a new terminal in a new window or tab. 
 
 A reasonably well behaved xterm program should have nothing to fear running under **term**. A weird one may have to force xterm compatibility, which is worth providing. 
+
+Quick Unicode/escape interaction note: relative jumps are relative to the cursor *and the direction of cursor travel*. This is the only correct interpretation.
 
 ###Nothing else
 
